@@ -18,6 +18,7 @@ public class CobblenavEvents {
         if (players.size() > 0) {
             players.forEach(player -> {
                 for (ServerPlayerEntity p : players) {
+                    //TODO:обработка ситуации 2х2 или более
                     boolean isWinner = event.getWinners().contains(event.getBattle().getActor(player));
                     CobblenavNbtHelper.updateContact(player, p, event.getBattle(), isWinner);
                     player.sendMessage(Text.literal(((ContactSaverEntity) player).cobblenav$getContactData().toString()));

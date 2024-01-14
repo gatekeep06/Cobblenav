@@ -1,6 +1,7 @@
 package com.metacontent.cobblenav.item;
 
 import com.cobblemon.mod.common.CobblemonSounds;
+import com.cobblemon.mod.common.client.CobblemonClient;
 import com.metacontent.cobblenav.client.screen.pokenav.MainScreen;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.player.PlayerEntity;
@@ -18,8 +19,10 @@ public class PokenavItem extends Item {
     @Override
     public TypedActionResult<ItemStack> use(World world, PlayerEntity playerEntity, Hand hand) {
         if (world.isClient()) {
-            playerEntity.playSound(CobblemonSounds.PC_ON, 0.1f, 1.25f);
-            MinecraftClient.getInstance().setScreen(new MainScreen());
+            if (CobblemonClient.INSTANCE.getBattle() == null) {
+                playerEntity.playSound(CobblemonSounds.PC_ON, 0.1f, 1.25f);
+                MinecraftClient.getInstance().setScreen(new MainScreen());
+            }
             return  TypedActionResult.success(playerEntity.getStackInHand(hand));
         }
         return TypedActionResult.pass(playerEntity.getStackInHand(hand));

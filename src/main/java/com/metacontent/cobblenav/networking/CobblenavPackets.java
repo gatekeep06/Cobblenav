@@ -30,12 +30,16 @@ import java.util.Map;
 public class CobblenavPackets {
     public static final Identifier SPAWN_MAP_PACKET_SERVER = new Identifier(Cobblenav.ID, "spawn_map_packet_server");
     public static final Identifier SPAWN_MAP_PACKET_CLIENT = new Identifier(Cobblenav.ID, "spawn_map_packet_client");
+    public static final Identifier CONTACT_DATA_PACKET_SERVER = new Identifier(Cobblenav.ID, "contact_data_packet_server");
+    public static final Identifier CONTACT_DATA_PACKET_CLIENT = new Identifier(Cobblenav.ID, "contact_data_packet_client");
 
     public static void registerC2SPackets() {
         ServerPlayNetworking.registerGlobalReceiver(SPAWN_MAP_PACKET_SERVER, SpawnMapPacketServerReceiver::receive);
+        ServerPlayNetworking.registerGlobalReceiver(CONTACT_DATA_PACKET_SERVER, ContactDataPacketServerReceiver::receive);
     }
 
     public static void registerS2CPackets() {
         ClientPlayNetworking.registerGlobalReceiver(SPAWN_MAP_PACKET_CLIENT, SpawnMapPacketClientReceiver::receive);
+        ClientPlayNetworking.registerGlobalReceiver(CONTACT_DATA_PACKET_CLIENT, ContactDataPacketClientReceiver::receive);
     }
 }
