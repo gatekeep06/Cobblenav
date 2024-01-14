@@ -1,5 +1,6 @@
 package com.metacontent.cobblenav;
 
+import com.metacontent.cobblenav.events.CobblenavEvents;
 import com.metacontent.cobblenav.item.CobblenavItems;
 import com.metacontent.cobblenav.networking.CobblenavPackets;
 import net.fabricmc.api.ModInitializer;
@@ -14,5 +15,6 @@ public class Cobblenav implements ModInitializer {
     public void onInitialize() {
         CobblenavItems.registerCobblenavItems();
         CobblenavPackets.registerC2SPackets();
+        CobblenavEvents.subscribeEvents();
     }
 }
