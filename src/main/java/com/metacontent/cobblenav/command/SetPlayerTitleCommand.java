@@ -12,14 +12,15 @@ import net.minecraft.server.command.ServerCommandSource;
 
 public class SetPlayerTitleCommand {
     public static void register(CommandDispatcher<ServerCommandSource> dispatcher, CommandRegistryAccess commandRegistryAccess, CommandManager.RegistrationEnvironment registrationEnvironment) {
-        dispatcher.register(CommandManager.literal("title")
-                .then(CommandManager.literal("set")
-                        .then(CommandManager.argument("title", StringArgumentType.string())
-                                .executes(context -> run((ContactSaverEntity) context.getSource().getPlayer(), context.getArgument("title", String.class)))))
-                .then(CommandManager.literal("setFor")
-                        .then(CommandManager.argument("player", EntityArgumentType.player())
+        dispatcher.register(CommandManager.literal("pokenav")
+                .then(CommandManager.literal("title")
+                        .then(CommandManager.literal("set")
                                 .then(CommandManager.argument("title", StringArgumentType.string())
-                                        .executes(context -> run((ContactSaverEntity) context.getArgument("player", EntitySelector.class).getPlayer(context.getSource()), context.getArgument("title", String.class)))))));
+                                        .executes(context -> run((ContactSaverEntity) context.getSource().getPlayer(), context.getArgument("title", String.class)))))
+                        .then(CommandManager.literal("setFor")
+                                .then(CommandManager.argument("player", EntityArgumentType.player())
+                                        .then(CommandManager.argument("title", StringArgumentType.string())
+                                                .executes(context -> run((ContactSaverEntity) context.getArgument("player", EntitySelector.class).getPlayer(context.getSource()), context.getArgument("title", String.class))))))));
     }
 
     private static int run(ContactSaverEntity player, String title) {

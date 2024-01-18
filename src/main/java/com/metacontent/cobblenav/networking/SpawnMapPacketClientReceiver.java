@@ -1,6 +1,7 @@
 package com.metacontent.cobblenav.networking;
 
 import com.cobblemon.mod.common.api.pokemon.PokemonSpecies;
+import com.cobblemon.mod.common.pokemon.Pokemon;
 import com.cobblemon.mod.common.pokemon.RenderablePokemon;
 import com.cobblemon.mod.common.pokemon.Species;
 import com.metacontent.cobblenav.client.screen.pokenav.LocationScreen;
@@ -21,7 +22,7 @@ public class SpawnMapPacketClientReceiver {
         namedProbabilities.forEach((key, value) -> {
             Species species = PokemonSpecies.INSTANCE.getByName(key);
             if (species != null) {
-                RenderablePokemon renderablePokemon = species.create(1).asRenderablePokemon();
+                RenderablePokemon renderablePokemon = species.create(10).asRenderablePokemon();
                 spawnMap.put(renderablePokemon, value);
             }
         });

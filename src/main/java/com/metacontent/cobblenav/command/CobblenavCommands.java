@@ -7,5 +7,6 @@ public class CobblenavCommands {
         CommandRegistrationCallback.EVENT.register(SetPlayerTitleCommand::register);
         CommandRegistrationCallback.EVENT.register(GetContactDataCommand::register);
         CommandRegistrationCallback.EVENT.register(ClearContactDataCommand::register);
+        CommandRegistrationCallback.EVENT.register(AddContactCommand::register);
     }
 }

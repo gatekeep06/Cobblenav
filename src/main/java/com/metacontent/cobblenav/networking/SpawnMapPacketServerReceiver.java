@@ -18,6 +18,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayNetworkHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.text.Text;
 
 import java.util.HashMap;
 import java.util.List;
@@ -26,6 +27,8 @@ import java.util.Map;
 import static com.metacontent.cobblenav.networking.CobblenavPackets.SPAWN_MAP_PACKET_CLIENT;
 
 public class SpawnMapPacketServerReceiver {
+    public static final List<String> BUCKET_NAMES = List.of("common", "uncommon", "rare", "ultra-rare");
+
     public static void receive(MinecraftServer server, ServerPlayerEntity player, ServerPlayNetworkHandler handler, PacketByteBuf buf, PacketSender responseSender) {
         Map<String, Float> namedProbabilities = new HashMap<>();
 
@@ -36,7 +39,7 @@ public class SpawnMapPacketServerReceiver {
         if (config.getEnableSpawning()) {
             PlayerSpawner spawner = CobblemonWorldSpawnerManager.INSTANCE.getSpawnersForPlayers().get(player.getUuid());
             SpawnBucket bucket = Cobblemon.INSTANCE.getBestSpawner().getConfig().getBuckets().stream()
-                    .filter(b -> LocationScreen.BUCKET_NAMES.get(bucketIndex).equalsIgnoreCase(b.name)).findFirst().orElse(null);
+                    .filter(b -> BUCKET_NAMES.get(bucketIndex).equalsIgnoreCase(b.name)).findFirst().orElse(null);
             if (spawner != null && bucket != null) {
                 SpawnCause cause = new SpawnCause(spawner, bucket, player);
 
@@ -53,7 +56,7 @@ public class SpawnMapPacketServerReceiver {
 
                 spawnProbabilities.forEach((key, value) -> {
                     if (key.getName().toString() != null) {
-                        String name = key.getName().getString().toLowerCase().replaceAll(" ", "").replaceAll("\\.", "");
+                        String name = key.getName().getString().toLowerCase().replaceAll("’", "").replaceAll(" ", "").replaceAll("\\.", "");
                         if (!namedProbabilities.containsKey(name)) {
                             namedProbabilities.put(name, value);
                         }

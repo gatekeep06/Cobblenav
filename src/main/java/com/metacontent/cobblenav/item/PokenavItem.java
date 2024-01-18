@@ -3,6 +3,8 @@ package com.metacontent.cobblenav.item;
 import com.cobblemon.mod.common.CobblemonSounds;
 import com.cobblemon.mod.common.client.CobblemonClient;
 import com.metacontent.cobblenav.client.screen.pokenav.MainScreen;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
@@ -16,6 +18,7 @@ public class PokenavItem extends Item {
         super(settings);
     }
 
+    @Environment(EnvType.CLIENT)
     @Override
     public TypedActionResult<ItemStack> use(World world, PlayerEntity playerEntity, Hand hand) {
         if (world.isClient()) {

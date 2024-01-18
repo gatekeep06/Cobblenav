@@ -2,6 +2,8 @@ package com.metacontent.cobblenav.client.screen;
 
 import com.cobblemon.mod.common.CobblemonSounds;
 import com.metacontent.cobblenav.Cobblenav;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
@@ -14,6 +16,7 @@ import net.minecraft.util.Identifier;
 import static com.cobblemon.mod.common.api.gui.GuiUtilsKt.blitk;
 import static com.cobblemon.mod.common.client.render.RenderHelperKt.drawScaledText;
 
+@Environment(EnvType.CLIENT)
 public class AbstractPokenavItemScreen extends Screen {
     public static final Identifier FONT = new Identifier("uniform");
     public static final Identifier BACKGROUND = new Identifier(Cobblenav.ID, "textures/gui/pokenav_item_gui_background.png");

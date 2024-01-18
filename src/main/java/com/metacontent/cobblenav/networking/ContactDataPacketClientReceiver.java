@@ -12,7 +12,7 @@ public class ContactDataPacketClientReceiver {
         if (client.currentScreen instanceof ContactsScreen contactsScreen) {
             NbtCompound nbt = buf.readNbt();
             if (nbt != null) {
-                contactsScreen.createContactMap(nbt);
+                contactsScreen.createContactList(nbt);
             }
         }
     }

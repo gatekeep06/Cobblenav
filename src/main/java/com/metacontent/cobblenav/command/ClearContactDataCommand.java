@@ -18,8 +18,8 @@ import java.util.Objects;
 public class ClearContactDataCommand {
     public static void register(CommandDispatcher<ServerCommandSource> dispatcher, CommandRegistryAccess commandRegistryAccess, CommandManager.RegistrationEnvironment registrationEnvironment) {
         dispatcher.register(CommandManager.literal("pokenav")
-                .then(CommandManager.literal("clearContacts")
-                        .then(CommandManager.argument("player", EntityArgumentType.players())
+                .then(CommandManager.argument("player", EntityArgumentType.players())
+                        .then(CommandManager.literal("clearContacts")
                                 .executes(ClearContactDataCommand::run))));
     }
 

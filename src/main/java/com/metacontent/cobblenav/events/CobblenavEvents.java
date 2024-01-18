@@ -18,10 +18,17 @@ public class CobblenavEvents {
         if (players.size() > 0) {
             players.forEach(player -> {
                 for (ServerPlayerEntity p : players) {
-                    //TODO:обработка ситуации 2х2 или более
                     boolean isWinner = event.getWinners().contains(event.getBattle().getActor(player));
-                    CobblenavNbtHelper.updateContact(player, p, event.getBattle(), isWinner);
-                    player.sendMessage(Text.literal(((ContactSaverEntity) player).cobblenav$getContactData().toString()));
+                    boolean isAlly = false;
+                    if (event.getWinners().size() > 1 && isWinner) {
+                        isAlly = event.getWinners().contains(event.getBattle().getActor(player)) &&
+                                event.getWinners().contains(event.getBattle().getActor(p));
+                    }
+                    else if (event.getLosers().size() > 1) {
+                        isAlly = event.getLosers().contains(event.getBattle().getActor(player)) &&
+                                event.getLosers().contains(event.getBattle().getActor(p));
+                    }
+                    CobblenavNbtHelper.updateContact(player, p, event.getBattle(), isWinner, isAlly);
                 }
                 player.sendMessage(Text.translatable("message.cobblenav.updating_contacts")
                         .setStyle(Style.EMPTY.withItalic(true).withColor(0xff9a38)));

@@ -30,5 +30,6 @@
   "gui.cobblenav.pokenav_item.spawn_message_clipboard": "%s spawns near the coordinates %s with a chance %s",
   "gui.cobblenav.pokenav_item.main_menu": "MAIN MENU",
   "gui.cobblenav.pokenav_item.location_menu": "LOCATION",
+  "gui.cobblenav.pokenav_item.contact_stats": "Winnings: %s | Losses: %s",
   "message.cobblenav.updating_contacts": "<Pokenav> Updating of contact information"
 }

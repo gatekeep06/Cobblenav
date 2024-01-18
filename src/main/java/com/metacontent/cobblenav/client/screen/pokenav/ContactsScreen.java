@@ -2,51 +2,60 @@ package com.metacontent.cobblenav.client.screen.pokenav;
 
 import com.cobblemon.mod.common.CobblemonSounds;
 import com.metacontent.cobblenav.client.screen.AbstractPokenavItemScreen;
+import com.metacontent.cobblenav.client.widget.ContactInfoWidget;
+import com.metacontent.cobblenav.client.widget.ContactListWidget;
 import com.metacontent.cobblenav.client.widget.PokenavItemButton;
 import com.metacontent.cobblenav.networking.CobblenavPackets;
 import com.metacontent.cobblenav.util.CobblenavNbtHelper;
-import com.metacontent.cobblenav.util.ContactSaverEntity;
+import com.metacontent.cobblenav.util.ContactSelector;
 import com.metacontent.cobblenav.util.PokenavContact;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.network.PacketByteBuf;
 import net.minecraft.text.Text;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import static com.cobblemon.mod.common.api.gui.GuiUtilsKt.blitk;
 
-public class ContactsScreen extends AbstractPokenavItemScreen {
+@Environment(EnvType.CLIENT)
+public class ContactsScreen extends AbstractPokenavItemScreen implements ContactSelector {
     private int borderX;
     private int borderY;
-    private Map<String, PokenavContact> contactMap;
+    private List<PokenavContact> contacts;
+    private int selectedContactIndex;
 
     private PokenavItemButton backButton;
+    private ContactListWidget contactListWidget;
+    private ContactInfoWidget contactInfoWidget;
 
     protected ContactsScreen() {
         super(Text.literal("Contacts"));
     }
 
     private void requestContactData() {
+        selectedContactIndex = -1;
+        contacts = new ArrayList<>();
         ClientPlayNetworking.send(CobblenavPackets.CONTACT_DATA_PACKET_SERVER, PacketByteBufs.create());
     }
 
-    public void createContactMap(NbtCompound nbt) {
-        contactMap = new HashMap<>();
-        player.sendMessage(Text.literal(nbt.toString()));
+    public void createContactList(NbtCompound nbt) {
         Set<String> keys = nbt.getKeys();
         keys.forEach(key -> {
-            NbtCompound contactData = nbt.getCompound(key);
-            PokenavContact pokenavContact = CobblenavNbtHelper.toPokenavContact(contactData);
-            player.sendMessage(Text.literal(pokenavContact.toString()));
-            contactMap.put(key, pokenavContact);
+            if (!Objects.equals(key, "title")) {
+                NbtCompound contactData = nbt.getCompound(key);
+                PokenavContact pokenavContact = CobblenavNbtHelper.toPokenavContact(contactData);
+                contacts.add(pokenavContact);
+            }
         });
+        contactListWidget = new ContactListWidget(borderX - BORDER_DEPTH + BORDER_WIDTH - ContactListWidget.WIDTH,
+                borderY + BORDER_DEPTH + 24, contacts, this);
+        contactInfoWidget = new ContactInfoWidget(borderX + BORDER_DEPTH, borderY + BORDER_DEPTH + 27);
     }
 
     @Override
@@ -84,6 +93,12 @@ public class ContactsScreen extends AbstractPokenavItemScreen {
                 256, 0, 1,1,1,1,false,1);
 
         backButton.render(drawContext, i, j, f);
+        if (contactListWidget != null) {
+            contactListWidget.render(drawContext, i, j, f);
+            if (selectedContactIndex != -1) {
+                contactInfoWidget.render(drawContext, i, j, f);
+            }
+        }
 
         super.render(drawContext, i, j, f);
     }
@@ -91,6 +106,20 @@ public class ContactsScreen extends AbstractPokenavItemScreen {
     @Override
     public boolean mouseClicked(double d, double e, int i) {
         backButton.mouseClicked(d, e, i);
+        contactListWidget.mouseClicked(d, e, i);
         return super.mouseClicked(d, e, i);
+    }
+
+    @Override
+    public void setContactIndex(int index) {
+        selectedContactIndex = index;
+        if (index != -1) {
+            contactInfoWidget.setContact(contacts.get(index));
+        }
+    }
+
+    @Override
+    public int getContactIndex() {
+        return selectedContactIndex;
     }
 }

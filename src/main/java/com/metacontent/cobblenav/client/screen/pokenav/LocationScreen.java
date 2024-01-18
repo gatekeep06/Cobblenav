@@ -7,6 +7,8 @@ import com.metacontent.cobblenav.client.screen.AbstractPokenavItemScreen;
 import com.metacontent.cobblenav.client.widget.PokemonSpawnInfoWidget;
 import com.metacontent.cobblenav.client.widget.PokenavItemButton;
 import com.metacontent.cobblenav.networking.CobblenavPackets;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.minecraft.client.MinecraftClient;
@@ -23,6 +25,7 @@ import java.util.*;
 import static com.cobblemon.mod.common.api.gui.GuiUtilsKt.blitk;
 import static com.cobblemon.mod.common.client.render.RenderHelperKt.drawScaledText;
 
+@Environment(EnvType.CLIENT)
 public class LocationScreen extends AbstractPokenavItemScreen {
     public static final List<String> BUCKET_NAMES = List.of("common", "uncommon", "rare", "ultra-rare");
     private static final Identifier LOADING_ANIMATION = new Identifier(Cobblenav.ID, "textures/gui/loading_animation.png");

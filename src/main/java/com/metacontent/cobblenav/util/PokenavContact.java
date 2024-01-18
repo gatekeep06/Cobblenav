@@ -7,14 +7,26 @@ public class PokenavContact {
     private final String title;
     private final int winnings;
     private final int losses;
-    private final List<String> team;
+    private final List<ContactTeamMember> team;
 
-    public PokenavContact(String name, String title, int winnings, int losses, List<String> team) {
+    public PokenavContact(String name, String title, int winnings, int losses, List<ContactTeamMember> team) {
         this.name = name;
         this.title = title;
         this.winnings = winnings;
         this.losses = losses;
         this.team = team;
+    }
+
+    public String getTitleOrElseName() {
+        return title.isEmpty() ? name : title;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getTitle() {
+        return title;
     }
 
     public int getWinnings() {
@@ -25,7 +37,7 @@ public class PokenavContact {
         return losses;
     }
 
-    public List<String> getTeam() {
+    public List<ContactTeamMember> getTeam() {
         return team;
     }
 
@@ -33,6 +45,7 @@ public class PokenavContact {
     public String toString() {
         return "PokenavContact{" +
                 "name='" + name + '\'' +
+                ", title='" + title + '\'' +
                 ", winnings=" + winnings +
                 ", losses=" + losses +
                 ", team=" + team +
