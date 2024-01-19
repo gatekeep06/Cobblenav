@@ -223,14 +223,14 @@ public class LocationScreen extends AbstractPokenavItemScreen {
     private void renderBucketSelector(DrawContext drawContext, int i, int j, float f) {
         decreaseBucketIndexButton.render(drawContext, i, j, f);
         drawScaledText(drawContext, FONT, Text.translatable("gui.cobblenav.pokenav_item.bucket." + BUCKET_NAMES.get(bucketIndex)).setStyle(Style.EMPTY.withBold(true).withColor(0xFFFFFF)),
-                width / 2 + 2, borderY + BORDER_DEPTH + 20, 1, 1, 100, 0, true, false, i, j);
+                width / 2 + 2, borderY + BORDER_DEPTH + 20, 1, 1, 40, 0, true, false, i, j);
         increaseBucketIndexButton.render(drawContext, i, j, f);
     }
 
     private void renderPageSelector(DrawContext drawContext, int i, int j, float f) {
         decreaseListPageButton.render(drawContext, i, j, f);
         drawScaledText(drawContext, FONT, Text.literal(String.valueOf(listPage + 1)).setStyle(Style.EMPTY.withBold(true).withColor(0xFFFFFF)),
-                borderX + BORDER_WIDTH - BORDER_DEPTH - 4, height / 2 - 3, 1, 1, 100, 0, true, false, i, j);
+                borderX + BORDER_WIDTH - BORDER_DEPTH - 4, height / 2 - 3, 1, 1, 5, 0, true, false, i, j);
         increaseListPageButton.render(drawContext, i, j, f);
     }
 

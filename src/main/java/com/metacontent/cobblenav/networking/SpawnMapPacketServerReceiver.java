@@ -59,7 +59,8 @@ public class SpawnMapPacketServerReceiver {
 
                 spawnProbabilities.forEach((key, value) -> {
                     if (key.getName().toString() != null) {
-                        String name = key.getName().getString().toLowerCase().replaceAll("’", "").replaceAll(" ", "").replaceAll("\\.", "");
+                        String[] s = key.getName().toString().split("\\.");
+                        String name = s[s.length - 2];
                         if (!namedProbabilities.containsKey(name)) {
                             namedProbabilities.put(name, value);
                         }

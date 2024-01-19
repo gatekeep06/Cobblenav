@@ -115,7 +115,7 @@ public class MainScreen extends AbstractPokenavItemScreen {
         renderPlayer(drawContext, playerX, playerY, player);
 
         drawScaledText(drawContext, FONT, Text.translatable("gui.cobblenav.pokenav_item.main_menu").setStyle(Style.EMPTY.withColor(0xFFFFFF)),
-                borderX + BORDER_DEPTH + 6, borderY + BORDER_DEPTH + 33, 1, 1, 100, 0, false, false, i, j);
+                borderX + BORDER_DEPTH + 6, borderY + BORDER_DEPTH + 33, 1, 1, 40, 0, false, false, i, j);
 
         closeButton.render(drawContext, i, j, f);
         contactsButton.render(drawContext, i, j, f);
