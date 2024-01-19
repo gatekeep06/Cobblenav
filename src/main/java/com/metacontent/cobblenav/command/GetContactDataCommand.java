@@ -16,7 +16,7 @@ import java.util.List;
 
 public class GetContactDataCommand {
     public static void register(CommandDispatcher<ServerCommandSource> dispatcher, CommandRegistryAccess commandRegistryAccess, CommandManager.RegistrationEnvironment registrationEnvironment) {
-        dispatcher.register(CommandManager.literal("pokenav")
+        dispatcher.register(CommandManager.literal("pokenav").requires(source -> source.hasPermissionLevel(2))
                 .then(CommandManager.argument("player", EntityArgumentType.players())
                         .then(CommandManager.literal("getContacts")
                                 .executes(GetContactDataCommand::run))));
@@ -31,7 +31,8 @@ public class GetContactDataCommand {
                     player.sendMessage(Text.literal(p.getEntityName() + ": " + contactSaverEntity.cobblenav$getContactData().toString()));
                 }
             });
+            return 1;
         }
-        return 1;
+        return -1;
     }
 }

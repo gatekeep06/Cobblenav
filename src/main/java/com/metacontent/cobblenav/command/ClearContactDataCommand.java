@@ -17,7 +17,7 @@ import java.util.Objects;
 
 public class ClearContactDataCommand {
     public static void register(CommandDispatcher<ServerCommandSource> dispatcher, CommandRegistryAccess commandRegistryAccess, CommandManager.RegistrationEnvironment registrationEnvironment) {
-        dispatcher.register(CommandManager.literal("pokenav")
+        dispatcher.register(CommandManager.literal("pokenav").requires(source -> source.hasPermissionLevel(2))
                 .then(CommandManager.argument("player", EntityArgumentType.players())
                         .then(CommandManager.literal("clearContacts")
                                 .executes(ClearContactDataCommand::run))));
@@ -25,16 +25,19 @@ public class ClearContactDataCommand {
 
     private static int run(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
         List<ServerPlayerEntity> players = context.getArgument("player", EntitySelector.class).getPlayers(context.getSource());
-        players.forEach(player -> {
-            if (player instanceof ContactSaverEntity contactSaverEntity) {
-                NbtCompound nbt = contactSaverEntity.cobblenav$getContactData();
-                nbt.getKeys().forEach(key -> {
-                    if (!Objects.equals(key, "title")) {
-                        nbt.remove(key);
-                    }
-                });
-            }
-        });
-        return 1;
+        if (!players.isEmpty()) {
+            players.forEach(player -> {
+                if (player instanceof ContactSaverEntity contactSaverEntity) {
+                    NbtCompound nbt = contactSaverEntity.cobblenav$getContactData();
+                    nbt.getKeys().forEach(key -> {
+                        if (!Objects.equals(key, "title")) {
+                            nbt.remove(key);
+                        }
+                    });
+                }
+            });
+            return 1;
+        }
+        return -1;
     }
 }

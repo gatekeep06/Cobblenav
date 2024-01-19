@@ -17,7 +17,7 @@ import java.util.List;
 
 public class AddContactCommand {
     public static void register(CommandDispatcher<ServerCommandSource> dispatcher, CommandRegistryAccess commandRegistryAccess, CommandManager.RegistrationEnvironment registrationEnvironment) {
-        dispatcher.register(CommandManager.literal("pokenav")
+        dispatcher.register(CommandManager.literal("pokenav").requires(source -> source.hasPermissionLevel(2))
                 .then(CommandManager.argument("player", EntityArgumentType.players())
                         .then(CommandManager.literal("addContact")
                                 .then(CommandManager.argument("contact", EntityArgumentType.player())
@@ -28,10 +28,14 @@ public class AddContactCommand {
         ServerPlayerEntity contact = context.getArgument("contact", EntitySelector.class).getPlayer(context.getSource());
         if (contact != null) {
             List<ServerPlayerEntity> players = context.getArgument("player", EntitySelector.class).getPlayers(context.getSource());
-            players.forEach(p -> {
-                CobblenavNbtHelper.updateContact(p, contact, null, false, true);
-            });
+            if (!players.isEmpty()) {
+                players.forEach(p -> {
+                    CobblenavNbtHelper.updateContact(p, contact, null, false, true);
+                });
+                return 1;
+            }
+            return -1;
         }
-        return 1;
+        return -1;
     }
 }

@@ -1,6 +1,7 @@
 package com.metacontent.cobblenav.networking;
 
 import com.cobblemon.mod.common.Cobblemon;
+import com.cobblemon.mod.common.api.pokemon.PokemonSpecies;
 import com.cobblemon.mod.common.api.spawning.CobblemonWorldSpawnerManager;
 import com.cobblemon.mod.common.api.spawning.SpawnBucket;
 import com.cobblemon.mod.common.api.spawning.SpawnCause;
@@ -10,6 +11,8 @@ import com.cobblemon.mod.common.api.spawning.detail.SpawnDetail;
 import com.cobblemon.mod.common.api.spawning.spawner.PlayerSpawner;
 import com.cobblemon.mod.common.api.spawning.spawner.SpawningArea;
 import com.cobblemon.mod.common.config.CobblemonConfig;
+import com.cobblemon.mod.common.pokemon.RenderablePokemon;
+import com.cobblemon.mod.common.pokemon.Species;
 import com.metacontent.cobblenav.client.screen.pokenav.LocationScreen;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
@@ -63,10 +66,19 @@ public class SpawnMapPacketServerReceiver {
                     }
                 });
 
+                Map<RenderablePokemon, Float> spawnMap = new HashMap<>();
+                namedProbabilities.forEach((key, value) -> {
+                    Species species = PokemonSpecies.INSTANCE.getByName(key);
+                    if (species != null) {
+                        RenderablePokemon renderablePokemon = species.create(10).asRenderablePokemon();
+                        spawnMap.put(renderablePokemon, value);
+                    }
+                });
+
                 PacketByteBuf responseBuf = PacketByteBufs.create();
-                PacketByteBuf.PacketWriter<String> namePacketWriter = PacketByteBuf::writeString;
+                PacketByteBuf.PacketWriter<RenderablePokemon> renderablePokemonPacketWriter = (packetByteBuf, pokemon) -> pokemon.saveToBuffer(packetByteBuf);
                 PacketByteBuf.PacketWriter<Float> floatPacketWriter = PacketByteBuf::writeFloat;
-                responseBuf.writeMap(namedProbabilities, namePacketWriter, floatPacketWriter);
+                responseBuf.writeMap(spawnMap, renderablePokemonPacketWriter, floatPacketWriter);
 
                 responseSender.sendPacket(SPAWN_MAP_PACKET_CLIENT, responseBuf);
             }

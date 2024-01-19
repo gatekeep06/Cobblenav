@@ -11,13 +11,17 @@ import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 
 import java.util.List;
+import java.util.Objects;
 
 public class CobblenavEvents {
     private static Unit addPlayersToContacts(BattleVictoryEvent event) {
         List<ServerPlayerEntity> players = event.getBattle().getPlayers();
-        if (players.size() > 0) {
+        if (players.size() > 1) {
             players.forEach(player -> {
                 for (ServerPlayerEntity p : players) {
+                    if (Objects.equals(p, player)) {
+                        continue;
+                    }
                     boolean isWinner = event.getWinners().contains(event.getBattle().getActor(player));
                     boolean isAlly = false;
                     if (event.getWinners().size() > 1 && isWinner) {

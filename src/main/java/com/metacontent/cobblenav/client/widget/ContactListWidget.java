@@ -42,6 +42,7 @@ public class ContactListWidget extends ClickableWidget {
             int index = i;
             ContactListItem item = new ContactListItem(x, y, contactList.get(i).getName(), contactList.get(i).getTitle(), index,
                     () -> {
+                        player.playSound(CobblemonSounds.PC_GRAB, 0.05f, 1.25f);
                         selector.setContactIndex(index);
                     }
             );
@@ -58,7 +59,7 @@ public class ContactListWidget extends ClickableWidget {
         this.selector = selector;
         createItems();
 
-        decreaseListPageButton = new PokenavItemButton(x + width / 2 - 2, y + 5, 5, 3, 111, 0, 0, 0,
+        decreaseListPageButton = new PokenavItemButton(x + width / 2 - 2, y + 5, 7, 5, 114, 0, 0, 0,
                 Text.literal(""),
                 BUTTONS,
                 BUTTONS_HOVERED,
@@ -70,7 +71,7 @@ public class ContactListWidget extends ClickableWidget {
                     }
                 }
         );
-        increaseListPageButton = new PokenavItemButton(x + width / 2 - 2, y + height - 9, 5, 3, 105, 0, 0, 0,
+        increaseListPageButton = new PokenavItemButton(x + width / 2 - 2, y + height - 11, 7, 5, 107, 0, 0, 0,
                 Text.literal(""),
                 BUTTONS,
                 BUTTONS_HOVERED,

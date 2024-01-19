@@ -12,7 +12,7 @@ import net.minecraft.server.command.ServerCommandSource;
 
 public class SetPlayerTitleCommand {
     public static void register(CommandDispatcher<ServerCommandSource> dispatcher, CommandRegistryAccess commandRegistryAccess, CommandManager.RegistrationEnvironment registrationEnvironment) {
-        dispatcher.register(CommandManager.literal("pokenav")
+        dispatcher.register(CommandManager.literal("pokenav").requires(source -> source.hasPermissionLevel(2))
                 .then(CommandManager.literal("title")
                         .then(CommandManager.literal("set")
                                 .then(CommandManager.argument("title", StringArgumentType.string())

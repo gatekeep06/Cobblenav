@@ -119,7 +119,7 @@ public class LocationScreen extends AbstractPokenavItemScreen {
                     checkSpawns();
                 }
         );
-        decreaseBucketIndexButton = new PokenavItemButton(width / 2 - 25, borderY + BORDER_DEPTH + 22, 3, 5, 97, 0, 0, 0,
+        decreaseBucketIndexButton = new PokenavItemButton(width / 2 - 25, borderY + BORDER_DEPTH + 22, 5, 7, 97, 0, 0, 0,
                 Text.literal(""),
                 BUTTONS,
                 BUTTONS_HOVERED,
@@ -131,7 +131,7 @@ public class LocationScreen extends AbstractPokenavItemScreen {
                     }
                 }
         );
-        increaseBucketIndexButton = new PokenavItemButton(width / 2 + 25, borderY + BORDER_DEPTH + 22, 3, 5, 101, 0, 0, 0,
+        increaseBucketIndexButton = new PokenavItemButton(width / 2 + 25, borderY + BORDER_DEPTH + 22, 5, 7, 102, 0, 0, 0,
                 Text.literal(""),
                 BUTTONS,
                 BUTTONS_HOVERED,
@@ -143,7 +143,7 @@ public class LocationScreen extends AbstractPokenavItemScreen {
                     }
                 }
         );
-        decreaseListPageButton = new PokenavItemButton(borderX + BORDER_WIDTH - BORDER_DEPTH - 7, height / 2 - 20, 5, 3, 111, 0, 0, 0,
+        decreaseListPageButton = new PokenavItemButton(borderX + BORDER_WIDTH - BORDER_DEPTH - 7, height / 2 - 20, 7, 5, 114, 0, 0, 0,
                 Text.literal(""),
                 BUTTONS,
                 BUTTONS_HOVERED,
@@ -155,7 +155,7 @@ public class LocationScreen extends AbstractPokenavItemScreen {
                     }
                 }
         );
-        increaseListPageButton = new PokenavItemButton(borderX + BORDER_WIDTH - BORDER_DEPTH - 7, height / 2 + 20, 5, 3, 105, 0, 0, 0,
+        increaseListPageButton = new PokenavItemButton(borderX + BORDER_WIDTH - BORDER_DEPTH - 7, height / 2 + 20, 7, 5, 107, 0, 0, 0,
                 Text.literal(""),
                 BUTTONS,
                 BUTTONS_HOVERED,

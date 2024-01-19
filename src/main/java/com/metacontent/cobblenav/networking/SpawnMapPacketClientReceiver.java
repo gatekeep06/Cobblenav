@@ -15,17 +15,9 @@ import java.util.Map;
 
 public class SpawnMapPacketClientReceiver {
     public static void receive(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender responseSender) {
-        PacketByteBuf.PacketReader<String> namePacketReader = PacketByteBuf::readString;
+        PacketByteBuf.PacketReader<RenderablePokemon> renderablePokemonPacketReader = RenderablePokemon.Companion::loadFromBuffer;
         PacketByteBuf.PacketReader<Float> floatPacketReader = PacketByteBuf::readFloat;
-        Map<String, Float> namedProbabilities = buf.readMap(namePacketReader, floatPacketReader);
-        Map<RenderablePokemon, Float> spawnMap = new HashMap<>();
-        namedProbabilities.forEach((key, value) -> {
-            Species species = PokemonSpecies.INSTANCE.getByName(key);
-            if (species != null) {
-                RenderablePokemon renderablePokemon = species.create(10).asRenderablePokemon();
-                spawnMap.put(renderablePokemon, value);
-            }
-        });
+        Map<RenderablePokemon, Float> spawnMap = buf.readMap(renderablePokemonPacketReader, floatPacketReader);
         if (client.currentScreen instanceof LocationScreen locationScreen) {
             locationScreen.setSpawnMap(spawnMap);
             locationScreen.createSpawnInfoWidgets();
