@@ -27,9 +27,10 @@
   "gui.cobblenav.pokenav_item.bucket.ultra-rare": "ультра-редкие",
   "gui.cobblenav.pokenav_item.empty_spawns_message.part_1": "Кажется, здесь никто не живет",
   "gui.cobblenav.pokenav_item.empty_spawns_message.part_2": "Попробуйте обновить, если вы уверены в обратном",
-  "gui.cobblenav.pokenav_item.spawn_message_clipboard": "%s спавнится вблизи координат: %s с шансом %s",
   "gui.cobblenav.pokenav_item.main_menu": "ГЛАВНОЕ МЕНЮ",
   "gui.cobblenav.pokenav_item.location_menu": "МЕСТНОСТЬ",
   "gui.cobblenav.pokenav_item.contact_stats": "Победы: %s | Поражения: %s",
-  "message.cobblenav.updating_contacts": "<Покенав> Обновление контактной информации"
+  "message.cobblenav.updating_contacts": "<Покенав> Обновление контактной информации",
+  "gui.cobblenav.pokenav_item.spawn_info_message": "%s спавнится вблизи координат: %s с шансом %s",
+  "gui.cobblenav.pokenav_item.share_spawn_info_message": "[Нажмите, чтобы поделиться]"
 }

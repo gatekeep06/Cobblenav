@@ -13,7 +13,6 @@ import com.cobblemon.mod.common.api.spawning.spawner.SpawningArea;
 import com.cobblemon.mod.common.config.CobblemonConfig;
 import com.cobblemon.mod.common.pokemon.RenderablePokemon;
 import com.cobblemon.mod.common.pokemon.Species;
-import com.metacontent.cobblenav.client.screen.pokenav.LocationScreen;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.minecraft.network.PacketByteBuf;
@@ -21,11 +20,8 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayNetworkHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.text.Text;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static com.metacontent.cobblenav.networking.CobblenavPackets.SPAWN_MAP_PACKET_CLIENT;
 
@@ -33,8 +29,6 @@ public class SpawnMapPacketServerReceiver {
     public static final List<String> BUCKET_NAMES = List.of("common", "uncommon", "rare", "ultra-rare");
 
     public static void receive(MinecraftServer server, ServerPlayerEntity player, ServerPlayNetworkHandler handler, PacketByteBuf buf, PacketSender responseSender) {
-        Map<String, Float> namedProbabilities = new HashMap<>();
-
         CobblemonConfig config = Cobblemon.config;
 
         int bucketIndex = buf.readInt();
@@ -44,6 +38,7 @@ public class SpawnMapPacketServerReceiver {
             SpawnBucket bucket = Cobblemon.INSTANCE.getBestSpawner().getConfig().getBuckets().stream()
                     .filter(b -> BUCKET_NAMES.get(bucketIndex).equalsIgnoreCase(b.name)).findFirst().orElse(null);
             if (spawner != null && bucket != null) {
+                Map<String, Float> namedProbabilities = new HashMap<>();
                 SpawnCause cause = new SpawnCause(spawner, bucket, player);
 
                 WorldSlice slice = spawner.getProspector().prospect(spawner, new SpawningArea(cause, (ServerWorld) player.getWorld(),
