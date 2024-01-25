@@ -19,6 +19,7 @@ import net.minecraft.network.PacketByteBuf;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
@@ -47,9 +48,12 @@ public class LocationScreen extends AbstractPokenavItemScreen {
     private PokenavItemButton decreaseListPageButton;
     private PokenavItemButton increaseListPageButton;
 
-    protected LocationScreen() {
+    protected LocationScreen(@Nullable String bucket) {
         super(Text.literal("Location"));
         this.player = MinecraftClient.getInstance().player;
+        if (bucket != null) {
+            this.bucketIndex = BUCKET_NAMES.indexOf(bucket);
+        }
     }
 
     private void checkSpawns() {

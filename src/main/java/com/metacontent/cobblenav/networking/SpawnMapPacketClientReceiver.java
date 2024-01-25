@@ -6,6 +6,7 @@ import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.network.PacketByteBuf;
+import net.minecraft.text.Text;
 
 import java.util.Comparator;
 import java.util.Map;
@@ -16,10 +17,10 @@ public class SpawnMapPacketClientReceiver {
         PacketByteBuf.PacketReader<RenderablePokemon> renderablePokemonPacketReader = RenderablePokemon.Companion::loadFromBuffer;
         PacketByteBuf.PacketReader<Float> floatPacketReader = PacketByteBuf::readFloat;
         Map<RenderablePokemon, Float> spawnMap = buf.readMap(renderablePokemonPacketReader, floatPacketReader);
-        Map<RenderablePokemon, Float> sortedSpawnMap = new TreeMap<>(Comparator.comparing(spawnMap::get));
-        sortedSpawnMap.putAll(spawnMap);
+        //Map<RenderablePokemon, Float> sortedSpawnMap = new TreeMap<>(Comparator.comparing(spawnMap::get));
+        //sortedSpawnMap.putAll(spawnMap);
         if (client.currentScreen instanceof LocationScreen locationScreen) {
-            locationScreen.setSpawnMap(sortedSpawnMap);
+            locationScreen.setSpawnMap(spawnMap);
             locationScreen.createSpawnInfoWidgets();
             locationScreen.setLoading(false);
             locationScreen.resetAnimationProgress();

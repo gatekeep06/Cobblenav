@@ -32,5 +32,11 @@
   "gui.cobblenav.pokenav_item.main_menu": "MAIN MENU",
   "gui.cobblenav.pokenav_item.location_menu": "LOCATION",
   "gui.cobblenav.pokenav_item.contact_stats": "Winnings: %s | Losses: %s",
+  "gui.cobblenav.pokenav_item.level_value": "Lv.%s",
+  "gui.cobblenav.pokenav_item.egg_move": "Egg Move",
+  "gui.cobblenav.pokenav_item.egg_move_none": "-None-",
+  "gui.cobblenav.pokenav_item.not_found_message": "No luck finding anything",
+  "gui.cobblenav.pokenav_item.found_pokemon_massage": "%s was last seen near the coordinates %s",
+  "gui.cobblenav.pokenav_item.track_button": "Let's catch!",
   "message.cobblenav.updating_contacts": "<Pokenav> Updating of contact information"
 }

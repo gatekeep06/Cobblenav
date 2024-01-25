@@ -7,6 +7,7 @@ import com.cobblemon.mod.common.api.spawning.SpawnBucket;
 import com.cobblemon.mod.common.api.spawning.SpawnCause;
 import com.cobblemon.mod.common.api.spawning.WorldSlice;
 import com.cobblemon.mod.common.api.spawning.context.AreaSpawningContext;
+import com.cobblemon.mod.common.api.spawning.detail.PokemonSpawnDetail;
 import com.cobblemon.mod.common.api.spawning.detail.SpawnDetail;
 import com.cobblemon.mod.common.api.spawning.spawner.PlayerSpawner;
 import com.cobblemon.mod.common.api.spawning.spawner.SpawningArea;
@@ -20,6 +21,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayNetworkHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.text.Text;
 
 import java.util.*;
 
@@ -38,7 +40,7 @@ public class SpawnMapPacketServerReceiver {
             SpawnBucket bucket = Cobblemon.INSTANCE.getBestSpawner().getConfig().getBuckets().stream()
                     .filter(b -> BUCKET_NAMES.get(bucketIndex).equalsIgnoreCase(b.name)).findFirst().orElse(null);
             if (spawner != null && bucket != null) {
-                Map<String, Float> namedProbabilities = new HashMap<>();
+//                Map<String, Float> namedProbabilities = new HashMap<>();
                 SpawnCause cause = new SpawnCause(spawner, bucket, player);
 
                 WorldSlice slice = spawner.getProspector().prospect(spawner, new SpawningArea(cause, (ServerWorld) player.getWorld(),
@@ -50,26 +52,34 @@ public class SpawnMapPacketServerReceiver {
                         config.getWorldSliceDiameter()));
 
                 List<AreaSpawningContext> contexts = spawner.getResolver().resolve(spawner, spawner.getContextCalculators(), slice);
+
                 Map<SpawnDetail, Float> spawnProbabilities = spawner.getSpawningSelector().getProbabilities(spawner, contexts);
 
+                Map<RenderablePokemon, Float> spawnMap = new HashMap<>();
+
                 spawnProbabilities.forEach((key, value) -> {
-                    if (key.getName().toString() != null) {
-                        String[] s = key.getName().toString().split("\\.");
-                        String name = s[s.length - 2];
-                        if (!namedProbabilities.containsKey(name)) {
-                            namedProbabilities.put(name, value);
+                    if (key instanceof PokemonSpawnDetail pokemonSpawnDetail && pokemonSpawnDetail.isValid()) {
+                        RenderablePokemon renderablePokemon = pokemonSpawnDetail.getPokemon().asRenderablePokemon();
+                        if (renderablePokemon.getSpecies().getImplemented() && !renderablePokemon.getSpecies().getLabels().contains("not_modeled")) {
+                            spawnMap.put(renderablePokemon, value);
                         }
                     }
+//                    if (key.getName().toString() != null) {
+//                        String[] s = key.getName().toString().split("\\.");
+//                        String name = s[s.length - 2];
+//                        if (!namedProbabilities.containsKey(name)) {
+//                            namedProbabilities.put(name, value);
+//                        }
+//                    }
                 });
 
-                Map<RenderablePokemon, Float> spawnMap = new HashMap<>();
-                namedProbabilities.forEach((key, value) -> {
-                    Species species = PokemonSpecies.INSTANCE.getByName(key);
-                    if (species != null) {
-                        RenderablePokemon renderablePokemon = species.create(10).asRenderablePokemon();
-                        spawnMap.put(renderablePokemon, value);
-                    }
-                });
+//                namedProbabilities.forEach((key, value) -> {
+//                    Species species = PokemonSpecies.INSTANCE.getByName(key);
+//                    if (species != null) {
+//                        RenderablePokemon renderablePokemon = species.create(10).asRenderablePokemon();
+//                        spawnMap.put(renderablePokemon, value);
+//                    }
+//                });
 
                 PacketByteBuf responseBuf = PacketByteBufs.create();
                 PacketByteBuf.PacketWriter<RenderablePokemon> renderablePokemonPacketWriter = (packetByteBuf, pokemon) -> pokemon.saveToBuffer(packetByteBuf);

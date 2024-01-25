@@ -76,7 +76,7 @@ public class PokenavItemButton extends ClickableWidget {
                     256, 0, 1, 1, 1, 1, false, 1);
         }
         drawScaledText(drawContext, FONT, message,
-                getX() + (isHovered() ? 12 : 12 + pullout), getY() + 3, 1, 1, (int) (getWidth() * 0.75), 0, false, false, i, j);
+                getX() + width / 2 + (isHovered() ? 0 : pullout), getY() + height / 2 - 4, 1, 1, (int) (getWidth() * 0.75), 0, true, false, i, j);
     }
 
     @Override

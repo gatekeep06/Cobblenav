@@ -2,8 +2,10 @@ package com.metacontent.cobblenav.client.widget;
 
 import com.cobblemon.mod.common.CobblemonSounds;
 import com.cobblemon.mod.common.client.gui.summary.widgets.ModelWidget;
+import com.cobblemon.mod.common.pokemon.Pokemon;
 import com.cobblemon.mod.common.pokemon.RenderablePokemon;
 import com.metacontent.cobblenav.Cobblenav;
+import com.metacontent.cobblenav.client.screen.pokenav.FinderScreen;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
@@ -41,7 +43,8 @@ public class PokemonSpawnInfoWidget extends ClickableWidget {
                 0, 0, Text.literal(""), BUTTONS, null,
                 () -> {
                     player.playSound(CobblemonSounds.PC_CLICK, 0.1f, 1.25f);
-                    String name = pokemonModel.getPokemon().getSpecies().getTranslatedName().getString();
+                    String form = pokemonModel.getPokemon().getForm().getName();
+                    String name = pokemonModel.getPokemon().getSpecies().getTranslatedName().getString() + (form.equals("Normal") ? "" : " (" + form + ")");
                     Vec3d vec3d = player.getPos();
                     String coordinates = "x: " + (int) vec3d.x + " y: " + (int) vec3d.y + " z: " + (int) vec3d.z;
                     String chance = bucket + " - " + df.format(probability) + "%";
@@ -56,7 +59,7 @@ public class PokemonSpawnInfoWidget extends ClickableWidget {
                 0, 0, Text.literal(""), BUTTONS, null,
                 () -> {
                     player.playSound(CobblemonSounds.PC_CLICK, 0.1f, 1.25f);
-                    player.sendMessage(Text.literal("Not available at this time. Wait for the next Cobblenav update").setStyle(Style.EMPTY.withColor(0xff9a38)));
+                    MinecraftClient.getInstance().setScreen(new FinderScreen(pokemonModel.getPokemon(), bucket));
                 }
         );
     }

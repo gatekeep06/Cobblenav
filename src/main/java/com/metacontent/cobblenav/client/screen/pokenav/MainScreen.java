@@ -74,7 +74,7 @@ public class MainScreen extends AbstractPokenavItemScreen {
                 BUTTONS_HOVERED,
                 () -> {
                     player.playSound(CobblemonSounds.PC_CLICK, 0.1f, 1.25f);
-                    MinecraftClient.getInstance().setScreen(new LocationScreen());
+                    MinecraftClient.getInstance().setScreen(new LocationScreen(null));
                 }
         );
         contactsButton = new PokenavItemButton(x, y + 16, 69, 14, 0, 0, 3, 0,

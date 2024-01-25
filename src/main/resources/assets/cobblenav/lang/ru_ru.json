@@ -32,5 +32,11 @@
   "gui.cobblenav.pokenav_item.contact_stats": "Победы: %s | Поражения: %s",
   "message.cobblenav.updating_contacts": "<Покенав> Обновление контактной информации",
   "gui.cobblenav.pokenav_item.spawn_info_message": "%s спавнится вблизи координат: %s с шансом %s",
-  "gui.cobblenav.pokenav_item.share_spawn_info_message": "[Нажмите, чтобы поделиться]"
+  "gui.cobblenav.pokenav_item.share_spawn_info_message": "[Нажмите, чтобы поделиться]",
+  "gui.cobblenav.pokenav_item.level_value": "Ур.%s",
+  "gui.cobblenav.pokenav_item.egg_move": "Яйцевой Приём",
+  "gui.cobblenav.pokenav_item.egg_move_none": "-Нет-",
+  "gui.cobblenav.pokenav_item.not_found_message": "Не удалось ничего найти",
+  "gui.cobblenav.pokenav_item.found_pokemon_massage": "%s был в последний раз виден около координат %s",
+  "gui.cobblenav.pokenav_item.track_button": "Поймаем его!"
 }
