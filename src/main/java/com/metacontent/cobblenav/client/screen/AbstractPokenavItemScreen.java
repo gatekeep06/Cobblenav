@@ -57,7 +57,7 @@ public class AbstractPokenavItemScreen extends Screen {
                 256, 0, 1,1,1,1,false,1);
 
         drawScaledText(drawContext, FONT, Text.translatable("gui.cobblenav.pokenav_item.title").setStyle(Style.EMPTY.withBold(true).withColor(0xFFFFFF)),
-                borderX + BORDER_DEPTH + 4, borderY + BORDER_DEPTH + 2, 1, 1, 100, 0, false, false, i, j);
+                borderX + BORDER_DEPTH + 4, borderY + BORDER_DEPTH + 2, 1, 1, (int) (BORDER_WIDTH / 1.5), 0, false, false, i, j);
     }
 
     @Override

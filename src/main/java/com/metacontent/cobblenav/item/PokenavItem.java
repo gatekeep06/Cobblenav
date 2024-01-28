@@ -11,14 +11,11 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NbtHelper;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.world.World;
 
 public class PokenavItem extends Item {
-    private PokemonEntity traceablePokemon;
-
     public PokenavItem(Settings settings) {
         super(settings);
     }
@@ -31,21 +28,8 @@ public class PokenavItem extends Item {
                 playerEntity.playSound(CobblemonSounds.PC_ON, 0.1f, 1.25f);
                 MinecraftClient.getInstance().setScreen(new MainScreen());
             }
-            return  TypedActionResult.success(playerEntity.getStackInHand(hand));
+            return  TypedActionResult.success(playerEntity.getStackInHand(hand), false);
         }
         return TypedActionResult.pass(playerEntity.getStackInHand(hand));
-    }
-
-    @Override
-    public void inventoryTick(ItemStack itemStack, World world, Entity entity, int i, boolean bl) {
-        super.inventoryTick(itemStack, world, entity, i, bl);
-    }
-
-    public PokemonEntity getTraceablePokemon() {
-        return traceablePokemon;
-    }
-
-    public void setTraceablePokemon(PokemonEntity traceablePokemon) {
-        this.traceablePokemon = traceablePokemon;
     }
 }

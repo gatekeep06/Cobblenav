@@ -7,6 +7,7 @@ import com.cobblemon.mod.common.pokemon.Pokemon;
 import com.cobblemon.mod.common.pokemon.activestate.ShoulderedState;
 import com.metacontent.cobblenav.client.screen.AbstractPokenavItemScreen;
 import com.metacontent.cobblenav.client.widget.PokenavItemButton;
+import com.metacontent.cobblenav.config.CobblenavConfig;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
@@ -108,11 +109,13 @@ public class MainScreen extends AbstractPokenavItemScreen {
                 borderX + BORDER_DEPTH, borderY + BORDER_DEPTH + 30, 14, 48, 0, 45, 256,
                 256, 0, 1, 1, 1, 1, false, 1);
 
-        for (ModelWidget modelWidget : partyModels) {
-            modelWidget.render(drawContext, i, j, f);
-        }
+        if (CobblenavConfig.DISPLAY_TEAM_WIDGET) {
+            for (ModelWidget modelWidget : partyModels) {
+                modelWidget.render(drawContext, i, j, f);
+            }
 
-        renderPlayer(drawContext, playerX, playerY, player);
+            renderPlayer(drawContext, playerX, playerY, player);
+        }
 
         drawScaledText(drawContext, FONT, Text.translatable("gui.cobblenav.pokenav_item.main_menu").setStyle(Style.EMPTY.withColor(0xFFFFFF)),
                 borderX + BORDER_DEPTH + 6, borderY + BORDER_DEPTH + 33, 1, 1, 40, 0, false, false, i, j);
