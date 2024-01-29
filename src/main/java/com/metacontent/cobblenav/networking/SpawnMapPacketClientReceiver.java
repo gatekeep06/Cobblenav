@@ -26,8 +26,8 @@ public class SpawnMapPacketClientReceiver {
             sortingList.forEach(entry -> sortedSpawnMap.put(entry.getKey(), entry.getValue()));
 
             locationScreen.setSpawnMap(sortedSpawnMap);
-            locationScreen.createSpawnInfoWidgets();
             locationScreen.setLoading(false);
+            locationScreen.createSpawnInfoWidgets();
             locationScreen.resetAnimationProgress();
         }
     }

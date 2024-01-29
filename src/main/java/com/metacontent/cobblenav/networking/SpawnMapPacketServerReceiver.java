@@ -14,6 +14,7 @@ import com.cobblemon.mod.common.api.spawning.spawner.SpawningArea;
 import com.cobblemon.mod.common.config.CobblemonConfig;
 import com.cobblemon.mod.common.pokemon.RenderablePokemon;
 import com.cobblemon.mod.common.pokemon.Species;
+import com.metacontent.cobblenav.Cobblenav;
 import com.metacontent.cobblenav.config.CobblenavConfig;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
@@ -34,59 +35,54 @@ public class SpawnMapPacketServerReceiver {
     public static void receive(MinecraftServer server, ServerPlayerEntity player, ServerPlayNetworkHandler handler, PacketByteBuf buf, PacketSender responseSender) {
         CobblemonConfig config = Cobblemon.config;
         int bucketIndex = buf.readInt();
+        Map<RenderablePokemon, Float> spawnMap = new HashMap<>();
 
         server.executeSync(() -> {
-            if (config.getEnableSpawning()) {
-                PlayerSpawner spawner = CobblemonWorldSpawnerManager.INSTANCE.getSpawnersForPlayers().get(player.getUuid());
-                SpawnBucket bucket = Cobblemon.INSTANCE.getBestSpawner().getConfig().getBuckets().stream()
-                        .filter(b -> BUCKET_NAMES.get(bucketIndex).equalsIgnoreCase(b.name)).findFirst().orElse(null);
-                if (spawner != null && bucket != null) {
-//                Map<String, Float> namedProbabilities = new HashMap<>();
-                    SpawnCause cause = new SpawnCause(spawner, bucket, player);
-                    WorldSlice slice = spawner.getProspector().prospect(spawner, new SpawningArea(cause, (ServerWorld) player.getWorld(),
-                            (int) Math.ceil(player.getX() - config.getWorldSliceDiameter() / 2f),
-                            (int) Math.ceil(player.getY() - config.getWorldSliceHeight() / 2f),
-                            (int) Math.ceil(player.getZ() - config.getWorldSliceDiameter() / 2f),
-                            CobblenavConfig.CHECK_SPAWNS_WIDTH == -1 ? config.getWorldSliceDiameter() : CobblenavConfig.CHECK_SPAWNS_WIDTH,
-                            CobblenavConfig.CHECK_SPAWNS_HEIGHT == -1 ? config.getWorldSliceHeight() : CobblenavConfig.CHECK_SPAWNS_HEIGHT,
-                            CobblenavConfig.CHECK_SPAWNS_WIDTH == -1 ? config.getWorldSliceDiameter() : CobblenavConfig.CHECK_SPAWNS_WIDTH));
+            try {
+                if (config.getEnableSpawning()) {
+                    PlayerSpawner spawner = CobblemonWorldSpawnerManager.INSTANCE.getSpawnersForPlayers().get(player.getUuid());
+                    SpawnBucket bucket = Cobblemon.INSTANCE.getBestSpawner().getConfig().getBuckets().stream()
+                            .filter(b -> BUCKET_NAMES.get(bucketIndex).equalsIgnoreCase(b.name)).findFirst().orElse(null);
+                    if (spawner != null && bucket != null) {
+                        SpawnCause cause = new SpawnCause(spawner, bucket, player);
+                        WorldSlice slice = spawner.getProspector().prospect(spawner, new SpawningArea(cause, (ServerWorld) player.getWorld(),
+                                (int) Math.ceil(player.getX() - config.getWorldSliceDiameter() / 2f),
+                                (int) Math.ceil(player.getY() - config.getWorldSliceHeight() / 2f),
+                                (int) Math.ceil(player.getZ() - config.getWorldSliceDiameter() / 2f),
+                                CobblenavConfig.CHECK_SPAWNS_WIDTH == -1 ? config.getWorldSliceDiameter() : CobblenavConfig.CHECK_SPAWNS_WIDTH,
+                                CobblenavConfig.CHECK_SPAWNS_HEIGHT == -1 ? config.getWorldSliceHeight() : CobblenavConfig.CHECK_SPAWNS_HEIGHT,
+                                CobblenavConfig.CHECK_SPAWNS_WIDTH == -1 ? config.getWorldSliceDiameter() : CobblenavConfig.CHECK_SPAWNS_WIDTH));
 
-                    List<AreaSpawningContext> contexts = spawner.getResolver().resolve(spawner, spawner.getContextCalculators(), slice);
-                    Map<SpawnDetail, Float> spawnProbabilities = spawner.getSpawningSelector().getProbabilities(spawner, contexts);
-                    Map<RenderablePokemon, Float> spawnMap = new HashMap<>();
+                        List<AreaSpawningContext> contexts = spawner.getResolver().resolve(spawner, spawner.getContextCalculators(), slice);
+                        Map<SpawnDetail, Float> spawnProbabilities = spawner.getSpawningSelector().getProbabilities(spawner, contexts);
 
-                    spawnProbabilities.forEach((key, value) -> {
-                        if (key instanceof PokemonSpawnDetail pokemonSpawnDetail && pokemonSpawnDetail.isValid()) {
-                            RenderablePokemon renderablePokemon = pokemonSpawnDetail.getPokemon().asRenderablePokemon();
-                            if (!renderablePokemon.getSpecies().getLabels().contains("not_modeled")) {
-                                spawnMap.put(renderablePokemon, value);
+                        spawnProbabilities.forEach((key, value) -> {
+                            try {
+                                if (key instanceof PokemonSpawnDetail pokemonSpawnDetail && pokemonSpawnDetail.isValid()) {
+                                    RenderablePokemon renderablePokemon = pokemonSpawnDetail.getPokemon().asRenderablePokemon();
+                                    if (!renderablePokemon.getSpecies().getLabels().contains("not_modeled")) {
+                                        spawnMap.put(renderablePokemon, value);
+                                    }
+                                }
                             }
-                        }
-//                    if (key.getName().toString() != null) {
-//                        String[] s = key.getName().toString().split("\\.");
-//                        String name = s[s.length - 2];
-//                        if (!namedProbabilities.containsKey(name)) {
-//                            namedProbabilities.put(name, value);
-//                        }
-//                    }
-                    });
-
-//                namedProbabilities.forEach((key, value) -> {
-//                    Species species = PokemonSpecies.INSTANCE.getByName(key);
-//                    if (species != null) {
-//                        RenderablePokemon renderablePokemon = species.create(10).asRenderablePokemon();
-//                        spawnMap.put(renderablePokemon, value);
-//                    }
-//                });
-
-                    PacketByteBuf responseBuf = PacketByteBufs.create();
-                    responseBuf.writeInt(bucketIndex);
-                    PacketByteBuf.PacketWriter<RenderablePokemon> renderablePokemonPacketWriter = (packetByteBuf, pokemon) -> pokemon.saveToBuffer(packetByteBuf);
-                    PacketByteBuf.PacketWriter<Float> floatPacketWriter = PacketByteBuf::writeFloat;
-                    responseBuf.writeMap(spawnMap, renderablePokemonPacketWriter, floatPacketWriter);
-
-                    responseSender.sendPacket(SPAWN_MAP_PACKET_CLIENT, responseBuf);
+                            catch (Throwable e) {
+                                Cobblenav.LOGGER.error(e.getMessage(), e);
+                            }
+                        });
+                    }
                 }
+            }
+            catch (Throwable e) {
+                Cobblenav.LOGGER.error(e.getMessage(), e);
+            }
+            finally {
+                PacketByteBuf responseBuf = PacketByteBufs.create();
+                responseBuf.writeInt(bucketIndex);
+                PacketByteBuf.PacketWriter<RenderablePokemon> renderablePokemonPacketWriter = (packetByteBuf, pokemon) -> pokemon.saveToBuffer(packetByteBuf);
+                PacketByteBuf.PacketWriter<Float> floatPacketWriter = PacketByteBuf::writeFloat;
+                responseBuf.writeMap(spawnMap, renderablePokemonPacketWriter, floatPacketWriter);
+
+                responseSender.sendPacket(SPAWN_MAP_PACKET_CLIENT, responseBuf);
             }
         });
     }
