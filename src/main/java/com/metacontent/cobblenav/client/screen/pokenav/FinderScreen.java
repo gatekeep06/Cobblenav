@@ -12,6 +12,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.util.math.MatrixStack;
@@ -50,6 +51,10 @@ public class FinderScreen extends AbstractPokenavItemScreen {
         this.bucket = bucket;
     }
 
+    public FinderScreen(RenderablePokemon pokemon) {
+        this(pokemon, null);
+    }
+
     public void setFoundPokemon(@Nullable FoundPokemon foundPokemon) {
         this.foundPokemon = foundPokemon;
     }
@@ -58,7 +63,7 @@ public class FinderScreen extends AbstractPokenavItemScreen {
         isLoading = loading;
     }
 
-    public void requestBestPokemon() {
+    private void requestBestPokemon() {
         PacketByteBuf buf = PacketByteBufs.create();
         if (pokemon.getForm().formOnlyShowdownId().equals("normal")) {
             buf.writeString(pokemon.getSpecies().showdownId());
@@ -67,6 +72,12 @@ public class FinderScreen extends AbstractPokenavItemScreen {
             buf.writeString(pokemon.getForm().showdownId());
         }
         ClientPlayNetworking.send(CobblenavPackets.BEST_POKEMON_PACKET_SERVER, buf);
+    }
+
+    private void saveLastFoundPokemon() {
+        PacketByteBuf buf = PacketByteBufs.create();
+        pokemon.saveToBuffer(buf);
+        ClientPlayNetworking.send(CobblenavPackets.SAVE_FOUND_POKEMON_PACKET, buf);
     }
 
     @Override
@@ -87,7 +98,7 @@ public class FinderScreen extends AbstractPokenavItemScreen {
                 BUTTONS_HOVERED,
                 () -> {
                     player.playSound(CobblemonSounds.PC_CLICK, 0.1f, 1.25f);
-                    MinecraftClient.getInstance().setScreen(new LocationScreen(bucket));
+                    MinecraftClient.getInstance().setScreen(bucket != null ? new LocationScreen(bucket) : new MainScreen());
                 }
         );
         trackButton = new PokenavItemButton(borderX + BORDER_WIDTH / 2 - 34, borderY + BORDER_HEIGHT - BORDER_DEPTH - 27, 70, 23, 0, 80, 0, 0,
@@ -95,6 +106,7 @@ public class FinderScreen extends AbstractPokenavItemScreen {
                 BUTTONS,
                 BUTTONS_HOVERED,
                 () -> {
+                    saveLastFoundPokemon();
                     BlockPos pos = foundPokemon.getPos();
                     player.playSound(CobblemonSounds.POKE_BALL_CAPTURE_SUCCEEDED, 0.5f, 0.75f);
                     player.sendMessage(Text.translatable("gui.cobblenav.pokenav_item.found_pokemon_massage",

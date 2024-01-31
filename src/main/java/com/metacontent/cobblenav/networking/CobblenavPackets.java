@@ -1,31 +1,9 @@
 package com.metacontent.cobblenav.networking;
 
-import com.cobblemon.mod.common.Cobblemon;
-import com.cobblemon.mod.common.api.pokemon.PokemonSpecies;
-import com.cobblemon.mod.common.api.spawning.CobblemonWorldSpawnerManager;
-import com.cobblemon.mod.common.api.spawning.SpawnBucket;
-import com.cobblemon.mod.common.api.spawning.SpawnCause;
-import com.cobblemon.mod.common.api.spawning.WorldSlice;
-import com.cobblemon.mod.common.api.spawning.context.AreaSpawningContext;
-import com.cobblemon.mod.common.api.spawning.detail.SpawnDetail;
-import com.cobblemon.mod.common.api.spawning.spawner.PlayerSpawner;
-import com.cobblemon.mod.common.api.spawning.spawner.SpawningArea;
-import com.cobblemon.mod.common.config.CobblemonConfig;
-import com.cobblemon.mod.common.pokemon.RenderablePokemon;
-import com.cobblemon.mod.common.pokemon.Species;
 import com.metacontent.cobblenav.Cobblenav;
-import com.metacontent.cobblenav.client.screen.pokenav.LocationScreen;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
-import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.minecraft.network.PacketByteBuf;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 public class CobblenavPackets {
     public static final Identifier SPAWN_MAP_PACKET_SERVER = new Identifier(Cobblenav.ID, "spawn_map_packet_server");
@@ -34,16 +12,24 @@ public class CobblenavPackets {
     public static final Identifier CONTACT_DATA_PACKET_CLIENT = new Identifier(Cobblenav.ID, "contact_data_packet_client");
     public static final Identifier BEST_POKEMON_PACKET_SERVER = new Identifier(Cobblenav.ID, "best_pokemon_packet_server");
     public static final Identifier BEST_POKEMON_PACKET_CLIENT = new Identifier(Cobblenav.ID, "best_pokemon_packet_client");
+    public static final Identifier SAVE_FOUND_POKEMON_PACKET = new Identifier(Cobblenav.ID, "save_found_pokemon_packet");
+    public static final Identifier RENDERABLE_POKEMON_PACKET_CLIENT = new Identifier(Cobblenav.ID, "renderable_pokemon_packet_client");
+    public static final Identifier RENDERABLE_POKEMON_PACKET_SERVER = new Identifier(Cobblenav.ID, "renderable_pokemon_packet_server");
+    public static final Identifier REMOVE_LAST_FOUND_POKEMON_PACKET = new Identifier(Cobblenav.ID, "remove_last_found_pokemon_packet");
 
     public static void registerC2SPackets() {
         ServerPlayNetworking.registerGlobalReceiver(SPAWN_MAP_PACKET_SERVER, SpawnMapPacketServerReceiver::receive);
         ServerPlayNetworking.registerGlobalReceiver(CONTACT_DATA_PACKET_SERVER, ContactDataPacketServerReceiver::receive);
         ServerPlayNetworking.registerGlobalReceiver(BEST_POKEMON_PACKET_SERVER, BestPokemonPacketServerReceiver::receive);
+        ServerPlayNetworking.registerGlobalReceiver(SAVE_FOUND_POKEMON_PACKET, SaveFoundPokemonPacketReceiver::receive);
+        ServerPlayNetworking.registerGlobalReceiver(RENDERABLE_POKEMON_PACKET_SERVER, RenderablePokemonPacketServerReceiver::receive);
+        ServerPlayNetworking.registerGlobalReceiver(REMOVE_LAST_FOUND_POKEMON_PACKET, RemoveLastFoundPokemonPacketReceiver::receive);
     }
 
     public static void registerS2CPackets() {
         ClientPlayNetworking.registerGlobalReceiver(SPAWN_MAP_PACKET_CLIENT, SpawnMapPacketClientReceiver::receive);
         ClientPlayNetworking.registerGlobalReceiver(CONTACT_DATA_PACKET_CLIENT, ContactDataPacketClientReceiver::receive);
         ClientPlayNetworking.registerGlobalReceiver(BEST_POKEMON_PACKET_CLIENT, BestPokemonPacketClientReceiver::receive);
+        ClientPlayNetworking.registerGlobalReceiver(RENDERABLE_POKEMON_PACKET_CLIENT, RenderablePokemonPacketClientReceiver::receive);
     }
 }

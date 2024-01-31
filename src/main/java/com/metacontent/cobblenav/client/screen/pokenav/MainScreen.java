@@ -4,12 +4,17 @@ import com.cobblemon.mod.common.CobblemonSounds;
 import com.cobblemon.mod.common.client.CobblemonClient;
 import com.cobblemon.mod.common.client.gui.summary.widgets.ModelWidget;
 import com.cobblemon.mod.common.pokemon.Pokemon;
+import com.cobblemon.mod.common.pokemon.RenderablePokemon;
 import com.cobblemon.mod.common.pokemon.activestate.ShoulderedState;
 import com.metacontent.cobblenav.client.screen.AbstractPokenavItemScreen;
+import com.metacontent.cobblenav.client.widget.FinderShortcutWidget;
 import com.metacontent.cobblenav.client.widget.PokenavItemButton;
 import com.metacontent.cobblenav.config.CobblenavConfig;
+import com.metacontent.cobblenav.networking.CobblenavPackets;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
+import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.ingame.InventoryScreen;
@@ -35,14 +40,30 @@ public class MainScreen extends AbstractPokenavItemScreen {
     private PokenavItemButton closeButton;
     private PokenavItemButton contactsButton;
     private PokenavItemButton spawnCheckButton;
+    private FinderShortcutWidget finderShortcutWidget = null;
 
     public MainScreen() {
         super(Text.literal("Pokenav"));
     }
 
+    private void requestLastFoundPokemon() {
+        ClientPlayNetworking.send(CobblenavPackets.RENDERABLE_POKEMON_PACKET_SERVER, PacketByteBufs.create());
+    }
+
+    public void createFinderShortcutWidget(RenderablePokemon pokemon) {
+        finderShortcutWidget = new FinderShortcutWidget(borderX + BORDER_WIDTH - BORDER_DEPTH - 30,
+                borderY + BORDER_DEPTH + 30, pokemon, this);
+    }
+
+    public void removeFinderShortcutWidget() {
+        finderShortcutWidget = null;
+    }
+
     @Override
     protected void init() {
         super.init();
+
+        requestLastFoundPokemon();
 
         partyModels = new ArrayList<>();
         borderX = (width - BORDER_WIDTH) / 2;
@@ -117,6 +138,10 @@ public class MainScreen extends AbstractPokenavItemScreen {
             renderPlayer(drawContext, playerX, playerY, player);
         }
 
+        if (finderShortcutWidget != null) {
+            finderShortcutWidget.render(drawContext, i, j, f);
+        }
+
         drawScaledText(drawContext, FONT, Text.translatable("gui.cobblenav.pokenav_item.main_menu").setStyle(Style.EMPTY.withColor(0xFFFFFF)),
                 borderX + BORDER_DEPTH + 6, borderY + BORDER_DEPTH + 33, 1, 1, 40, 0, false, false, i, j);
 
@@ -129,6 +154,9 @@ public class MainScreen extends AbstractPokenavItemScreen {
 
     @Override
     public boolean mouseClicked(double d, double e, int i) {
+        if (finderShortcutWidget != null) {
+            finderShortcutWidget.mouseClicked(d, e, i);
+        }
         spawnCheckButton.mouseClicked(d, e, i);
         contactsButton.mouseClicked(d, e, i);
         closeButton.mouseClicked(d, e, i);

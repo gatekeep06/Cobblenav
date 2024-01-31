@@ -21,7 +21,11 @@ public class SpawnMapPacketClientReceiver {
             Map<RenderablePokemon, Float> spawnMap = buf.readMap(renderablePokemonPacketReader, floatPacketReader);
 
             List<Map.Entry<RenderablePokemon, Float>> sortingList = new ArrayList<>(spawnMap.entrySet());
-            sortingList.sort(Map.Entry.comparingByValue());
+            int sortingMark = locationScreen.getSortingMark();
+            Comparator<Map.Entry<RenderablePokemon, Float>> comparator = Map.Entry.comparingByValue(
+                    (c1, c2) -> sortingMark * Float.compare(c1, c2)
+            );
+            sortingList.sort(comparator);
             Map<RenderablePokemon, Float> sortedSpawnMap = new LinkedHashMap<>();
             sortingList.forEach(entry -> sortedSpawnMap.put(entry.getKey(), entry.getValue()));
 

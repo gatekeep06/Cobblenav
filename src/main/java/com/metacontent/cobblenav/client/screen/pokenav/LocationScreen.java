@@ -37,6 +37,7 @@ public class LocationScreen extends AbstractPokenavItemScreen {
     private boolean isLoading = false;
     private int ticker = 0;
     private int animProgress = 0;
+    private int sortingMark = 1;
     private int listPage;
     private int borderX;
     private int borderY;
@@ -47,6 +48,7 @@ public class LocationScreen extends AbstractPokenavItemScreen {
     private PokenavItemButton increaseBucketIndexButton;
     private PokenavItemButton decreaseListPageButton;
     private PokenavItemButton increaseListPageButton;
+    private PokenavItemButton reverseSortingButton;
 
     protected LocationScreen(@Nullable String bucket) {
         super(Text.literal("Location"));
@@ -172,6 +174,25 @@ public class LocationScreen extends AbstractPokenavItemScreen {
                     }
                 }
         );
+        reverseSortingButton = new PokenavItemButton(borderX + BORDER_WIDTH - BORDER_DEPTH - 14, borderY + BORDER_HEIGHT - BORDER_DEPTH - 12, 11, 11, 97, 12, 0, 100,
+                Text.literal(""),
+                BUTTONS,
+                BUTTONS_HOVERED,
+                () -> {
+                    player.playSound(CobblemonSounds.PC_CLICK, 0.05f, 1.25f);
+                    if (!spawnMap.isEmpty()) {
+                        sortingMark = -sortingMark;
+                        List<Map.Entry<RenderablePokemon, Float>> sortingList = new ArrayList<>(spawnMap.entrySet());
+                        Comparator<Map.Entry<RenderablePokemon, Float>> comparator = Map.Entry.comparingByValue(
+                                (c1, c2) -> sortingMark * Float.compare(c1, c2)
+                        );
+                        sortingList.sort(comparator);
+                        spawnMap.clear();
+                        sortingList.forEach(entry -> spawnMap.put(entry.getKey(), entry.getValue()));
+                        createSpawnInfoWidgets();
+                    }
+                }
+        );
     }
 
     @Override
@@ -193,13 +214,21 @@ public class LocationScreen extends AbstractPokenavItemScreen {
 
         backButton.render(drawContext, i, j, f);
         refreshButton.render(drawContext, i, j, f);
+        reverseSortingButton.render(drawContext, i, j, f);
 
         if (isLoading) {
             renderLoadingAnimation(drawContext, i, j, f);
         }
         else {
             if (!spawnInfoWidgets.isEmpty()) {
-                spawnInfoWidgets.forEach(widget -> widget.render(drawContext, i, j, f));
+                try {
+                    for (PokemonSpawnInfoWidget spawnInfoWidget : spawnInfoWidgets) {
+                        spawnInfoWidget.render(drawContext, i, j, f);
+                    }
+                }
+                catch (Throwable e) {
+                    Cobblenav.LOGGER.error(e.getMessage(), e);
+                }
             }
             else {
                 drawScaledText(drawContext, FONT, Text.translatable("gui.cobblenav.pokenav_item.empty_spawns_message.part_1"),
@@ -221,6 +250,7 @@ public class LocationScreen extends AbstractPokenavItemScreen {
         decreaseListPageButton.mouseClicked(d, e, i);
         increaseListPageButton.mouseClicked(d, e, i);
         spawnInfoWidgets.forEach(widget -> widget.mouseClicked(d, e, i));
+        reverseSortingButton.mouseClicked(d, e, i);
         return super.mouseClicked(d, e, i);
     }
 
@@ -254,5 +284,9 @@ public class LocationScreen extends AbstractPokenavItemScreen {
 
     public int getBucketIndex() {
         return bucketIndex;
+    }
+
+    public int getSortingMark() {
+        return sortingMark;
     }
 }
