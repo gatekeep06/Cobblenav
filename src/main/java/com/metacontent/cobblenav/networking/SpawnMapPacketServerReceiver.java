@@ -60,7 +60,10 @@ public class SpawnMapPacketServerReceiver {
                             try {
                                 if (key instanceof PokemonSpawnDetail pokemonSpawnDetail && pokemonSpawnDetail.isValid()) {
                                     RenderablePokemon renderablePokemon = pokemonSpawnDetail.getPokemon().asRenderablePokemon();
-                                    if (!renderablePokemon.getSpecies().getLabels().contains("not_modeled")) {
+                                    boolean isIgnored = Arrays.stream(CobblenavConfig.IGNORED_LABELS).anyMatch(
+                                            string -> renderablePokemon.getSpecies().getLabels().contains(string)
+                                    );
+                                    if (!isIgnored) {
                                         spawnMap.put(renderablePokemon, value);
                                     }
                                 }
