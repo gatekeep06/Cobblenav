@@ -2,21 +2,52 @@ package com.metacontent.cobblenav.util;
 
 import com.cobblemon.mod.common.api.battles.model.PokemonBattle;
 import com.cobblemon.mod.common.api.battles.model.actor.BattleActor;
+import com.cobblemon.mod.common.api.pokemon.PokemonSpecies;
 import com.cobblemon.mod.common.battles.pokemon.BattlePokemon;
+import com.cobblemon.mod.common.pokemon.FormData;
+import com.cobblemon.mod.common.pokemon.Pokemon;
+import com.cobblemon.mod.common.pokemon.RenderablePokemon;
+import com.cobblemon.mod.common.pokemon.Species;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.text.Text;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class CobblenavNbtHelper {
-    private CobblenavNbtHelper() {
 
+    @Nullable
+    public static RenderablePokemon getRenderablePokemonByNbtData(NbtCompound nbt) {
+        String name = nbt.getString("name");
+        String formName = nbt.getString("form");
+        Species species = PokemonSpecies.INSTANCE.getByName(name);
+        if (species != null) {
+            FormData form = species.getForms().stream().filter(formData ->
+                    formData.formOnlyShowdownId().equals(formName)
+            ).findFirst().orElse(species.getStandardForm());
+            Pokemon pokemon = species.create(10);
+            pokemon.setForm(form);
+            return pokemon.asRenderablePokemon();
+        }
+        return null;
     }
 
-    public static PokenavContact toPokenavContact(NbtCompound nbt) {
+    public static void saveRenderablePokemonData(RenderablePokemon pokemon, NbtCompound nbt) {
+        String name = pokemon.getSpecies().showdownId();
+        String formName = pokemon.getForm().formOnlyShowdownId();
+        nbt.putString("name", name);
+        nbt.putString("form", formName);
+    }
+
+    public static void clearRenderablePokemonData(NbtCompound nbt) {
+        nbt.remove("name");
+        nbt.remove("form");
+    }
+
+    public static PokenavContact toPokenavContact(NbtCompound nbt, String uuid) {
         String name = nbt.getString("name");
         String title = nbt.getString("title");
         int winnings = nbt.getInt("winnings");
@@ -29,7 +60,14 @@ public class CobblenavNbtHelper {
             }
         });
 
-        return new PokenavContact(name, title, winnings, losses, team);
+        return new PokenavContact(uuid, name, title, winnings, losses, team);
+    }
+
+    public static void deleteContact(ServerPlayerEntity player, String uuid) {
+        if (player instanceof ContactSaverEntity contactSaverEntity) {
+            NbtCompound nbt = contactSaverEntity.cobblenav$getContactData();
+            nbt.remove(uuid);
+        }
     }
 
     public static void updateContact(ServerPlayerEntity player, ServerPlayerEntity contact, @Nullable PokemonBattle battle, boolean isWinner, boolean isAlly) {

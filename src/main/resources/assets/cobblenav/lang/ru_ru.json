@@ -38,5 +38,7 @@
   "gui.cobblenav.pokenav_item.egg_move_none": "-Нет-",
   "gui.cobblenav.pokenav_item.not_found_message": "Не удалось ничего найти",
   "gui.cobblenav.pokenav_item.found_pokemon_massage": "%s был в последний раз виден около координат %s",
-  "gui.cobblenav.pokenav_item.track_button": "Поймаем его!"
+  "gui.cobblenav.pokenav_item.track_button": "Поймаем его!",
+  "gamerule.titleCommandsPermissionLevel": "Уровень доступа команд титула",
+  "gui.cobblenav.pokenav_item.last_found": "ИСКАЛОСЬ"
 }

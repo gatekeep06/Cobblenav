@@ -1,11 +1,15 @@
 package com.metacontent.cobblenav.client.widget;
 
 import com.metacontent.cobblenav.Cobblenav;
+import com.metacontent.cobblenav.networking.CobblenavPackets;
 import com.metacontent.cobblenav.util.PokenavContact;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
+import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.Drawable;
 import net.minecraft.client.gui.widget.ClickableWidget;
 import net.minecraft.client.gui.widget.Widget;
+import net.minecraft.network.PacketByteBuf;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
@@ -79,6 +83,10 @@ public class ContactInfoWidget implements Drawable, Widget {
         ticker = ANIMATION_LENGTH;
     }
 
+    public PokenavContact getContact() {
+        return contact;
+    }
+
     @Override
     public void setX(int i) {
         x = i;
@@ -107,6 +115,12 @@ public class ContactInfoWidget implements Drawable, Widget {
     @Override
     public int getHeight() {
         return 0;
+    }
+
+    public void deleteContact() {
+        PacketByteBuf buf = PacketByteBufs.create();
+        buf.writeString(contact.getUuid());
+        ClientPlayNetworking.send(CobblenavPackets.DELETE_CONTACT_PACKET, buf);
     }
 
     @Override

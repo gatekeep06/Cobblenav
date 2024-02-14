@@ -16,8 +16,8 @@ import java.util.List;
 
 public class GetContactDataCommand {
     public static void register(CommandDispatcher<ServerCommandSource> dispatcher, CommandRegistryAccess commandRegistryAccess, CommandManager.RegistrationEnvironment registrationEnvironment) {
-        dispatcher.register(CommandManager.literal("pokenav").requires(source -> source.hasPermissionLevel(2))
-                .then(CommandManager.argument("player", EntityArgumentType.players())
+        dispatcher.register(CommandManager.literal("pokenav")
+                .then(CommandManager.argument("player", EntityArgumentType.players()).requires(source -> source.hasPermissionLevel(2))
                         .then(CommandManager.literal("getContacts")
                                 .executes(GetContactDataCommand::run))));
     }

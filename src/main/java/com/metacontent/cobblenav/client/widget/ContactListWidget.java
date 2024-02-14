@@ -37,6 +37,9 @@ public class ContactListWidget extends ClickableWidget {
         items = new ArrayList<>();
         int x = getX() + 14;
         int y = getY() + 12;
+        while (!contactList.isEmpty() && contactList.size() - 7 * listPage <= 0) {
+            listPage--;
+        }
         int maxI = contactList.size() - 7 * listPage < 7 ? contactList.size() : 7 * (listPage + 1);
         for (int i = 7 * listPage; i < maxI; i++) {
             int index = i;
@@ -92,10 +95,15 @@ public class ContactListWidget extends ClickableWidget {
                 256, 0, 1, 1, 1, 1, false, 1);
         decreaseListPageButton.render(drawContext, i, j, f);
         increaseListPageButton.render(drawContext, i, j, f);
-        items.forEach(item -> item.renderItem(drawContext, i, j, f, selector.getContactIndex()));
+        //items.forEach(item -> item.renderItem(drawContext, i, j, f, selector.getContactIndex()));
         for (int index = 0; index < Math.min(items.size(), 14); index++) {
             items.get(index).renderItem(drawContext, i, j, f, selector.getContactIndex());
         }
+    }
+
+    public void deleteContact(PokenavContact contact) {
+        contactList.remove(contact);
+        createItems();
     }
 
     @Override

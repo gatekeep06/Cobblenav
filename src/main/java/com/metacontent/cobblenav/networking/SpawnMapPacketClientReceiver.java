@@ -8,21 +8,30 @@ import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.text.Text;
 
-import java.util.Comparator;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 
 public class SpawnMapPacketClientReceiver {
     public static void receive(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender responseSender) {
-        PacketByteBuf.PacketReader<RenderablePokemon> renderablePokemonPacketReader = RenderablePokemon.Companion::loadFromBuffer;
-        PacketByteBuf.PacketReader<Float> floatPacketReader = PacketByteBuf::readFloat;
-        Map<RenderablePokemon, Float> spawnMap = buf.readMap(renderablePokemonPacketReader, floatPacketReader);
-        //Map<RenderablePokemon, Float> sortedSpawnMap = new TreeMap<>(Comparator.comparing(spawnMap::get));
-        //sortedSpawnMap.putAll(spawnMap);
         if (client.currentScreen instanceof LocationScreen locationScreen) {
-            locationScreen.setSpawnMap(spawnMap);
-            locationScreen.createSpawnInfoWidgets();
+            if (locationScreen.getBucketIndex() != buf.readInt()) {
+                return;
+            }
+            PacketByteBuf.PacketReader<RenderablePokemon> renderablePokemonPacketReader = RenderablePokemon.Companion::loadFromBuffer;
+            PacketByteBuf.PacketReader<Float> floatPacketReader = PacketByteBuf::readFloat;
+            Map<RenderablePokemon, Float> spawnMap = buf.readMap(renderablePokemonPacketReader, floatPacketReader);
+
+            List<Map.Entry<RenderablePokemon, Float>> sortingList = new ArrayList<>(spawnMap.entrySet());
+            int sortingMark = locationScreen.getSortingMark();
+            Comparator<Map.Entry<RenderablePokemon, Float>> comparator = Map.Entry.comparingByValue(
+                    (c1, c2) -> sortingMark * Float.compare(c1, c2)
+            );
+            sortingList.sort(comparator);
+            Map<RenderablePokemon, Float> sortedSpawnMap = new LinkedHashMap<>();
+            sortingList.forEach(entry -> sortedSpawnMap.put(entry.getKey(), entry.getValue()));
+
+            locationScreen.setSpawnMap(sortedSpawnMap);
             locationScreen.setLoading(false);
+            locationScreen.createSpawnInfoWidgets();
             locationScreen.resetAnimationProgress();
         }
     }

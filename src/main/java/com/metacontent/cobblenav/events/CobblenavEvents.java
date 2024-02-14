@@ -4,7 +4,6 @@ import com.cobblemon.mod.common.api.Priority;
 import com.cobblemon.mod.common.api.events.CobblemonEvents;
 import com.cobblemon.mod.common.api.events.battles.BattleVictoryEvent;
 import com.metacontent.cobblenav.util.CobblenavNbtHelper;
-import com.metacontent.cobblenav.util.ContactSaverEntity;
 import kotlin.Unit;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Style;

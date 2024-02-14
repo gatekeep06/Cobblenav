@@ -7,6 +7,7 @@ import com.cobblemon.mod.common.api.moves.MoveTemplate;
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity;
 import com.cobblemon.mod.common.pokemon.Pokemon;
 import com.cobblemon.mod.common.pokemon.abilities.HiddenAbility;
+import com.metacontent.cobblenav.config.CobblenavConfig;
 import com.metacontent.cobblenav.util.FoundPokemon;
 import net.fabricmc.fabric.api.networking.v1.EntityTrackingEvents;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
@@ -29,10 +30,10 @@ public class BestPokemonPacketServerReceiver {
         List<PokemonEntity> pokemonEntities = world.getEntitiesByClass(
                 PokemonEntity.class,
                 Box.of(
-                    player.getPos(),
-                    200,
-                    100,
-                    200
+                        player.getPos(),
+                        CobblenavConfig.FINDING_WIDTH,
+                        CobblenavConfig.FINDING_HEIGHT,
+                        CobblenavConfig.FINDING_WIDTH
                 ),
                 (pokemonEntity -> pokemonEntity.getPokemon().isWild() && pokemonEntity.getPokemon().showdownId().equals(name))
         );
@@ -64,8 +65,11 @@ public class BestPokemonPacketServerReceiver {
                 }
 
                 List<MoveTemplate> eggMoves = pokemon.getForm().getMoves().getEggMoves();
+                List<MoveTemplate> levelupMoves = new ArrayList<>();
+                pokemon.getForm().getMoves().getLevelUpMoves().values().forEach(levelupMoves::addAll);
                 for (Move move : pokemon.getMoveSet()) {
-                    if (eggMoves.contains(move.getTemplate())) {
+                    MoveTemplate moveTemplate = move.getTemplate();
+                    if (eggMoves.contains(moveTemplate) && !levelupMoves.contains(moveTemplate)) {
                         rating.getAndIncrement();
                         eggMoveName = move.getName();
                         break;
@@ -73,9 +77,10 @@ public class BestPokemonPacketServerReceiver {
                 }
                 if (eggMoveName.isEmpty()) {
                     for (BenchedMove benchedMove : pokemon.getBenchedMoves()) {
-                        if (eggMoves.contains(benchedMove.getMoveTemplate())) {
+                        MoveTemplate moveTemplate = benchedMove.getMoveTemplate();
+                        if (eggMoves.contains(moveTemplate) && !levelupMoves.contains(moveTemplate)) {
                             rating.getAndIncrement();
-                            eggMoveName = benchedMove.getMoveTemplate().getName();
+                            eggMoveName = moveTemplate.getName();
                             break;
                         }
                     }

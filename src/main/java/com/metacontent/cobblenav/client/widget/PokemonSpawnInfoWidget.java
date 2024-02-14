@@ -46,7 +46,7 @@ public class PokemonSpawnInfoWidget extends ClickableWidget {
                     String form = pokemonModel.getPokemon().getForm().getName();
                     String name = pokemonModel.getPokemon().getSpecies().getTranslatedName().getString() + (form.equals("Normal") ? "" : " (" + form + ")");
                     Vec3d vec3d = player.getPos();
-                    String coordinates = "x: " + (int) vec3d.x + " y: " + (int) vec3d.y + " z: " + (int) vec3d.z;
+                    String coordinates = "x: " + (int) vec3d.x + " y: " + (int) vec3d.y + " z: " + (int) vec3d.z + " (" + player.getWorld().getDimensionKey().getValue() + ")";
                     String chance = bucket + " - " + df.format(probability) + "%";
                     Text text = Text.translatable("gui.cobblenav.pokenav_item.spawn_info_message", name, coordinates, chance);
                     player.sendMessage(text);

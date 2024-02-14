@@ -31,6 +31,7 @@ public class ContactsScreen extends AbstractPokenavItemScreen implements Contact
     private int selectedContactIndex;
 
     private PokenavItemButton backButton;
+    private PokenavItemButton deleteButton;
     private ContactListWidget contactListWidget;
     private ContactInfoWidget contactInfoWidget;
 
@@ -49,7 +50,7 @@ public class ContactsScreen extends AbstractPokenavItemScreen implements Contact
         keys.forEach(key -> {
             if (!Objects.equals(key, "title")) {
                 NbtCompound contactData = nbt.getCompound(key);
-                PokenavContact pokenavContact = CobblenavNbtHelper.toPokenavContact(contactData);
+                PokenavContact pokenavContact = CobblenavNbtHelper.toPokenavContact(contactData, key);
                 contacts.add(pokenavContact);
             }
         });
@@ -76,6 +77,17 @@ public class ContactsScreen extends AbstractPokenavItemScreen implements Contact
                     MinecraftClient.getInstance().setScreen(new MainScreen());
                 }
         );
+        deleteButton = new PokenavItemButton(borderX + BORDER_WIDTH - BORDER_DEPTH - 14, borderY + BORDER_HEIGHT - BORDER_DEPTH - 12, 11, 11, 109, 12, 0, 0,
+                Text.literal(""),
+                BUTTONS,
+                BUTTONS_HOVERED,
+                () -> {
+                    player.playSound(CobblemonSounds.PC_RELEASE, 0.1f, 1.25f);
+                    selectedContactIndex = -1;
+                    contactListWidget.deleteContact(contactInfoWidget.getContact());
+                    contactInfoWidget.deleteContact();
+                }
+        );
     }
 
     @Override
@@ -97,6 +109,7 @@ public class ContactsScreen extends AbstractPokenavItemScreen implements Contact
             contactListWidget.render(drawContext, i, j, f);
             if (selectedContactIndex != -1) {
                 contactInfoWidget.render(drawContext, i, j, f);
+                deleteButton.render(drawContext, i, j, f);
             }
         }
 
@@ -106,7 +119,12 @@ public class ContactsScreen extends AbstractPokenavItemScreen implements Contact
     @Override
     public boolean mouseClicked(double d, double e, int i) {
         backButton.mouseClicked(d, e, i);
-        contactListWidget.mouseClicked(d, e, i);
+        if (contactListWidget != null) {
+            contactListWidget.mouseClicked(d, e, i);
+            if (selectedContactIndex != -1) {
+                deleteButton.mouseClicked(d, e, i);
+            }
+        }
         return super.mouseClicked(d, e, i);
     }
 
