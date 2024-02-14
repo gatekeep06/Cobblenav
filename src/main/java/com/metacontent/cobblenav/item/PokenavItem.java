@@ -2,6 +2,7 @@ package com.metacontent.cobblenav.item;
 
 import com.cobblemon.mod.common.CobblemonSounds;
 import com.cobblemon.mod.common.client.CobblemonClient;
+import com.metacontent.cobblenav.client.CobblenavClient;
 import com.metacontent.cobblenav.client.screen.pokenav.MainScreen;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -28,7 +29,10 @@ public class PokenavItem extends Item {
 
     @Environment(EnvType.CLIENT)
     private TypedActionResult<ItemStack> openPokenavScreen(PlayerEntity playerEntity, Hand hand) {
-        if (CobblemonClient.INSTANCE.getBattle() == null) {
+        if (CobblenavClient.TRACK_ARROW_HUD_OVERLAY.isTracking()) {
+            CobblenavClient.TRACK_ARROW_HUD_OVERLAY.resetTracking();
+        }
+        else if (CobblemonClient.INSTANCE.getBattle() == null) {
             playerEntity.playSound(CobblemonSounds.PC_ON, 0.1f, 1.25f);
             MinecraftClient.getInstance().setScreen(new MainScreen());
         }

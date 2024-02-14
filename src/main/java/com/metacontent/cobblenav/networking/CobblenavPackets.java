@@ -16,6 +16,7 @@ public class CobblenavPackets {
     public static final Identifier RENDERABLE_POKEMON_PACKET_CLIENT = new Identifier(Cobblenav.ID, "renderable_pokemon_packet_client");
     public static final Identifier RENDERABLE_POKEMON_PACKET_SERVER = new Identifier(Cobblenav.ID, "renderable_pokemon_packet_server");
     public static final Identifier REMOVE_LAST_FOUND_POKEMON_PACKET = new Identifier(Cobblenav.ID, "remove_last_found_pokemon_packet");
+    public static final Identifier DELETE_CONTACT_PACKET = new Identifier(Cobblenav.ID, "delete_contact_packet");
 
     public static void registerC2SPackets() {
         ServerPlayNetworking.registerGlobalReceiver(SPAWN_MAP_PACKET_SERVER, SpawnMapPacketServerReceiver::receive);
@@ -24,6 +25,7 @@ public class CobblenavPackets {
         ServerPlayNetworking.registerGlobalReceiver(SAVE_FOUND_POKEMON_PACKET, SaveFoundPokemonPacketReceiver::receive);
         ServerPlayNetworking.registerGlobalReceiver(RENDERABLE_POKEMON_PACKET_SERVER, RenderablePokemonPacketServerReceiver::receive);
         ServerPlayNetworking.registerGlobalReceiver(REMOVE_LAST_FOUND_POKEMON_PACKET, RemoveLastFoundPokemonPacketReceiver::receive);
+        ServerPlayNetworking.registerGlobalReceiver(DELETE_CONTACT_PACKET, DeleteContactPacketReceiver::receive);
     }
 
     public static void registerS2CPackets() {

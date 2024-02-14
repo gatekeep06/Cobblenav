@@ -11,6 +11,7 @@ import com.cobblemon.mod.common.pokemon.Species;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.text.Text;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -46,7 +47,7 @@ public class CobblenavNbtHelper {
         nbt.remove("form");
     }
 
-    public static PokenavContact toPokenavContact(NbtCompound nbt) {
+    public static PokenavContact toPokenavContact(NbtCompound nbt, String uuid) {
         String name = nbt.getString("name");
         String title = nbt.getString("title");
         int winnings = nbt.getInt("winnings");
@@ -59,7 +60,14 @@ public class CobblenavNbtHelper {
             }
         });
 
-        return new PokenavContact(name, title, winnings, losses, team);
+        return new PokenavContact(uuid, name, title, winnings, losses, team);
+    }
+
+    public static void deleteContact(ServerPlayerEntity player, String uuid) {
+        if (player instanceof ContactSaverEntity contactSaverEntity) {
+            NbtCompound nbt = contactSaverEntity.cobblenav$getContactData();
+            nbt.remove(uuid);
+        }
     }
 
     public static void updateContact(ServerPlayerEntity player, ServerPlayerEntity contact, @Nullable PokemonBattle battle, boolean isWinner, boolean isAlly) {

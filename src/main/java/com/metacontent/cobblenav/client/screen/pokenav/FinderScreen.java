@@ -4,6 +4,7 @@ import com.cobblemon.mod.common.CobblemonSounds;
 import com.cobblemon.mod.common.client.gui.summary.widgets.ModelWidget;
 import com.cobblemon.mod.common.pokemon.RenderablePokemon;
 import com.metacontent.cobblenav.Cobblenav;
+import com.metacontent.cobblenav.client.CobblenavClient;
 import com.metacontent.cobblenav.client.screen.AbstractPokenavItemScreen;
 import com.metacontent.cobblenav.client.widget.PokenavItemButton;
 import com.metacontent.cobblenav.networking.CobblenavPackets;
@@ -107,10 +108,8 @@ public class FinderScreen extends AbstractPokenavItemScreen {
                 BUTTONS_HOVERED,
                 () -> {
                     saveLastFoundPokemon();
-                    BlockPos pos = foundPokemon.getPos();
                     player.playSound(CobblemonSounds.POKE_BALL_CAPTURE_SUCCEEDED, 0.5f, 0.75f);
-                    player.sendMessage(Text.translatable("gui.cobblenav.pokenav_item.found_pokemon_massage",
-                            pokemon.getSpecies().getTranslatedName().getString(), "x: " + pos.getX() + " y: " + pos.getY() + " z: " + pos.getZ()));
+                    CobblenavClient.TRACK_ARROW_HUD_OVERLAY.setTrackedEntityId(foundPokemon.getEntityId());
                     close();
                 }
         );

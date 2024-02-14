@@ -3,13 +3,15 @@ package com.metacontent.cobblenav.util;
 import java.util.List;
 
 public class PokenavContact {
+    private final String uuid;
     private final String name;
     private final String title;
     private final int winnings;
     private final int losses;
     private final List<ContactTeamMember> team;
 
-    public PokenavContact(String name, String title, int winnings, int losses, List<ContactTeamMember> team) {
+    public PokenavContact(String uuid, String name, String title, int winnings, int losses, List<ContactTeamMember> team) {
+        this.uuid = uuid;
         this.name = name;
         this.title = title;
         this.winnings = winnings;
@@ -19,6 +21,10 @@ public class PokenavContact {
 
     public String getTitleOrElseName() {
         return title.isEmpty() ? name : title;
+    }
+
+    public String getUuid() {
+        return uuid;
     }
 
     public String getName() {
@@ -44,7 +50,8 @@ public class PokenavContact {
     @Override
     public String toString() {
         return "PokenavContact{" +
-                "name='" + name + '\'' +
+                "uuid='" + uuid + '\'' +
+                ", name='" + name + '\'' +
                 ", title='" + title + '\'' +
                 ", winnings=" + winnings +
                 ", losses=" + losses +
