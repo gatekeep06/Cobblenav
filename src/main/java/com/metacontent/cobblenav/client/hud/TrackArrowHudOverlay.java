@@ -51,9 +51,6 @@ public class TrackArrowHudOverlay implements HudRenderCallback {
                 float x = width / 2;
                 float y = height - CobblenavConfig.TRACK_ARROW_VERTICAL_POSITION;
 
-                blitk(matrixStack, HUD_ELEMENTS, x - 7.5, y - 7.5, 15, 15, 30, 0, 256, 256,
-                        0, 1, 1, 1, 1, false, 1);
-
                 double trackedPosX = trackedEntity.getX();
                 double trackedPosZ = trackedEntity.getZ();
                 double tanX = trackedPosX - player.getX();
@@ -62,12 +59,14 @@ public class TrackArrowHudOverlay implements HudRenderCallback {
                 float angle = (float) Math.toDegrees(Math.atan2(tanZ, tanX));
 
                 matrixStack.push();
-                matrixStack.translate(x, y, -1);
-
+                matrixStack.translate(x, y, -10);
                 matrixStack.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(135 + angle - player.headYaw));
                 blitk(matrixStack, HUD_ELEMENTS, -7.5, -7.5, 28, 28, 0, 0, 256, 256,
                         0, 1, 1, 1, 1, false, 1);
                 matrixStack.pop();
+
+                blitk(matrixStack, HUD_ELEMENTS, x - 7.5, y - 7.5, 15, 15, 30, 0, 256, 256,
+                        0, 1, 1, 1, 1, false, 1);
             }
         }
         catch (Throwable e) {

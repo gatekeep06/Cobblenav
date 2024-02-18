@@ -15,6 +15,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class CobblenavDataSaverEntityMixin implements ContactSaverEntity, LastFoundPokemonSaverEntity {
     @Unique
     private NbtCompound contactData;
+    @Unique
     private NbtCompound lastFoundPokemonData;
 
     @Override
@@ -34,7 +35,7 @@ public class CobblenavDataSaverEntityMixin implements ContactSaverEntity, LastFo
     }
 
     @Inject(method = "writeNbt", at = @At("HEAD"))
-    protected void injectWriteMethod(NbtCompound nbt, CallbackInfoReturnable info) {
+    protected void injectWriteMethod(NbtCompound nbt, CallbackInfoReturnable<NbtCompound> cir) {
         if (lastFoundPokemonData != null) {
             nbt.put("pokenav_last_found_pokemon", lastFoundPokemonData);
         }
