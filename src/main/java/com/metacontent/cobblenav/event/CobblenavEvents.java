@@ -1,8 +1,9 @@
-package com.metacontent.cobblenav.events;
+package com.metacontent.cobblenav.event;
 
 import com.cobblemon.mod.common.api.Priority;
 import com.cobblemon.mod.common.api.events.CobblemonEvents;
 import com.cobblemon.mod.common.api.events.battles.BattleVictoryEvent;
+import com.cobblemon.mod.common.battles.pokemon.BattlePokemon;
 import com.metacontent.cobblenav.util.CobblenavNbtHelper;
 import kotlin.Unit;
 import net.minecraft.server.network.ServerPlayerEntity;
