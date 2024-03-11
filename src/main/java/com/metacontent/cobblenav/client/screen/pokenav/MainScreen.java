@@ -131,7 +131,7 @@ public class MainScreen extends AbstractPokenavItemScreen {
                 borderX + BORDER_DEPTH, borderY + BORDER_DEPTH + 30, 14, 48, 0, 45, 256,
                 256, 0, 1, 1, 1, 1, false, 1);
 
-        if (CobblenavConfig.DISPLAY_TEAM_WIDGET) {
+        if (CobblenavConfig.MAIN_MENU_WIDGET == 0) {
             for (ModelWidget modelWidget : partyModels) {
                 modelWidget.render(drawContext, i, j, f);
             }
