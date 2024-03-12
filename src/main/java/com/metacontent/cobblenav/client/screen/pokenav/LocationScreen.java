@@ -6,7 +6,10 @@ import com.metacontent.cobblenav.Cobblenav;
 import com.metacontent.cobblenav.client.screen.AbstractPokenavItemScreen;
 import com.metacontent.cobblenav.client.widget.PokemonSpawnInfoWidget;
 import com.metacontent.cobblenav.client.widget.PokenavItemButton;
+import com.metacontent.cobblenav.client.widget.ScrollableViewWidget;
+import com.metacontent.cobblenav.client.widget.TableWidget;
 import com.metacontent.cobblenav.networking.CobblenavPackets;
+import com.metacontent.cobblenav.util.BorderBox;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
@@ -33,6 +36,8 @@ public class LocationScreen extends AbstractPokenavItemScreen {
     private final PlayerEntity player;
     private Map<RenderablePokemon, Float> spawnMap = new HashMap<>();
     private List<PokemonSpawnInfoWidget> spawnInfoWidgets = new ArrayList<>();
+    private TableWidget<PokemonSpawnInfoWidget> spawnTable;
+    private ScrollableViewWidget<TableWidget<PokemonSpawnInfoWidget>> scrollableSpawnTable;
     private int bucketIndex = 0;
     private boolean isLoading = false;
     private int ticker = 0;
@@ -78,20 +83,15 @@ public class LocationScreen extends AbstractPokenavItemScreen {
 
     public void createSpawnInfoWidgets() {
         spawnInfoWidgets = new ArrayList<>();
-        int x = borderX + BORDER_DEPTH + 8;
-        int y = borderY + BORDER_DEPTH + 30;
         RenderablePokemon[] renderablePokemonArray = spawnMap.keySet().toArray(new RenderablePokemon[0]);
         Float[] probabilityArray = spawnMap.values().toArray(new Float[0]);
-        int maxI = spawnMap.size() - 21 * listPage < 21 ? spawnMap.size() : 21 * (listPage + 1);
-        for (int i = 21 * listPage; i < maxI; i++) {
-            PokemonSpawnInfoWidget widget = new PokemonSpawnInfoWidget(x, y, renderablePokemonArray[i], probabilityArray[i], BUCKET_NAMES.get(bucketIndex));
+        for (int i = 0; i < spawnMap.size(); i++) {
+            PokemonSpawnInfoWidget widget = new PokemonSpawnInfoWidget(0, 0, renderablePokemonArray[i], probabilityArray[i], BUCKET_NAMES.get(bucketIndex));
             spawnInfoWidgets.add(widget);
-            x += 8 + widget.getWidth();
-            if ((i + 1) % 7 == 0) {
-                x = borderX + BORDER_DEPTH + 8;
-                y += widget.getHeight() + 3;
-            }
         }
+        scrollableSpawnTable.resetScrollY();
+        spawnTable.calcRows(spawnInfoWidgets.size());
+        spawnTable.setWidgets(spawnInfoWidgets);
     }
 
     public void setSpawnMap(Map<RenderablePokemon, Float> spawnMap) {
@@ -106,6 +106,11 @@ public class LocationScreen extends AbstractPokenavItemScreen {
 
         borderX = (width - BORDER_WIDTH) / 2;
         borderY = (height - BORDER_HEIGHT) / 2 - 10;
+
+        spawnTable = new TableWidget<>(borderX + BORDER_DEPTH + 3, borderY + BORDER_DEPTH + 30,
+                7, 3, new BorderBox(4, 2));
+
+        scrollableSpawnTable = new ScrollableViewWidget<>(spawnTable, 200, 106, 20);
 
         backButton = new PokenavItemButton(borderX + BORDER_DEPTH + 3, borderY + BORDER_HEIGHT - BORDER_DEPTH - 12, 11, 11, 73, 0, 0, 0,
                 Text.literal(""),
@@ -222,9 +227,7 @@ public class LocationScreen extends AbstractPokenavItemScreen {
         else {
             if (!spawnInfoWidgets.isEmpty()) {
                 try {
-                    for (PokemonSpawnInfoWidget spawnInfoWidget : spawnInfoWidgets) {
-                        spawnInfoWidget.render(drawContext, i, j, f);
-                    }
+                    scrollableSpawnTable.render(drawContext, i, j, f);
                 }
                 catch (Throwable e) {
                     Cobblenav.LOGGER.error(e.getMessage(), e);
@@ -249,9 +252,15 @@ public class LocationScreen extends AbstractPokenavItemScreen {
         increaseBucketIndexButton.mouseClicked(d, e, i);
         decreaseListPageButton.mouseClicked(d, e, i);
         increaseListPageButton.mouseClicked(d, e, i);
-        spawnInfoWidgets.forEach(widget -> widget.mouseClicked(d, e, i));
+        scrollableSpawnTable.mouseClicked(d, e, i);
         reverseSortingButton.mouseClicked(d, e, i);
         return super.mouseClicked(d, e, i);
+    }
+
+    @Override
+    public boolean mouseScrolled(double d, double e, double f) {
+        scrollableSpawnTable.mouseScrolled(d, e, f);
+        return super.mouseScrolled(d, e, f);
     }
 
     private void renderBucketSelector(DrawContext drawContext, int i, int j, float f) {

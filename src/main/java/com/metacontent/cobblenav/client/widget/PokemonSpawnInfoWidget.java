@@ -107,4 +107,20 @@ public class PokemonSpawnInfoWidget extends ClickableWidget {
     protected void appendClickableNarrations(NarrationMessageBuilder narrationMessageBuilder) {
 
     }
+
+    @Override
+    public void setX(int i) {
+        super.setX(i);
+        this.pokemonModel.setX(i);
+        this.shareButton.setX(getX() + getWidth() / 2 + 1);
+        this.findButton.setX(getX() + getWidth() / 2 - 12);
+    }
+
+    @Override
+    public void setY(int i) {
+        super.setY(i);
+        this.pokemonModel.setY(i);
+        this.shareButton.setY(getY() + getHeight() - 12);
+        this.findButton.setY(getY() + getHeight() - 12);
+    }
 }

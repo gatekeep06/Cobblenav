@@ -7,43 +7,51 @@ import net.minecraft.client.gui.widget.ClickableWidget;
 import net.minecraft.text.Text;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class TableWidget<T extends ClickableWidget> extends ClickableWidget {
     private final int columns;
-    private final int rows;
+    private int rows;
     private List<T> widgets;
     private final BorderBox box;
 
-    public TableWidget(int x, int y, int columns, int rows, List<T> widgets, BorderBox box) {
+    public TableWidget(int x, int y, int columns, int rows, BorderBox box) {
         super(x, y, 0, 0, Text.literal(""));
         this.columns = columns;
         this.rows = rows;
         this.box = box;
-        setWidgets(widgets);
+    }
+
+    public void calcRows(int size) {
+        this.rows = size / columns + (size % columns == 0 ? 0 : 1);
+    }
+
+    public void setRows(int rows) {
+        this.rows = rows;
     }
 
     public void setWidgets(List<T> widgets) {
         this.widgets = widgets;
         List<Integer> widths = new ArrayList<>();
         List<Integer> heights = new ArrayList<>();
+        for (int i = 0; i < columns; i++) {
+            heights.add(0);
+        }
+        Iterator<T> iterator = widgets.iterator();
         for (int i = 0; i < rows; i++) {
             int width = 0;
             for (int j = 0; j < columns; j++) {
-                T widget = widgets.get(i * columns + j);
-                widget.setX(getX() + box.left + width);
-                width += box.left + widget.getWidth() + box.right;
+                if (iterator.hasNext()) {
+                    T widget = iterator.next();
+                    widget.setX(getX() + box.left + width);
+                    widget.setY(getY() + box.top + heights.get(j));
+                    width += box.left + widget.getWidth() + box.right;
+                    int height = box.top + widget.getHeight() + box.bottom;
+                    heights.set(j, heights.get(j) + height);
+                }
             }
             widths.add(width);
-        }
-        for (int i = 0; i < columns; i++) {
-            int height = 0;
-            for (int j = 0; j < rows; j++) {
-                T widget = widgets.get(i * columns + j);
-                widget.setY(getY() + box.top + height);
-                height += box.top + widget.getHeight() + box.bottom;
-            }
-            heights.add(height);
         }
         setWidth(widths.stream().max(Integer::compareTo).orElse(0));
         setHeight(heights.stream().max(Integer::compareTo).orElse(0));
@@ -52,7 +60,7 @@ public class TableWidget<T extends ClickableWidget> extends ClickableWidget {
     @Override
     protected void renderButton(DrawContext drawContext, int i, int j, float f) {
         for (int row = 0; row < rows; row++) {
-            for (int column = 0; column < columns; column++) {
+            for (int column = 0; column < columns && widgets.size() > row * columns + column; column++) {
                 widgets.get(row * columns + column).render(drawContext, i, j, f);
             }
         }
@@ -79,6 +87,18 @@ public class TableWidget<T extends ClickableWidget> extends ClickableWidget {
 
         }
         return false;
+    }
+
+    @Override
+    public void setX(int i) {
+        super.setX(i);
+        setWidgets(widgets);
+    }
+
+    @Override
+    public void setY(int i) {
+        super.setY(i);
+        setWidgets(widgets);
     }
 
     public void setHeight(int i) {
