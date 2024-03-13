@@ -33,10 +33,10 @@ public class FinderScreen extends AbstractPokenavItemScreen {
     private static final int WIDTH = 80;
     private static final int ANIM_DURATION = 40;
 
+    private final AbstractPokenavItemScreen parent;
     private int borderX;
     private int borderY;
     private final RenderablePokemon pokemon;
-    private final String bucket;
     private int ticker = 0;
     private boolean isLoading = true;
     private FoundPokemon foundPokemon;
@@ -45,14 +45,10 @@ public class FinderScreen extends AbstractPokenavItemScreen {
     private IconButton backButton;
     private TextButton trackButton;
 
-    public FinderScreen(RenderablePokemon pokemon, String bucket) {
+    public FinderScreen(RenderablePokemon pokemon, AbstractPokenavItemScreen parent) {
         super(Text.literal("Finder"));
         this.pokemon = pokemon;
-        this.bucket = bucket;
-    }
-
-    public FinderScreen(RenderablePokemon pokemon) {
-        this(pokemon, null);
+        this.parent = parent;
     }
 
     public void setFoundPokemon(@Nullable FoundPokemon foundPokemon) {
@@ -95,7 +91,7 @@ public class FinderScreen extends AbstractPokenavItemScreen {
         backButton = new IconButton(borderX + BORDER_DEPTH + 3, borderY + BORDER_HEIGHT - BORDER_DEPTH - 12, 11, 11, 73, 0, 0,
                 () -> {
                     player.playSound(CobblemonSounds.PC_CLICK, 0.1f, 1.25f);
-                    MinecraftClient.getInstance().setScreen(bucket != null ? new LocationScreen(bucket) : new MainScreen());
+                    MinecraftClient.getInstance().setScreen(parent);
                 }
         );
         trackButton = new TextButton(borderX + BORDER_WIDTH / 2 - 34, borderY + BORDER_HEIGHT - BORDER_DEPTH - 27, 70, 23, 0, 80,

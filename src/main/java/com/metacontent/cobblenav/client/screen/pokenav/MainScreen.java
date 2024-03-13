@@ -97,7 +97,7 @@ public class MainScreen extends AbstractPokenavItemScreen {
                 Text.translatable("gui.cobblenav.pokenav_item.spawn_check_button"),
                 () -> {
                     player.playSound(CobblemonSounds.PC_CLICK, 0.1f, 1.25f);
-                    MinecraftClient.getInstance().setScreen(new LocationScreen(null));
+                    MinecraftClient.getInstance().setScreen(new LocationScreen());
                 }
         );
         contactsButton = new MainScreenButton(x, y + 16, 69, 14, 0, 0, 4,

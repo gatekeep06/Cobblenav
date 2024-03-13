@@ -49,12 +49,9 @@ public class LocationScreen extends AbstractPokenavItemScreen {
     private IconButton increaseBucketIndexButton;
     private IconButton reverseSortingButton;
 
-    protected LocationScreen(@Nullable String bucket) {
+    protected LocationScreen() {
         super(Text.literal("Location"));
         this.player = MinecraftClient.getInstance().player;
-        if (bucket != null) {
-            this.bucketIndex = BUCKET_NAMES.indexOf(bucket);
-        }
     }
 
     private void checkSpawns() {
@@ -82,7 +79,7 @@ public class LocationScreen extends AbstractPokenavItemScreen {
         RenderablePokemon[] renderablePokemonArray = spawnMap.keySet().toArray(new RenderablePokemon[0]);
         Float[] probabilityArray = spawnMap.values().toArray(new Float[0]);
         for (int i = 0; i < spawnMap.size(); i++) {
-            PokemonSpawnInfoWidget widget = new PokemonSpawnInfoWidget(0, 0, renderablePokemonArray[i], probabilityArray[i], BUCKET_NAMES.get(bucketIndex));
+            PokemonSpawnInfoWidget widget = new PokemonSpawnInfoWidget(0, 0, renderablePokemonArray[i], probabilityArray[i], this);
             spawnInfoWidgets.add(widget);
         }
         spawnTable.calcRows(spawnInfoWidgets.size());
@@ -229,6 +226,10 @@ public class LocationScreen extends AbstractPokenavItemScreen {
             resetAnimationProgress();
         }
         ticker++;
+    }
+
+    public String getCurrentBucketName() {
+        return BUCKET_NAMES.get(bucketIndex);
     }
 
     public int getBucketIndex() {

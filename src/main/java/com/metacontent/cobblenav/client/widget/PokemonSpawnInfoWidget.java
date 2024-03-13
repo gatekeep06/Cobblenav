@@ -5,6 +5,7 @@ import com.cobblemon.mod.common.client.gui.summary.widgets.ModelWidget;
 import com.cobblemon.mod.common.pokemon.RenderablePokemon;
 import com.metacontent.cobblenav.Cobblenav;
 import com.metacontent.cobblenav.client.screen.pokenav.FinderScreen;
+import com.metacontent.cobblenav.client.screen.pokenav.LocationScreen;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
@@ -32,7 +33,7 @@ public class PokemonSpawnInfoWidget extends ClickableWidget {
     private final IconButton shareButton;
     private final IconButton findButton;
 
-    public PokemonSpawnInfoWidget(int i, int j, RenderablePokemon pokemon, float probability, String bucket) {
+    public PokemonSpawnInfoWidget(int i, int j, RenderablePokemon pokemon, float probability, LocationScreen parent) {
         super(i, j, 20, 30, pokemon.getSpecies().getTranslatedName());
         this.pokemonModel = new ModelWidget(getX(), getY(), getWidth(), getHeight() - getHeight() / 3, pokemon, 0.5F, 340F, 0F);
         this.probability = probability;
@@ -46,7 +47,7 @@ public class PokemonSpawnInfoWidget extends ClickableWidget {
                     String name = pokemonModel.getPokemon().getSpecies().getTranslatedName().getString() + (form.equals("Normal") ? "" : " (" + form + ")");
                     Vec3d vec3d = player.getPos();
                     String coordinates = "x: " + (int) vec3d.x + " y: " + (int) vec3d.y + " z: " + (int) vec3d.z + " (" + player.getWorld().getDimensionKey().getValue() + ")";
-                    String chance = bucket + " - " + df.format(probability) + "%";
+                    String chance = parent.getCurrentBucketName() + " - " + df.format(probability) + "%";
                     Text text = Text.translatable("gui.cobblenav.pokenav_item.spawn_info_message", name, coordinates, chance);
                     player.sendMessage(text);
                     player.sendMessage(Text.translatable("gui.cobblenav.pokenav_item.share_spawn_info_message")
@@ -58,7 +59,7 @@ public class PokemonSpawnInfoWidget extends ClickableWidget {
                 0,
                 () -> {
                     player.playSound(CobblemonSounds.PC_CLICK, 0.1f, 1.25f);
-                    MinecraftClient.getInstance().setScreen(new FinderScreen(pokemonModel.getPokemon(), bucket));
+                    MinecraftClient.getInstance().setScreen(new FinderScreen(pokemonModel.getPokemon(), parent));
                 }
         );
     }

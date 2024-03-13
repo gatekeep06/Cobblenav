@@ -71,7 +71,7 @@ public class FinderShortcutWidget extends ClickableWidget {
     @Override
     public void onClick(double d, double e) {
         player.playSound(CobblemonSounds.PC_CLICK, 0.1f, 1.25f);
-        MinecraftClient.getInstance().setScreen(new FinderScreen(pokemonModel.getPokemon()));
+        MinecraftClient.getInstance().setScreen(new FinderScreen(pokemonModel.getPokemon(), parent));
     }
 
 
