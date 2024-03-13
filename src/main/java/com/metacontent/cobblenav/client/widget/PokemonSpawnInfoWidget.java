@@ -7,6 +7,7 @@ import com.metacontent.cobblenav.Cobblenav;
 import com.metacontent.cobblenav.client.screen.pokenav.FinderScreen;
 import com.metacontent.cobblenav.client.screen.pokenav.LocationScreen;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
 import net.minecraft.client.gui.widget.ClickableWidget;
@@ -29,15 +30,17 @@ public class PokemonSpawnInfoWidget extends ClickableWidget {
     private final float probability;
     private static final DecimalFormat df = new DecimalFormat("#.##");
     private boolean showActionButtons = false;
+    private final TextRenderer textRenderer;
 
     private final IconButton shareButton;
     private final IconButton findButton;
 
-    public PokemonSpawnInfoWidget(int i, int j, RenderablePokemon pokemon, float probability, LocationScreen parent) {
+    public PokemonSpawnInfoWidget(int i, int j, RenderablePokemon pokemon, float probability, LocationScreen parent, TextRenderer textRenderer) {
         super(i, j, 20, 30, pokemon.getSpecies().getTranslatedName());
         this.pokemonModel = new ModelWidget(getX(), getY(), getWidth(), getHeight() - getHeight() / 3, pokemon, 0.5F, 340F, 0F);
         this.probability = probability;
         this.player = MinecraftClient.getInstance().player;
+        this.textRenderer = textRenderer;
 
         shareButton = new IconButton(getX() + getWidth() / 2 + 1, getY() + getHeight() - 12, 11, 11, 73, 12,
                 0,
@@ -68,8 +71,9 @@ public class PokemonSpawnInfoWidget extends ClickableWidget {
     protected void renderButton(DrawContext drawContext, int i, int j, float f) {
         pokemonModel.render(drawContext, i, j, f);
         if (isHovered()) {
-            drawScaledText(drawContext, FONT, pokemonModel.getPokemon().getSpecies().getTranslatedName(),
-                getX() + getWidth() / 2, getY() - 4, 1, 1, getWidth(), 0xFFFFFF, true, false, i, j);
+            drawContext.drawTooltip(textRenderer, pokemonModel.getPokemon().getSpecies().getTranslatedName(), i, j);
+//            drawScaledText(drawContext, FONT, pokemonModel.getPokemon().getSpecies().getTranslatedName(),
+//                getX() + getWidth() / 2, getY() - 4, 1, 1, getWidth(), 0xFFFFFF, true, false, i, j);
         }
         drawScaledText(drawContext, FONT, Text.literal(df.format(probability) + "%").setStyle(Style.EMPTY.withBold(true)),
                 getX() + getWidth() / 2, getY() + getHeight() - 10, 1, 1, 2 * getWidth(), 0xFFFFFF, true, false, i, j);

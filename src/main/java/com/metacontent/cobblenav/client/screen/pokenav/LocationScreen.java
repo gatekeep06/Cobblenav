@@ -79,7 +79,7 @@ public class LocationScreen extends AbstractPokenavItemScreen {
         RenderablePokemon[] renderablePokemonArray = spawnMap.keySet().toArray(new RenderablePokemon[0]);
         Float[] probabilityArray = spawnMap.values().toArray(new Float[0]);
         for (int i = 0; i < spawnMap.size(); i++) {
-            PokemonSpawnInfoWidget widget = new PokemonSpawnInfoWidget(0, 0, renderablePokemonArray[i], probabilityArray[i], this);
+            PokemonSpawnInfoWidget widget = new PokemonSpawnInfoWidget(0, 0, renderablePokemonArray[i], probabilityArray[i], this, textRenderer);
             spawnInfoWidgets.add(widget);
         }
         spawnTable.calcRows(spawnInfoWidgets.size());
