@@ -4,10 +4,7 @@ import com.cobblemon.mod.common.CobblemonSounds;
 import com.cobblemon.mod.common.pokemon.RenderablePokemon;
 import com.metacontent.cobblenav.Cobblenav;
 import com.metacontent.cobblenav.client.screen.AbstractPokenavItemScreen;
-import com.metacontent.cobblenav.client.widget.PokemonSpawnInfoWidget;
-import com.metacontent.cobblenav.client.widget.PokenavItemButton;
-import com.metacontent.cobblenav.client.widget.ScrollableViewWidget;
-import com.metacontent.cobblenav.client.widget.TableWidget;
+import com.metacontent.cobblenav.client.widget.*;
 import com.metacontent.cobblenav.networking.CobblenavPackets;
 import com.metacontent.cobblenav.util.BorderBox;
 import net.fabricmc.api.EnvType;
@@ -43,17 +40,14 @@ public class LocationScreen extends AbstractPokenavItemScreen {
     private int ticker = 0;
     private int animProgress = 0;
     private int sortingMark = 1;
-    private int listPage;
     private int borderX;
     private int borderY;
 
-    private PokenavItemButton backButton;
-    private PokenavItemButton refreshButton;
-    private PokenavItemButton decreaseBucketIndexButton;
-    private PokenavItemButton increaseBucketIndexButton;
-    private PokenavItemButton decreaseListPageButton;
-    private PokenavItemButton increaseListPageButton;
-    private PokenavItemButton reverseSortingButton;
+    private IconButton backButton;
+    private IconButton refreshButton;
+    private IconButton decreaseBucketIndexButton;
+    private IconButton increaseBucketIndexButton;
+    private IconButton reverseSortingButton;
 
     protected LocationScreen(@Nullable String bucket) {
         super(Text.literal("Location"));
@@ -64,7 +58,6 @@ public class LocationScreen extends AbstractPokenavItemScreen {
     }
 
     private void checkSpawns() {
-        listPage = 0;
         spawnMap.clear();
         isLoading = true;
         PacketByteBuf buf = PacketByteBufs.create();
@@ -82,6 +75,9 @@ public class LocationScreen extends AbstractPokenavItemScreen {
     }
 
     public void createSpawnInfoWidgets() {
+        spawnTable = new TableWidget<>(borderX + BORDER_DEPTH + 3, borderY + BORDER_DEPTH + 30,
+                7, 3, new BorderBox(4, 2));
+        scrollableSpawnTable = new ScrollableViewWidget<>(spawnTable, 200, 106, 20);
         spawnInfoWidgets = new ArrayList<>();
         RenderablePokemon[] renderablePokemonArray = spawnMap.keySet().toArray(new RenderablePokemon[0]);
         Float[] probabilityArray = spawnMap.values().toArray(new Float[0]);
@@ -89,7 +85,6 @@ public class LocationScreen extends AbstractPokenavItemScreen {
             PokemonSpawnInfoWidget widget = new PokemonSpawnInfoWidget(0, 0, renderablePokemonArray[i], probabilityArray[i], BUCKET_NAMES.get(bucketIndex));
             spawnInfoWidgets.add(widget);
         }
-        scrollableSpawnTable.resetScrollY();
         spawnTable.calcRows(spawnInfoWidgets.size());
         spawnTable.setWidgets(spawnInfoWidgets);
     }
@@ -102,38 +97,24 @@ public class LocationScreen extends AbstractPokenavItemScreen {
     protected void init() {
         super.init();
 
-        checkSpawns();
-
         borderX = (width - BORDER_WIDTH) / 2;
         borderY = (height - BORDER_HEIGHT) / 2 - 10;
 
-        spawnTable = new TableWidget<>(borderX + BORDER_DEPTH + 3, borderY + BORDER_DEPTH + 30,
-                7, 3, new BorderBox(4, 2));
+        checkSpawns();
 
-        scrollableSpawnTable = new ScrollableViewWidget<>(spawnTable, 200, 106, 20);
-
-        backButton = new PokenavItemButton(borderX + BORDER_DEPTH + 3, borderY + BORDER_HEIGHT - BORDER_DEPTH - 12, 11, 11, 73, 0, 0, 0,
-                Text.literal(""),
-                BUTTONS,
-                BUTTONS_HOVERED,
+        backButton = new IconButton(borderX + BORDER_DEPTH + 3, borderY + BORDER_HEIGHT - BORDER_DEPTH - 12, 11, 11, 73, 0, 0,
                 () -> {
                     player.playSound(CobblemonSounds.PC_CLICK, 0.1f, 1.25f);
                     MinecraftClient.getInstance().setScreen(new MainScreen());
                 }
         );
-        refreshButton = new PokenavItemButton(borderX + BORDER_DEPTH + 18, borderY + BORDER_HEIGHT - BORDER_DEPTH - 12, 11, 11, 85, 0, 0, 400,
-                Text.literal(""),
-                BUTTONS,
-                BUTTONS_HOVERED,
+        refreshButton = new IconButton(borderX + BORDER_DEPTH + 18, borderY + BORDER_HEIGHT - BORDER_DEPTH - 12, 11, 11, 85, 0, 400,
                 () -> {
                     player.playSound(CobblemonSounds.PC_CLICK, 0.1f, 1.25f);
                     checkSpawns();
                 }
         );
-        decreaseBucketIndexButton = new PokenavItemButton(width / 2 - 25, borderY + BORDER_DEPTH + 22, 5, 7, 97, 0, 0, 0,
-                Text.literal(""),
-                BUTTONS,
-                BUTTONS_HOVERED,
+        decreaseBucketIndexButton = new IconButton(width / 2 - 25, borderY + BORDER_DEPTH + 22, 5, 7, 97, 0, 0,
                 () -> {
                     player.playSound(CobblemonSounds.PC_CLICK, 0.05f, 1.25f);
                     if (bucketIndex - 1 >= 0) {
@@ -142,10 +123,7 @@ public class LocationScreen extends AbstractPokenavItemScreen {
                     }
                 }
         );
-        increaseBucketIndexButton = new PokenavItemButton(width / 2 + 25, borderY + BORDER_DEPTH + 22, 5, 7, 102, 0, 0, 0,
-                Text.literal(""),
-                BUTTONS,
-                BUTTONS_HOVERED,
+        increaseBucketIndexButton = new IconButton(width / 2 + 25, borderY + BORDER_DEPTH + 22, 5, 7, 102, 0, 0,
                 () -> {
                     player.playSound(CobblemonSounds.PC_CLICK, 0.05f, 1.25f);
                     if (bucketIndex + 1 < BUCKET_NAMES.size()) {
@@ -154,35 +132,7 @@ public class LocationScreen extends AbstractPokenavItemScreen {
                     }
                 }
         );
-        decreaseListPageButton = new PokenavItemButton(borderX + BORDER_WIDTH - BORDER_DEPTH - 7, height / 2 - 20, 7, 5, 114, 0, 0, 0,
-                Text.literal(""),
-                BUTTONS,
-                BUTTONS_HOVERED,
-                () -> {
-                    player.playSound(CobblemonSounds.PC_CLICK, 0.05f, 1.25f);
-                    if (listPage - 1 >= 0) {
-                        listPage--;
-                        createSpawnInfoWidgets();
-                    }
-                }
-        );
-        increaseListPageButton = new PokenavItemButton(borderX + BORDER_WIDTH - BORDER_DEPTH - 7, height / 2 + 20, 7, 5, 107, 0, 0, 0,
-                Text.literal(""),
-                BUTTONS,
-                BUTTONS_HOVERED,
-                () -> {
-                    player.playSound(CobblemonSounds.PC_CLICK, 0.05f, 1.25f);
-                    int pagesAmount = spawnMap.size() % 21 > 0 ? spawnMap.size() / 21 + 1 : spawnMap.size() / 21;
-                    if (listPage + 1 < pagesAmount) {
-                        listPage++;
-                        createSpawnInfoWidgets();
-                    }
-                }
-        );
-        reverseSortingButton = new PokenavItemButton(borderX + BORDER_WIDTH - BORDER_DEPTH - 14, borderY + BORDER_HEIGHT - BORDER_DEPTH - 12, 11, 11, 97, 12, 0, 100,
-                Text.literal(""),
-                BUTTONS,
-                BUTTONS_HOVERED,
+        reverseSortingButton = new IconButton(borderX + BORDER_WIDTH - BORDER_DEPTH - 14, borderY + BORDER_HEIGHT - BORDER_DEPTH - 12, 11, 11, 97, 12, 100,
                 () -> {
                     player.playSound(CobblemonSounds.PC_CLICK, 0.05f, 1.25f);
                     if (!spawnMap.isEmpty()) {
@@ -215,7 +165,6 @@ public class LocationScreen extends AbstractPokenavItemScreen {
                 256, 0, 1,1,1,1,false,1);
 
         renderBucketSelector(drawContext, i, j, f);
-        renderPageSelector(drawContext, i, j, f);
 
         backButton.render(drawContext, i, j, f);
         refreshButton.render(drawContext, i, j, f);
@@ -250,8 +199,6 @@ public class LocationScreen extends AbstractPokenavItemScreen {
         refreshButton.mouseClicked(d, e, i);
         decreaseBucketIndexButton.mouseClicked(d, e, i);
         increaseBucketIndexButton.mouseClicked(d, e, i);
-        decreaseListPageButton.mouseClicked(d, e, i);
-        increaseListPageButton.mouseClicked(d, e, i);
         scrollableSpawnTable.mouseClicked(d, e, i);
         reverseSortingButton.mouseClicked(d, e, i);
         return super.mouseClicked(d, e, i);
@@ -268,13 +215,6 @@ public class LocationScreen extends AbstractPokenavItemScreen {
         drawScaledText(drawContext, FONT, Text.translatable("gui.cobblenav.pokenav_item.bucket." + BUCKET_NAMES.get(bucketIndex)).setStyle(Style.EMPTY.withBold(true).withColor(0xFFFFFF)),
                 width / 2 + 3, borderY + BORDER_DEPTH + 20, 1, 1, 40, 0, true, false, i, j);
         increaseBucketIndexButton.render(drawContext, i, j, f);
-    }
-
-    private void renderPageSelector(DrawContext drawContext, int i, int j, float f) {
-        decreaseListPageButton.render(drawContext, i, j, f);
-        drawScaledText(drawContext, FONT, Text.literal(String.valueOf(listPage + 1)).setStyle(Style.EMPTY.withBold(true).withColor(0xFFFFFF)),
-                borderX + BORDER_WIDTH - BORDER_DEPTH - 4, height / 2 - 3, 1, 1, 5, 0, true, false, i, j);
-        increaseListPageButton.render(drawContext, i, j, f);
     }
 
     private void renderLoadingAnimation(DrawContext drawContext, int i, int j, float f) {

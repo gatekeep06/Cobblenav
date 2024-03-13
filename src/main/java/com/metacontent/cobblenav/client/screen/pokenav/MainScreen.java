@@ -6,9 +6,10 @@ import com.cobblemon.mod.common.client.gui.summary.widgets.ModelWidget;
 import com.cobblemon.mod.common.pokemon.Pokemon;
 import com.cobblemon.mod.common.pokemon.RenderablePokemon;
 import com.cobblemon.mod.common.pokemon.activestate.ShoulderedState;
+import com.metacontent.cobblenav.Cobblenav;
 import com.metacontent.cobblenav.client.screen.AbstractPokenavItemScreen;
 import com.metacontent.cobblenav.client.widget.FinderShortcutWidget;
-import com.metacontent.cobblenav.client.widget.PokenavItemButton;
+import com.metacontent.cobblenav.client.widget.MainScreenButton;
 import com.metacontent.cobblenav.config.CobblenavConfig;
 import com.metacontent.cobblenav.networking.CobblenavPackets;
 import net.fabricmc.api.EnvType;
@@ -22,7 +23,7 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
-import net.minecraft.util.math.RotationAxis;
+import net.minecraft.util.Identifier;
 import org.joml.Quaternionf;
 
 import java.util.ArrayList;
@@ -33,14 +34,15 @@ import static com.cobblemon.mod.common.client.render.RenderHelperKt.drawScaledTe
 
 @Environment(EnvType.CLIENT)
 public class MainScreen extends AbstractPokenavItemScreen {
+    private static final Identifier BUTTONS = new Identifier(Cobblenav.ID, "textures/gui/pokenav_item_gui_buttons.png");
     private int borderX;
     private int borderY;
     private int playerX;
     private int playerY;
     private List<ModelWidget> partyModels;
-    private PokenavItemButton closeButton;
-    private PokenavItemButton contactsButton;
-    private PokenavItemButton spawnCheckButton;
+    private MainScreenButton closeButton;
+    private MainScreenButton contactsButton;
+    private MainScreenButton spawnCheckButton;
     private FinderShortcutWidget finderShortcutWidget = null;
 
     public MainScreen() {
@@ -91,28 +93,22 @@ public class MainScreen extends AbstractPokenavItemScreen {
             }
         }
 
-        spawnCheckButton = new PokenavItemButton(x, y, 69, 14, 0, 0, 3, 0,
+        spawnCheckButton = new MainScreenButton(x, y, 69, 14, 0, 0, 4,
                 Text.translatable("gui.cobblenav.pokenav_item.spawn_check_button"),
-                BUTTONS,
-                BUTTONS_HOVERED,
                 () -> {
                     player.playSound(CobblemonSounds.PC_CLICK, 0.1f, 1.25f);
                     MinecraftClient.getInstance().setScreen(new LocationScreen(null));
                 }
         );
-        contactsButton = new PokenavItemButton(x, y + 16, 69, 14, 0, 0, 3, 0,
+        contactsButton = new MainScreenButton(x, y + 16, 69, 14, 0, 0, 4,
                 Text.translatable("gui.cobblenav.pokenav_item.contact_button"),
-                BUTTONS,
-                BUTTONS_HOVERED,
                 () -> {
                     player.playSound(CobblemonSounds.PC_CLICK, 0.1f, 1.25f);
                     MinecraftClient.getInstance().setScreen(new ContactsScreen());
                 }
         );
-        closeButton = new PokenavItemButton(x, y + 32, 69, 14, 0, 30, 3, 0,
+        closeButton = new MainScreenButton(x, y + 32, 69, 14, 0, 30, 4,
                 Text.translatable("gui.cobblenav.pokenav_item.close_button"),
-                BUTTONS,
-                BUTTONS_HOVERED,
                 this::close
         );
     }

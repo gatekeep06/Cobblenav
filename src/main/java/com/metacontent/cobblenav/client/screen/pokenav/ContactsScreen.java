@@ -4,7 +4,7 @@ import com.cobblemon.mod.common.CobblemonSounds;
 import com.metacontent.cobblenav.client.screen.AbstractPokenavItemScreen;
 import com.metacontent.cobblenav.client.widget.ContactInfoWidget;
 import com.metacontent.cobblenav.client.widget.ContactListWidget;
-import com.metacontent.cobblenav.client.widget.PokenavItemButton;
+import com.metacontent.cobblenav.client.widget.IconButton;
 import com.metacontent.cobblenav.networking.CobblenavPackets;
 import com.metacontent.cobblenav.util.CobblenavNbtHelper;
 import com.metacontent.cobblenav.util.ContactSelector;
@@ -30,8 +30,8 @@ public class ContactsScreen extends AbstractPokenavItemScreen implements Contact
     private List<PokenavContact> contacts;
     private int selectedContactIndex;
 
-    private PokenavItemButton backButton;
-    private PokenavItemButton deleteButton;
+    private IconButton backButton;
+    private IconButton deleteButton;
     private ContactListWidget contactListWidget;
     private ContactInfoWidget contactInfoWidget;
 
@@ -68,19 +68,15 @@ public class ContactsScreen extends AbstractPokenavItemScreen implements Contact
         borderX = (width - BORDER_WIDTH) / 2;
         borderY = (height - BORDER_HEIGHT) / 2 - 10;
 
-        backButton = new PokenavItemButton(borderX + BORDER_DEPTH + 3, borderY + BORDER_HEIGHT - BORDER_DEPTH - 12, 11, 11, 73, 0, 0, 0,
-                Text.literal(""),
-                BUTTONS,
-                BUTTONS_HOVERED,
+        backButton = new IconButton(borderX + BORDER_DEPTH + 3, borderY + BORDER_HEIGHT - BORDER_DEPTH - 12,
+                11, 11, 73, 0, 0,
                 () -> {
                     player.playSound(CobblemonSounds.PC_CLICK, 0.1f, 1.25f);
                     MinecraftClient.getInstance().setScreen(new MainScreen());
                 }
         );
-        deleteButton = new PokenavItemButton(borderX + BORDER_WIDTH - BORDER_DEPTH - 14, borderY + BORDER_HEIGHT - BORDER_DEPTH - 12, 11, 11, 109, 12, 0, 0,
-                Text.literal(""),
-                BUTTONS,
-                BUTTONS_HOVERED,
+        deleteButton = new IconButton(borderX + BORDER_WIDTH - BORDER_DEPTH - 14, borderY + BORDER_HEIGHT - BORDER_DEPTH - 12,
+                11, 11, 109, 12, 0,
                 () -> {
                     player.playSound(CobblemonSounds.PC_RELEASE, 0.1f, 1.25f);
                     selectedContactIndex = -1;

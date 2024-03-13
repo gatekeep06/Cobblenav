@@ -21,8 +21,6 @@ public class AbstractPokenavItemScreen extends Screen {
     public static final Identifier FONT = new Identifier("uniform");
     public static final Identifier BACKGROUND = new Identifier(Cobblenav.ID, "textures/gui/pokenav_item_gui_background.png");
     public static final Identifier BORDERS = new Identifier(Cobblenav.ID, "textures/gui/pokenav_item_gui_borders.png");
-    public static final Identifier BUTTONS = new Identifier(Cobblenav.ID, "textures/gui/pokenav_item_gui_buttons.png");
-    public static final Identifier BUTTONS_HOVERED = new Identifier(Cobblenav.ID, "textures/gui/pokenav_item_gui_buttons_hovered.png");
     public static final int BORDER_WIDTH = 240;
     public static final int BORDER_HEIGHT = 180;
     public static final int BORDER_DEPTH = 15;

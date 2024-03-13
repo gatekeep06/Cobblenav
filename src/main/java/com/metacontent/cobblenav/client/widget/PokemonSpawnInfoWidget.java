@@ -2,7 +2,6 @@ package com.metacontent.cobblenav.client.widget;
 
 import com.cobblemon.mod.common.CobblemonSounds;
 import com.cobblemon.mod.common.client.gui.summary.widgets.ModelWidget;
-import com.cobblemon.mod.common.pokemon.Pokemon;
 import com.cobblemon.mod.common.pokemon.RenderablePokemon;
 import com.metacontent.cobblenav.Cobblenav;
 import com.metacontent.cobblenav.client.screen.pokenav.FinderScreen;
@@ -30,8 +29,8 @@ public class PokemonSpawnInfoWidget extends ClickableWidget {
     private static final DecimalFormat df = new DecimalFormat("#.##");
     private boolean showActionButtons = false;
 
-    private final PokenavItemButton shareButton;
-    private final PokenavItemButton findButton;
+    private final IconButton shareButton;
+    private final IconButton findButton;
 
     public PokemonSpawnInfoWidget(int i, int j, RenderablePokemon pokemon, float probability, String bucket) {
         super(i, j, 20, 30, pokemon.getSpecies().getTranslatedName());
@@ -39,8 +38,8 @@ public class PokemonSpawnInfoWidget extends ClickableWidget {
         this.probability = probability;
         this.player = MinecraftClient.getInstance().player;
 
-        shareButton = new PokenavItemButton(getX() + getWidth() / 2 + 1, getY() + getHeight() - 12, 11, 11, 73, 12,
-                0, 0, Text.literal(""), BUTTONS, null,
+        shareButton = new IconButton(getX() + getWidth() / 2 + 1, getY() + getHeight() - 12, 11, 11, 73, 12,
+                0,
                 () -> {
                     player.playSound(CobblemonSounds.PC_CLICK, 0.1f, 1.25f);
                     String form = pokemonModel.getPokemon().getForm().getName();
@@ -55,8 +54,8 @@ public class PokemonSpawnInfoWidget extends ClickableWidget {
                                     .withClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, text.getString()))));
                 }
         );
-        findButton = new PokenavItemButton(getX() + getWidth() / 2 - 12, getY() + getHeight() - 12, 11, 11, 85, 12,
-                0, 0, Text.literal(""), BUTTONS, null,
+        findButton = new IconButton(getX() + getWidth() / 2 - 12, getY() + getHeight() - 12, 11, 11, 85, 12,
+                0,
                 () -> {
                     player.playSound(CobblemonSounds.PC_CLICK, 0.1f, 1.25f);
                     MinecraftClient.getInstance().setScreen(new FinderScreen(pokemonModel.getPokemon(), bucket));

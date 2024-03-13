@@ -30,8 +30,8 @@ public class ContactListWidget extends ClickableWidget {
     private final PlayerEntity player;
     private final ContactSelector selector;
 
-    private final PokenavItemButton decreaseListPageButton;
-    private final PokenavItemButton increaseListPageButton;
+    private final IconButton decreaseListPageButton;
+    private final IconButton increaseListPageButton;
 
     private void createItems() {
         items = new ArrayList<>();
@@ -62,10 +62,7 @@ public class ContactListWidget extends ClickableWidget {
         this.selector = selector;
         createItems();
 
-        decreaseListPageButton = new PokenavItemButton(x + width / 2 - 2, y + 5, 7, 5, 114, 0, 0, 0,
-                Text.literal(""),
-                BUTTONS,
-                BUTTONS_HOVERED,
+        decreaseListPageButton = new IconButton(x + width / 2 - 2, y + 5, 7, 5, 114, 0, 0,
                 () -> {
                     player.playSound(CobblemonSounds.PC_CLICK, 0.05f, 1.25f);
                     if (listPage - 1 >= 0) {
@@ -74,10 +71,7 @@ public class ContactListWidget extends ClickableWidget {
                     }
                 }
         );
-        increaseListPageButton = new PokenavItemButton(x + width / 2 - 2, y + height - 11, 7, 5, 107, 0, 0, 0,
-                Text.literal(""),
-                BUTTONS,
-                BUTTONS_HOVERED,
+        increaseListPageButton = new IconButton(x + width / 2 - 2, y + height - 11, 7, 5, 107, 0, 0,
                 () -> {
                     player.playSound(CobblemonSounds.PC_CLICK, 0.05f, 1.25f);
                     int pagesAmount = contactList.size() % 7 > 0 ? contactList.size() / 7 + 1 : contactList.size() / 7;

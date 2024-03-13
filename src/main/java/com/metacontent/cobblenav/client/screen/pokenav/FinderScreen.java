@@ -6,14 +6,14 @@ import com.cobblemon.mod.common.pokemon.RenderablePokemon;
 import com.metacontent.cobblenav.Cobblenav;
 import com.metacontent.cobblenav.client.CobblenavClient;
 import com.metacontent.cobblenav.client.screen.AbstractPokenavItemScreen;
-import com.metacontent.cobblenav.client.widget.PokenavItemButton;
+import com.metacontent.cobblenav.client.widget.IconButton;
+import com.metacontent.cobblenav.client.widget.TextButton;
 import com.metacontent.cobblenav.networking.CobblenavPackets;
 import com.metacontent.cobblenav.util.FoundPokemon;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
-import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.util.math.MatrixStack;
@@ -21,7 +21,6 @@ import net.minecraft.network.PacketByteBuf;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.math.BlockPos;
 import org.jetbrains.annotations.Nullable;
 
 import static com.cobblemon.mod.common.api.gui.GuiUtilsKt.blitk;
@@ -43,8 +42,8 @@ public class FinderScreen extends AbstractPokenavItemScreen {
     private FoundPokemon foundPokemon;
 
     private ModelWidget pokemonModel;
-    private PokenavItemButton backButton;
-    private PokenavItemButton trackButton;
+    private IconButton backButton;
+    private TextButton trackButton;
 
     public FinderScreen(RenderablePokemon pokemon, String bucket) {
         super(Text.literal("Finder"));
@@ -93,19 +92,14 @@ public class FinderScreen extends AbstractPokenavItemScreen {
         pokemonModel = new ModelWidget(borderX + BORDER_WIDTH / 2 - WIDTH / 2, borderY + BORDER_HEIGHT / 2 + 20 - HEIGHT / 2,
                 WIDTH, HEIGHT, pokemon, 1.5f, 340, 0);
 
-        backButton = new PokenavItemButton(borderX + BORDER_DEPTH + 3, borderY + BORDER_HEIGHT - BORDER_DEPTH - 12, 11, 11, 73, 0, 0, 0,
-                Text.literal(""),
-                BUTTONS,
-                BUTTONS_HOVERED,
+        backButton = new IconButton(borderX + BORDER_DEPTH + 3, borderY + BORDER_HEIGHT - BORDER_DEPTH - 12, 11, 11, 73, 0, 0,
                 () -> {
                     player.playSound(CobblemonSounds.PC_CLICK, 0.1f, 1.25f);
                     MinecraftClient.getInstance().setScreen(bucket != null ? new LocationScreen(bucket) : new MainScreen());
                 }
         );
-        trackButton = new PokenavItemButton(borderX + BORDER_WIDTH / 2 - 34, borderY + BORDER_HEIGHT - BORDER_DEPTH - 27, 70, 23, 0, 80, 0, 0,
+        trackButton = new TextButton(borderX + BORDER_WIDTH / 2 - 34, borderY + BORDER_HEIGHT - BORDER_DEPTH - 27, 70, 23, 0, 80,
                 Text.translatable("gui.cobblenav.pokenav_item.track_button").setStyle(Style.EMPTY.withBold(true)),
-                BUTTONS,
-                BUTTONS_HOVERED,
                 () -> {
                     saveLastFoundPokemon();
                     player.playSound(CobblemonSounds.POKE_BALL_CAPTURE_SUCCEEDED, 0.5f, 0.75f);
