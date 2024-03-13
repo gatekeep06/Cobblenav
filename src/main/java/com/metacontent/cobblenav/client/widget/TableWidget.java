@@ -59,9 +59,12 @@ public class TableWidget<T extends ClickableWidget> extends ClickableWidget {
 
     @Override
     protected void renderButton(DrawContext drawContext, int i, int j, float f) {
+        Iterator<T> iterator = widgets.iterator();
         for (int row = 0; row < rows; row++) {
-            for (int column = 0; column < columns && widgets.size() > row * columns + column; column++) {
-                widgets.get(row * columns + column).render(drawContext, i, j, f);
+            for (int column = 0; column < columns; column++) {
+                if (iterator.hasNext()) {
+                    iterator.next().render(drawContext, i, j, f);
+                }
             }
         }
     }

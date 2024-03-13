@@ -203,8 +203,18 @@ public class LocationScreen extends AbstractPokenavItemScreen {
 
     @Override
     public boolean mouseScrolled(double d, double e, double f) {
-        scrollableSpawnTable.mouseScrolled(d, e, f);
+        if (!isLoading) {
+            scrollableSpawnTable.mouseScrolled(d, e, f);
+        }
         return super.mouseScrolled(d, e, f);
+    }
+
+    @Override
+    public boolean mouseDragged(double d, double e, int i, double f, double g) {
+        if (!isLoading) {
+            scrollableSpawnTable.mouseDragged(d, e, i, f, g);
+        }
+        return super.mouseDragged(d, e, i, f, g);
     }
 
     private void renderBucketSelector(DrawContext drawContext, int i, int j, float f) {

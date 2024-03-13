@@ -1,22 +1,19 @@
 package com.metacontent.cobblenav.client.widget;
 
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
-import net.minecraft.client.gui.widget.ClickableWidget;
-import net.minecraft.text.Text;
+public class ScrollerWidget extends IconButton {
+    private final OnScrollerDrag onDrag;
 
-public class ScrollerWidget extends ClickableWidget {
-    public ScrollerWidget(int i, int j, int k, int l, Text text) {
-        super(i, j, k, l, text);
+    public ScrollerWidget(int x, int y, int width, int height, int offsetX, int offsetY, OnScrollerDrag onDrag) {
+        super(x, y, width, height, offsetX, offsetY, 0, () -> {});
+        this.onDrag = onDrag;
     }
 
     @Override
-    protected void renderButton(DrawContext drawContext, int i, int j, float f) {
-
+    protected void onDrag(double d, double e, double f, double g) {
+        onDrag.drag(g);
     }
 
-    @Override
-    protected void appendClickableNarrations(NarrationMessageBuilder narrationMessageBuilder) {
-
+    public interface OnScrollerDrag {
+        void drag(double deltaY);
     }
 }
