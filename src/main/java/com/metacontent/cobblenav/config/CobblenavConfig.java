@@ -20,8 +20,8 @@ public class CobblenavConfig {
     }
 
     private static void createProvider(CobblenavConfigProvider provider) {
-        provider.addParameter("mainMenuWidget", 0,
-                "Integer between 0 and 2, determines ");
+        provider.addParameter("mainMenuWidget", 1,
+                "Integer between 0 and 2, determines which widget will be on the main screen (so far from the options only none - 0 - and player's team - 1)");
         provider.addParameter("checkSpawnsSizing.width", -1,
                 "Integer, determines the size of the check area (-1 to use the same size as the command)");
         provider.addParameter("checkSpawnsSizing.height", -1,
@@ -39,7 +39,7 @@ public class CobblenavConfig {
     }
 
     private static void assignParameters(SimpleConfig config) {
-        MAIN_MENU_WIDGET = config.getOrDefault("mainMenuWidget", 0);
+        MAIN_MENU_WIDGET = config.getOrDefault("mainMenuWidget", 1);
         CHECK_SPAWNS_WIDTH = config.getOrDefault("checkSpawnsSizing.width", -1);
         CHECK_SPAWNS_HEIGHT = config.getOrDefault("checkSpawnsSizing.height", -1);
         FINDING_WIDTH = config.getOrDefault("findingSizing.width", 100);
