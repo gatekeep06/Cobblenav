@@ -8,6 +8,7 @@ import com.cobblemon.mod.common.pokemon.FormData;
 import com.cobblemon.mod.common.pokemon.Pokemon;
 import com.cobblemon.mod.common.pokemon.RenderablePokemon;
 import com.cobblemon.mod.common.pokemon.Species;
+import com.google.gson.Gson;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -15,6 +16,8 @@ import net.minecraft.text.Text;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 
 public class CobblenavNbtHelper {
@@ -22,14 +25,11 @@ public class CobblenavNbtHelper {
     @Nullable
     public static RenderablePokemon getRenderablePokemonByNbtData(NbtCompound nbt) {
         String name = nbt.getString("name");
-        String formName = nbt.getString("form");
+        String formAspectsString = nbt.getString("form");
         Species species = PokemonSpecies.INSTANCE.getByName(name);
         if (species != null) {
-            FormData form = species.getForms().stream().filter(formData ->
-                    formData.formOnlyShowdownId().equals(formName)
-            ).findFirst().orElse(species.getStandardForm());
             Pokemon pokemon = species.create(10);
-            pokemon.setForm(form);
+            pokemon.setAspects(new HashSet<>(Arrays.stream((new Gson()).fromJson(formAspectsString, String[].class)).toList()));
             return pokemon.asRenderablePokemon();
         }
         return null;
@@ -37,9 +37,9 @@ public class CobblenavNbtHelper {
 
     public static void saveRenderablePokemonData(RenderablePokemon pokemon, NbtCompound nbt) {
         String name = pokemon.getSpecies().showdownId();
-        String formName = pokemon.getForm().formOnlyShowdownId();
+        List<String> formName = pokemon.getForm().getAspects();
         nbt.putString("name", name);
-        nbt.putString("form", formName);
+        nbt.putString("form", formName.toString());
     }
 
     public static void clearRenderablePokemonData(NbtCompound nbt) {

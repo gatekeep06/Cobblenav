@@ -15,13 +15,13 @@ public class ScrollableViewWidget<T extends ClickableWidget> extends ClickableWi
         super(widget.getX(), widget.getY(), width, height, Text.literal(""));
         this.widget = widget;
         this.scrollSize = scrollSize;
-        this.scrollerWidget = new ScrollerWidget(getX() + getWidth(), getY(), 4, 15, 73, 24, deltaY -> scroll((-deltaY * 2.0 / scrollSize)));
+        this.scrollerWidget = new ScrollerWidget(getX() + getWidth(), getY(), 4, 15, 73, 24, this::dragScroller);
     }
 
     @Override
     protected void renderButton(DrawContext drawContext, int i, int j, float f) {
         if (this.visible) {
-            drawContext.enableScissor(getX(), getY(), getX() + getWidth(), getY() + getHeight());
+            drawContext.enableScissor(getX() - getWidth(), getY(), getX() + getWidth() * 2, getY() + getHeight());
             widget.render(drawContext, i, j, f);
             drawContext.disableScissor();
             scrollerWidget.render(drawContext, i, j, f);
@@ -54,25 +54,41 @@ public class ScrollableViewWidget<T extends ClickableWidget> extends ClickableWi
     public boolean mouseScrolled(double d, double e, double f) {
         if (this.active && this.visible) {
             if (this.clicked(d, e)) {
-                return scroll(f);
+                return middleButtonScroll(f, scrollSize);
             }
         }
         return false;
     }
 
-    private boolean scroll(double f) {
+    private double calcScrollerPos(double scrollY) {
+        return (getY() + (getHeight() - 5 - scrollerWidget.getHeight()) * (scrollY / (widget.getHeight() - getHeight())));
+    }
+
+    private void dragScroller(double deltaY) {
+        if (widget.getHeight() > getHeight()) {
+            scrollY = ((deltaY - getY()) * (widget.getHeight() - getHeight())) / (getHeight() - 5 - scrollerWidget.getHeight());
+            scroll();
+        }
+    }
+
+    private boolean middleButtonScroll(double f, float scrollSize) {
         if (widget.getHeight() > getHeight()) {
             scrollY -= f * scrollSize;
-            if (scrollY < 0) {
-                scrollY = 0;
-            } else if (scrollY > widget.getHeight() - getHeight()) {
-                scrollY = widget.getHeight() - getHeight();
-            }
-            scrollerWidget.setY((int) (getY() + (getHeight() - 5 - scrollerWidget.getHeight()) * (scrollY / (widget.getHeight() - getHeight()))));
-            widget.setY((int) (getY() - scrollY));
+            scroll();
             return true;
         }
         return false;
+    }
+
+    private void scroll() {
+        if (scrollY < 0) {
+            scrollY = 0;
+        }
+        else if (scrollY > widget.getHeight() - getHeight()) {
+            scrollY = widget.getHeight() - getHeight();
+        }
+        scrollerWidget.setY((int) calcScrollerPos(scrollY));
+        widget.setY((int) (getY() - scrollY));
     }
 
     public void resetScrollY() {

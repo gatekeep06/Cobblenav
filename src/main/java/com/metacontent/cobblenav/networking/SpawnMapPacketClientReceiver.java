@@ -13,7 +13,7 @@ import java.util.*;
 public class SpawnMapPacketClientReceiver {
     public static void receive(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender responseSender) {
         if (client.currentScreen instanceof LocationScreen locationScreen) {
-            if (locationScreen.getBucketIndex() != buf.readInt()) {
+            if (!locationScreen.getCurrentBucketName().equals(buf.readString())) {
                 return;
             }
             PacketByteBuf.PacketReader<RenderablePokemon> renderablePokemonPacketReader = RenderablePokemon.Companion::loadFromBuffer;

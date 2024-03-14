@@ -30,11 +30,9 @@ import java.util.*;
 import static com.metacontent.cobblenav.networking.CobblenavPackets.SPAWN_MAP_PACKET_CLIENT;
 
 public class SpawnMapPacketServerReceiver {
-    public static final List<String> BUCKET_NAMES = List.of("common", "uncommon", "rare", "ultra-rare");
-
     public static void receive(MinecraftServer server, ServerPlayerEntity player, ServerPlayNetworkHandler handler, PacketByteBuf buf, PacketSender responseSender) {
         CobblemonConfig config = Cobblemon.config;
-        int bucketIndex = buf.readInt();
+        String bucketName = buf.readString();
         Map<RenderablePokemon, Float> spawnMap = new HashMap<>();
 
         server.executeSync(() -> {
@@ -42,7 +40,7 @@ public class SpawnMapPacketServerReceiver {
                 if (config.getEnableSpawning()) {
                     PlayerSpawner spawner = CobblemonWorldSpawnerManager.INSTANCE.getSpawnersForPlayers().get(player.getUuid());
                     SpawnBucket bucket = Cobblemon.INSTANCE.getBestSpawner().getConfig().getBuckets().stream()
-                            .filter(b -> BUCKET_NAMES.get(bucketIndex).equalsIgnoreCase(b.name)).findFirst().orElse(null);
+                            .filter(b -> bucketName.equalsIgnoreCase(b.name)).findFirst().orElse(null);
                     if (spawner != null && bucket != null) {
                         SpawnCause cause = new SpawnCause(spawner, bucket, player);
                         WorldSlice slice = spawner.getProspector().prospect(spawner, new SpawningArea(cause, (ServerWorld) player.getWorld(),
@@ -80,7 +78,7 @@ public class SpawnMapPacketServerReceiver {
             }
             finally {
                 PacketByteBuf responseBuf = PacketByteBufs.create();
-                responseBuf.writeInt(bucketIndex);
+                responseBuf.writeString(bucketName);
                 PacketByteBuf.PacketWriter<RenderablePokemon> renderablePokemonPacketWriter = (packetByteBuf, pokemon) -> pokemon.saveToBuffer(packetByteBuf);
                 PacketByteBuf.PacketWriter<Float> floatPacketWriter = PacketByteBuf::writeFloat;
                 responseBuf.writeMap(spawnMap, renderablePokemonPacketWriter, floatPacketWriter);
