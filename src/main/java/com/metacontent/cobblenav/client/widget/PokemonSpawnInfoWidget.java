@@ -30,17 +30,19 @@ public class PokemonSpawnInfoWidget extends ClickableWidget {
     private final float probability;
     private static final DecimalFormat df = new DecimalFormat("#.##");
     private boolean showActionButtons = false;
-    private final TextRenderer textRenderer;
+    private final int minRenderY;
+    private final int maxRenderY;
 
     private final IconButton shareButton;
     private final IconButton findButton;
 
-    public PokemonSpawnInfoWidget(int i, int j, RenderablePokemon pokemon, float probability, LocationScreen parent, TextRenderer textRenderer) {
+    public PokemonSpawnInfoWidget(int i, int j, RenderablePokemon pokemon, float probability, LocationScreen parent, int minRenderY, int maxRenderY) {
         super(i, j, 20, 30, pokemon.getSpecies().getTranslatedName());
         this.pokemonModel = new ModelWidget(getX(), getY(), getWidth(), getHeight() - getHeight() / 3, pokemon, 0.5F, 340F, 0F);
         this.probability = probability;
         this.player = MinecraftClient.getInstance().player;
-        this.textRenderer = textRenderer;
+        this.minRenderY = minRenderY;
+        this.maxRenderY = maxRenderY;
 
         shareButton = new IconButton(getX() + getWidth() / 2 + 1, getY() + getHeight() - 12, 11, 11, 73, 12,
                 0,
@@ -67,20 +69,21 @@ public class PokemonSpawnInfoWidget extends ClickableWidget {
         );
     }
 
+    public boolean isVisible() {
+        return getY() >= minRenderY && getY() <= maxRenderY;
+    }
+
     @Override
     protected void renderButton(DrawContext drawContext, int i, int j, float f) {
-        pokemonModel.render(drawContext, i, j, f);
-        if (isHovered()) {
-            drawContext.drawTooltip(textRenderer, pokemonModel.getPokemon().getSpecies().getTranslatedName(), i, j);
-//            drawScaledText(drawContext, FONT, pokemonModel.getPokemon().getSpecies().getTranslatedName(),
-//                getX() + getWidth() / 2, getY() - 4, 1, 1, getWidth(), 0xFFFFFF, true, false, i, j);
-        }
-        drawScaledText(drawContext, FONT, Text.literal(df.format(probability) + "%").setStyle(Style.EMPTY.withBold(true)),
-                getX() + getWidth() / 2, getY() + getHeight() - 10, 1, 1, 2 * getWidth(), 0xFFFFFF, true, false, i, j);
-        if (showActionButtons) {
-            showActionButtons = hovered;
-            shareButton.renderButton(drawContext, i, j, f);
-            findButton.renderButton(drawContext, i, j, f);
+        if (isVisible()) {
+            pokemonModel.render(drawContext, i, j, f);
+            drawScaledText(drawContext, FONT, Text.literal(df.format(probability) + "%").setStyle(Style.EMPTY.withBold(true)),
+                    getX() + getWidth() / 2, getY() + getHeight() - 10, 1, 1, 2 * getWidth(), 0xFFFFFF, true, false, i, j);
+            if (showActionButtons) {
+                showActionButtons = hovered;
+                shareButton.renderButton(drawContext, i, j, f);
+                findButton.renderButton(drawContext, i, j, f);
+            }
         }
     }
 
@@ -126,5 +129,9 @@ public class PokemonSpawnInfoWidget extends ClickableWidget {
         this.pokemonModel.setY(i);
         this.shareButton.setY(getY() + getHeight() - 12);
         this.findButton.setY(getY() + getHeight() - 12);
+    }
+
+    public ModelWidget getPokemonModel() {
+        return pokemonModel;
     }
 }

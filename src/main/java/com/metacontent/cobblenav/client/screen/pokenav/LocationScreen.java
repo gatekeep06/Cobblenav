@@ -74,14 +74,15 @@ public class LocationScreen extends AbstractPokenavItemScreen {
     }
 
     public void createSpawnInfoWidgets() {
-        spawnTable = new TableWidget<>(borderX + BORDER_DEPTH + 3, borderY + BORDER_DEPTH + 30,
+        int y = borderY + BORDER_DEPTH + 30;
+        spawnTable = new TableWidget<>(borderX + BORDER_DEPTH + 3, y,
                 7, 3, new BorderBox(4, 2));
         scrollableSpawnTable = new ScrollableViewWidget<>(spawnTable, 200, 106, 20);
         spawnInfoWidgets = new ArrayList<>();
         RenderablePokemon[] renderablePokemonArray = spawnMap.keySet().toArray(new RenderablePokemon[0]);
         Float[] probabilityArray = spawnMap.values().toArray(new Float[0]);
         for (int i = 0; i < spawnMap.size(); i++) {
-            PokemonSpawnInfoWidget widget = new PokemonSpawnInfoWidget(0, 0, renderablePokemonArray[i], probabilityArray[i], this, textRenderer);
+            PokemonSpawnInfoWidget widget = new PokemonSpawnInfoWidget(0, 0, renderablePokemonArray[i], probabilityArray[i], this, y - 30, y + 106);
             spawnInfoWidgets.add(widget);
         }
         spawnTable.calcRows(spawnInfoWidgets.size());
@@ -176,6 +177,11 @@ public class LocationScreen extends AbstractPokenavItemScreen {
             if (!spawnInfoWidgets.isEmpty()) {
                 try {
                     scrollableSpawnTable.render(drawContext, i, j, f);
+                    for (PokemonSpawnInfoWidget widget : spawnInfoWidgets) {
+                        if (widget.isVisible() && widget.isHovered() && scrollableSpawnTable.isHovered()) {
+                            drawContext.drawTooltip(textRenderer, widget.getPokemonModel().getPokemon().getSpecies().getTranslatedName(), i, j);
+                        }
+                    }
                 }
                 catch (Throwable e) {
                     Cobblenav.LOGGER.error(e.getMessage(), e);
