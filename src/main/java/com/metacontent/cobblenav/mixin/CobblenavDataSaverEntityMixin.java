@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(Entity.class)
-public class CobblenavDataSaverEntityMixin implements ContactSaverEntity, LastFoundPokemonSaverEntity {
+public abstract class CobblenavDataSaverEntityMixin implements ContactSaverEntity, LastFoundPokemonSaverEntity {
     @Unique
     private NbtCompound contactData;
     @Unique

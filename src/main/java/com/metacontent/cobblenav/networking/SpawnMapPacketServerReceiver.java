@@ -42,7 +42,7 @@ public class SpawnMapPacketServerReceiver {
                     SpawnBucket bucket = Cobblemon.INSTANCE.getBestSpawner().getConfig().getBuckets().stream()
                             .filter(b -> bucketName.equalsIgnoreCase(b.name)).findFirst().orElse(null);
                     if (spawner != null && bucket != null) {
-                        SpawnCause cause = new SpawnCause(spawner, bucket, player);
+                        SpawnCause cause = new SpawnCause(spawner, bucket, spawner.getCauseEntity());
                         WorldSlice slice = spawner.getProspector().prospect(spawner, new SpawningArea(cause, (ServerWorld) player.getWorld(),
                                 (int) Math.ceil(player.getX() - config.getWorldSliceDiameter() / 2f),
                                 (int) Math.ceil(player.getY() - config.getWorldSliceHeight() / 2f),
@@ -51,7 +51,7 @@ public class SpawnMapPacketServerReceiver {
                                 CobblenavConfig.CHECK_SPAWNS_HEIGHT == -1 ? config.getWorldSliceHeight() : CobblenavConfig.CHECK_SPAWNS_HEIGHT,
                                 CobblenavConfig.CHECK_SPAWNS_WIDTH == -1 ? config.getWorldSliceDiameter() : CobblenavConfig.CHECK_SPAWNS_WIDTH));
 
-                        List<AreaSpawningContext> contexts = spawner.getResolver().resolve(spawner, spawner.getContextCalculators(), slice);
+                        List<AreaSpawningContext> contexts = Cobblenav.RESOLVER.resolve(spawner, spawner.getContextCalculators(), slice);
                         Map<SpawnDetail, Float> spawnProbabilities = spawner.getSpawningSelector().getProbabilities(spawner, contexts);
 
                         spawnProbabilities.forEach((key, value) -> {
