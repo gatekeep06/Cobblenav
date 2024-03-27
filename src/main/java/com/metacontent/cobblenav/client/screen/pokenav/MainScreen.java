@@ -85,9 +85,10 @@ public class MainScreen extends AbstractPokenavItemScreen {
                 if (pokemon.getState() instanceof ShoulderedState) {
                     continue;
                 }
-                pX += (int) (index * 18 * (index % 2 == 1 ? -1 : 1)) + (index % 2 == 1 ? -1 : 1) * 20;
-                ModelWidget modelWidget = new ModelWidget(pX - 51, playerY + BORDER_HEIGHT / 2 - 35, 100, 100,
-                        pokemon.asRenderablePokemon(), 1f - 0.05f * (index % 2 == 1 ? index - 1 : index), 350f + 20 * (index % 2 == 1 ? 1 : 0), 0);
+                float scale = pokemon.getForm().getBaseScale() * pokemon.getScaleModifier() * 1.27f;
+                pX += (index * 18 * (index % 2 == 1 ? -1 : 1)) + (index % 2 == 1 ? -1 : 1) * 20;
+                ModelWidget modelWidget = new ModelWidget(pX - 101, playerY + BORDER_HEIGHT / 2 - 135, 200, 200,
+                        pokemon.asRenderablePokemon(), scale - 0.05f * (index % 2 == 1 ? index - 1 : index), 350f + 20 * (index % 2 == 1 ? 1 : 0), 100 + (1 - scale) * 30);
                 partyModels.add(modelWidget);
                 index++;
             }
@@ -123,28 +124,32 @@ public class MainScreen extends AbstractPokenavItemScreen {
                 borderX + BORDER_DEPTH, borderY + BORDER_DEPTH + 20, BORDER_HEIGHT - 2 * BORDER_DEPTH - 20, BORDER_WIDTH - 2 * BORDER_DEPTH, 0, 0, 256,
                 256, 0, 1, 1, 1, 1, false, 1);
 
-        blitk(matrixStack, BUTTONS,
-                borderX + BORDER_DEPTH, borderY + BORDER_DEPTH + 30, 14, 48, 0, 45, 256,
-                256, 0, 1, 1, 1, 1, false, 1);
-
-        if (CobblenavConfig.MAIN_MENU_WIDGET == 0) {
+        if (CobblenavConfig.MAIN_MENU_WIDGET == 1) {
+            drawContext.enableScissor(borderX + BORDER_DEPTH, borderY + BORDER_DEPTH + 20,
+                    borderX + BORDER_WIDTH - BORDER_DEPTH, borderY + BORDER_HEIGHT - BORDER_DEPTH);
             for (ModelWidget modelWidget : partyModels) {
                 modelWidget.render(drawContext, i, j, f);
             }
 
             renderPlayer(drawContext, playerX, playerY, player);
+            drawContext.disableScissor();
         }
 
         if (finderShortcutWidget != null) {
             finderShortcutWidget.render(drawContext, i, j, f);
         }
 
-        drawScaledText(drawContext, FONT, Text.translatable("gui.cobblenav.pokenav_item.main_menu").setStyle(Style.EMPTY.withColor(0xFFFFFF)),
-                borderX + BORDER_DEPTH + 6, borderY + BORDER_DEPTH + 33, 1, 1, 40, 0, false, false, i, j);
-
+        matrixStack.push();
+        matrixStack.translate(0f, 0f, 500f);
         closeButton.render(drawContext, i, j, f);
         contactsButton.render(drawContext, i, j, f);
         spawnCheckButton.render(drawContext, i, j, f);
+        blitk(matrixStack, BUTTONS,
+                borderX + BORDER_DEPTH, borderY + BORDER_DEPTH + 30, 14, 48, 0, 45, 256,
+                256, 0, 1, 1, 1, 1, false, 1);
+        drawScaledText(drawContext, FONT, Text.translatable("gui.cobblenav.pokenav_item.main_menu").setStyle(Style.EMPTY.withColor(0xFFFFFF)),
+                borderX + BORDER_DEPTH + 6, borderY + BORDER_DEPTH + 33, 1, 1, 40, 0, false, false, i, j);
+        matrixStack.pop();
 
         super.render(drawContext, i, j, f);
     }
@@ -174,7 +179,9 @@ public class MainScreen extends AbstractPokenavItemScreen {
         player.setPitch(0.0F);
         player.headYaw = 180F;
         player.prevHeadYaw = player.getYaw();
-        InventoryScreen.drawEntity(drawContext, x, y + BORDER_HEIGHT / 2, 20, (new Quaternionf()).rotateZ(3.1415927F), (new Quaternionf()).rotateX(120.0F * 0.017453292F), this.player);
+
+        InventoryScreen.drawEntity(drawContext, x, y + BORDER_HEIGHT / 2, 18, (new Quaternionf()).rotateZ(3.1415927F), (new Quaternionf()).rotateX(120.0F * 0.017453292F), this.player);
+
         player.bodyYaw = m;
         player.setYaw(n);
         player.setPitch(o);
