@@ -1,6 +1,7 @@
 {
   "gamerule.titleCommandsPermissionLevel": "Title commands permission level",
   "itemGroup.cobblenav.pokenav_group": "Cobblenav",
+  "item.cobblenav.pokefinder_item": "Pokefinder",
   "item.cobblenav.pokenav_item": "Pokenav",
   "item.cobblenav.pokenav_item_white": "Pokenav",
   "item.cobblenav.pokenav_item_light_gray": "Pokenav",
