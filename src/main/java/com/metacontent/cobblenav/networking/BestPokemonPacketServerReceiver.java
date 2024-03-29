@@ -8,6 +8,7 @@ import com.cobblemon.mod.common.entity.pokemon.PokemonEntity;
 import com.cobblemon.mod.common.pokemon.Pokemon;
 import com.cobblemon.mod.common.pokemon.abilities.HiddenAbility;
 import com.metacontent.cobblenav.config.CobblenavConfig;
+import com.metacontent.cobblenav.util.BestPokemonFinder;
 import com.metacontent.cobblenav.util.FoundPokemon;
 import net.fabricmc.fabric.api.networking.v1.EntityTrackingEvents;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
@@ -24,76 +25,16 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class BestPokemonPacketServerReceiver {
     public static void receive(MinecraftServer server, ServerPlayerEntity player, ServerPlayNetworkHandler handler, PacketByteBuf buf, PacketSender responseSender) {
+        PacketByteBuf responseBuf = PacketByteBufs.create();
         String name = buf.readString();
         ServerWorld world = player.getServerWorld();
 
-        List<PokemonEntity> pokemonEntities = world.getEntitiesByClass(
-                PokemonEntity.class,
-                Box.of(
-                        player.getPos(),
-                        CobblenavConfig.FINDING_WIDTH,
-                        CobblenavConfig.FINDING_HEIGHT,
-                        CobblenavConfig.FINDING_WIDTH
-                ),
-                (pokemonEntity -> pokemonEntity.getPokemon().isWild() && pokemonEntity.getPokemon().showdownId().equals(name))
-        );
-
-        PacketByteBuf responseBuf = PacketByteBufs.create();
+        BestPokemonFinder finder = new BestPokemonFinder(player, world);
+        List<PokemonEntity> pokemonEntities = finder.find(name);
 
         if (!pokemonEntities.isEmpty()) {
-            Map<FoundPokemon, Integer> ratedFoundPokemonMap = new HashMap<>();
+            Map.Entry<FoundPokemon, Integer> entry = BestPokemonFinder.selectBest(pokemonEntities);
 
-            pokemonEntities.forEach(pokemonEntity -> {
-                Pokemon pokemon = pokemonEntity.getPokemon();
-                AtomicInteger rating = new AtomicInteger(0);
-                AtomicInteger potentialStarsAmount = new AtomicInteger(0);
-                boolean hasHiddenAbility = false;
-                String eggMoveName = "";
-                pokemon.getIvs().forEach(entry -> {
-                    int value = entry.getValue();
-                    if (value == 31) {
-                        potentialStarsAmount.getAndIncrement();
-                        rating.getAndIncrement();
-                    }
-                });
-                for (PotentialAbility potentialAbility : pokemon.getForm().getAbilities()) {
-                    if (potentialAbility instanceof HiddenAbility && pokemon.getAbility().getTemplate() == potentialAbility.getTemplate()) {
-                        rating.getAndIncrement();
-                        hasHiddenAbility = true;
-                        break;
-                    }
-                }
-
-                List<MoveTemplate> eggMoves = pokemon.getForm().getMoves().getEggMoves();
-                List<MoveTemplate> levelupMoves = new ArrayList<>();
-                pokemon.getForm().getMoves().getLevelUpMoves().values().forEach(levelupMoves::addAll);
-                for (Move move : pokemon.getMoveSet()) {
-                    MoveTemplate moveTemplate = move.getTemplate();
-                    if (eggMoves.contains(moveTemplate) && !levelupMoves.contains(moveTemplate)) {
-                        rating.getAndIncrement();
-                        eggMoveName = move.getName();
-                        break;
-                    }
-                }
-                if (eggMoveName.isEmpty()) {
-                    for (BenchedMove benchedMove : pokemon.getBenchedMoves()) {
-                        MoveTemplate moveTemplate = benchedMove.getMoveTemplate();
-                        if (eggMoves.contains(moveTemplate) && !levelupMoves.contains(moveTemplate)) {
-                            rating.getAndIncrement();
-                            eggMoveName = moveTemplate.getName();
-                            break;
-                        }
-                    }
-                }
-
-                FoundPokemon foundPokemon = new FoundPokemon(pokemonEntity.getId(), pokemonEntity.getBlockPos(), pokemon.getLevel(),
-                        potentialStarsAmount.get(), pokemon.getAbility().getName(), eggMoveName, hasHiddenAbility);
-
-                ratedFoundPokemonMap.put(foundPokemon, rating.get());
-            });
-
-            Map.Entry<FoundPokemon, Integer> entry = ratedFoundPokemonMap.entrySet().stream()
-                    .max(Map.Entry.comparingByValue()).orElse(null);
             if (entry != null) {
                 responseBuf.writeBoolean(true);
                 FoundPokemon bestFoundPokemon = entry.getKey();

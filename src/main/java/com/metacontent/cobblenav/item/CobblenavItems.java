@@ -13,6 +13,8 @@ import net.minecraft.util.Identifier;
 
 public class CobblenavItems {
     public static final Item POKENAV_ITEM = registerPokenavItem(null);
+    public static final Item POKEFINDER_ITEM = registerItem("pokefinder_item",
+            new PokefinderItem(new FabricItemSettings().maxCount(1)));
     public static final Item POKENAV_ITEM_WHITE = registerPokenavItem("white");
     public static final Item POKENAV_ITEM_LIGHT_GRAY = registerPokenavItem("light_gray");
     public static final Item POKENAV_ITEM_GRAY = registerPokenavItem("gray");
@@ -36,6 +38,7 @@ public class CobblenavItems {
                     .displayName(Text.translatable("itemGroup.cobblenav.pokenav_group"))
                     .entries(((displayContext, entries) -> {
                         entries.add(POKENAV_ITEM);
+                        entries.add(POKEFINDER_ITEM);
                         entries.add(POKENAV_ITEM_WHITE);
                         entries.add(POKENAV_ITEM_LIGHT_GRAY);
                         entries.add(POKENAV_ITEM_GRAY);
