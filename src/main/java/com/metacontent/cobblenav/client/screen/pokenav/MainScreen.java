@@ -10,6 +10,8 @@ import com.metacontent.cobblenav.Cobblenav;
 import com.metacontent.cobblenav.client.screen.AbstractPokenavItemScreen;
 import com.metacontent.cobblenav.client.widget.FinderShortcutWidget;
 import com.metacontent.cobblenav.client.widget.MainScreenButton;
+import com.metacontent.cobblenav.client.widget.main_screen.MainScreenWidget;
+import com.metacontent.cobblenav.client.widget.main_screen.PartyWidget;
 import com.metacontent.cobblenav.config.CobblenavConfig;
 import com.metacontent.cobblenav.networking.CobblenavPackets;
 import net.fabricmc.api.EnvType;
@@ -39,11 +41,11 @@ public class MainScreen extends AbstractPokenavItemScreen {
     private int borderY;
     private int playerX;
     private int playerY;
-    private List<ModelWidget> partyModels;
     private MainScreenButton closeButton;
     private MainScreenButton contactsButton;
     private MainScreenButton spawnCheckButton;
     private FinderShortcutWidget finderShortcutWidget = null;
+    private MainScreenWidget mainScreenWidget;
 
     public MainScreen() {
         super(Text.literal("Pokenav"));
@@ -68,30 +70,21 @@ public class MainScreen extends AbstractPokenavItemScreen {
 
         requestLastFoundPokemon();
 
-        partyModels = new ArrayList<>();
         borderX = (width - BORDER_WIDTH) / 2;
         borderY = (height - BORDER_HEIGHT) / 2 - 10;
-        playerX = width / 2 - 50 + BORDER_DEPTH;
-        playerY = borderY + 45;
         int x = (width + BORDER_WIDTH) / 2 - 68 - BORDER_DEPTH;
         int y = (height) / 2 + 1;
 
-        List<Pokemon> party = CobblemonClient.INSTANCE.getStorage().getMyParty().getSlots();
-
-        int index = 0;
-        int pX = playerX;
-        for (Pokemon pokemon : party) {
-            if (pokemon != null) {
-                if (pokemon.getState() instanceof ShoulderedState) {
-                    continue;
-                }
-                float scale = pokemon.getForm().getBaseScale() * pokemon.getScaleModifier() * 1.27f;
-                pX += (index * 18 * (index % 2 == 1 ? -1 : 1)) + (index % 2 == 1 ? -1 : 1) * 20;
-                ModelWidget modelWidget = new ModelWidget(pX - 101, playerY + BORDER_HEIGHT / 2 - 135, 200, 200,
-                        pokemon.asRenderablePokemon(), scale - 0.05f * (index % 2 == 1 ? index - 1 : index), 350f + 20 * (index % 2 == 1 ? 1 : 0), 100 + (1 - scale) * 30);
-                partyModels.add(modelWidget);
-                index++;
-            }
+        if (CobblenavConfig.MAIN_MENU_WIDGET == 1) {
+            playerX = width / 2 - 50 + BORDER_DEPTH;
+            playerY = borderY + 45;
+            mainScreenWidget = new PartyWidget(playerX, playerY, borderX, borderY);
+        }
+        else {
+            mainScreenWidget = new MainScreenWidget() {
+                @Override
+                protected void renderWidget(DrawContext drawContext, int i, int j, float f) {}
+            };
         }
 
         spawnCheckButton = new MainScreenButton(x, y, 69, 14, 0, 0, 4,
@@ -124,20 +117,11 @@ public class MainScreen extends AbstractPokenavItemScreen {
                 borderX + BORDER_DEPTH, borderY + BORDER_DEPTH + 20, BORDER_HEIGHT - 2 * BORDER_DEPTH - 20, BORDER_WIDTH - 2 * BORDER_DEPTH, 0, 0, 256,
                 256, 0, 1, 1, 1, 1, false, 1);
 
-        if (CobblenavConfig.MAIN_MENU_WIDGET == 1) {
-            drawContext.enableScissor(borderX + BORDER_DEPTH, borderY + BORDER_DEPTH + 20,
-                    borderX + BORDER_WIDTH - BORDER_DEPTH, borderY + BORDER_HEIGHT - BORDER_DEPTH);
-            for (ModelWidget modelWidget : partyModels) {
-                modelWidget.render(drawContext, i, j, f);
-            }
-
-            renderPlayer(drawContext, playerX, playerY, player);
-            drawContext.disableScissor();
-        }
-
         if (finderShortcutWidget != null) {
             finderShortcutWidget.render(drawContext, i, j, f);
         }
+
+        mainScreenWidget.render(drawContext, i, j, f);
 
         matrixStack.push();
         matrixStack.translate(0f, 0f, 500f);
@@ -163,29 +147,5 @@ public class MainScreen extends AbstractPokenavItemScreen {
         contactsButton.mouseClicked(d, e, i);
         closeButton.mouseClicked(d, e, i);
         return super.mouseClicked(d, e, i);
-    }
-
-    private void renderPlayer(DrawContext drawContext, int x, int y, PlayerEntity player) {
-        Quaternionf quaternionf = (new Quaternionf()).rotateZ(3.1415927F);
-        Quaternionf quaternionf2 = (new Quaternionf()).rotateX(20.0F * 0.017453292F);
-        quaternionf.mul(quaternionf2);
-        float m = player.bodyYaw;
-        float n = player.getYaw();
-        float o = player.getPitch();
-        float p = player.prevHeadYaw;
-        float q = player.headYaw;
-        player.bodyYaw = 190.0F;
-        player.setYaw(220.0F);
-        player.setPitch(0.0F);
-        player.headYaw = 180F;
-        player.prevHeadYaw = player.getYaw();
-
-        InventoryScreen.drawEntity(drawContext, x, y + BORDER_HEIGHT / 2, 18, (new Quaternionf()).rotateZ(3.1415927F), (new Quaternionf()).rotateX(120.0F * 0.017453292F), this.player);
-
-        player.bodyYaw = m;
-        player.setYaw(n);
-        player.setPitch(o);
-        player.prevHeadYaw = p;
-        player.headYaw = q;
     }
 }
