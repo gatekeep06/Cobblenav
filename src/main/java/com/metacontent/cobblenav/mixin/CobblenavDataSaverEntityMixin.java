@@ -2,6 +2,7 @@ package com.metacontent.cobblenav.mixin;
 
 import com.metacontent.cobblenav.util.ContactSaverEntity;
 import com.metacontent.cobblenav.util.LastFoundPokemonSaverEntity;
+import com.metacontent.cobblenav.util.PreferencesSaverEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NbtCompound;
 import org.spongepowered.asm.mixin.Mixin;
@@ -12,11 +13,13 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(Entity.class)
-public abstract class CobblenavDataSaverEntityMixin implements ContactSaverEntity, LastFoundPokemonSaverEntity {
+public abstract class CobblenavDataSaverEntityMixin implements ContactSaverEntity, LastFoundPokemonSaverEntity, PreferencesSaverEntity {
     @Unique
     private NbtCompound contactData;
     @Unique
     private NbtCompound lastFoundPokemonData;
+    @Unique
+    private NbtCompound savedPreferences;
 
     @Override
     public NbtCompound cobblenav$getLastFoundPokemonData() {
@@ -34,6 +37,14 @@ public abstract class CobblenavDataSaverEntityMixin implements ContactSaverEntit
         return contactData;
     }
 
+    @Override
+    public NbtCompound cobblenav$getSavedPreferences() {
+        if (savedPreferences == null) {
+            savedPreferences = new NbtCompound();
+        }
+        return savedPreferences;
+    }
+
     @Inject(method = "writeNbt", at = @At("HEAD"))
     protected void injectWriteMethod(NbtCompound nbt, CallbackInfoReturnable<NbtCompound> cir) {
         if (lastFoundPokemonData != null) {
@@ -41,6 +52,9 @@ public abstract class CobblenavDataSaverEntityMixin implements ContactSaverEntit
         }
         if (contactData != null) {
             nbt.put("pokenav_contacts", contactData);
+        }
+        if (savedPreferences != null) {
+            nbt.put("pokenav_saved_preferences", savedPreferences);
         }
     }
 
@@ -51,6 +65,9 @@ public abstract class CobblenavDataSaverEntityMixin implements ContactSaverEntit
         }
         if (nbt.contains("pokenav_contacts")) {
             contactData = nbt.getCompound("pokenav_contacts");
+        }
+        if (nbt.contains("pokenav_saved_preferences")) {
+            savedPreferences = nbt.getCompound("pokenav_saved_preferences");
         }
     }
 }

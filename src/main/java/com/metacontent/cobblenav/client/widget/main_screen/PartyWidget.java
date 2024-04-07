@@ -43,7 +43,7 @@ public class PartyWidget extends MainScreenWidget {
                 float scale = pokemon.getForm().getBaseScale() * pokemon.getScaleModifier() * 1.27f;
                 pX += (index * 18 * (index % 2 == 1 ? -1 : 1)) + (index % 2 == 1 ? -1 : 1) * 18;
                 ModelWidget modelWidget = new ModelWidget(pX - 101, playerY + BORDER_HEIGHT / 2 - 135, 200, 200,
-                        pokemon.asRenderablePokemon(), scale - 0.01f * (index % 2 == 1 ? index - 1 : index), 350f + 20 * (index % 2 == 1 ? 1 : 0), 100 + (1 - scale) * 30);
+                        pokemon.asRenderablePokemon(), scale - 0.01f * (index % 2 == 1 ? index - 1 : index), 350f + 20 * (index % 2 == 1 ? 1 : 0), 102 + (1 - scale) * 30);
                 partyModels.add(modelWidget);
                 index++;
             }

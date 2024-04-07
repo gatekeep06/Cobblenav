@@ -56,7 +56,16 @@ public class LocationScreen extends AbstractPokenavItemScreen {
         this.buckets = Cobblemon.INSTANCE.getBestSpawner().getConfig().getBuckets().stream().map(spawnBucket -> spawnBucket.name).collect(Collectors.toList());
     }
 
-    private void checkSpawns() {
+    private void requestSavedPreferences() {
+        ClientPlayNetworking.send(CobblenavPackets.SAVED_PREFERENCES_PACKET_SERVER, PacketByteBufs.create());
+    }
+
+    public void setPreferences(int bucketIndex, int sortingMark) {
+        this.bucketIndex = bucketIndex;
+        this.sortingMark = sortingMark == 0 ? 1 : sortingMark;
+    }
+
+    public void checkSpawns() {
         spawnMap.clear();
         isLoading = true;
         PacketByteBuf buf = PacketByteBufs.create();
@@ -100,7 +109,7 @@ public class LocationScreen extends AbstractPokenavItemScreen {
         borderX = (width - BORDER_WIDTH) / 2;
         borderY = (height - BORDER_HEIGHT) / 2 - 10;
 
-        checkSpawns();
+        requestSavedPreferences();
 
         backButton = new IconButton(borderX + BORDER_DEPTH + 3, borderY + BORDER_HEIGHT - BORDER_DEPTH - 12, 11, 11, 73, 0, 0,
                 () -> {
@@ -119,6 +128,7 @@ public class LocationScreen extends AbstractPokenavItemScreen {
                     player.playSound(CobblemonSounds.PC_CLICK, 0.05f, 1.25f);
                     if (bucketIndex - 1 >= 0) {
                         bucketIndex--;
+                        savePreferences();
                         checkSpawns();
                     }
                 }
@@ -128,6 +138,7 @@ public class LocationScreen extends AbstractPokenavItemScreen {
                     player.playSound(CobblemonSounds.PC_CLICK, 0.05f, 1.25f);
                     if (bucketIndex + 1 < buckets.size()) {
                         bucketIndex++;
+                        savePreferences();
                         checkSpawns();
                     }
                 }
@@ -137,6 +148,7 @@ public class LocationScreen extends AbstractPokenavItemScreen {
                     player.playSound(CobblemonSounds.PC_CLICK, 0.05f, 1.25f);
                     if (!spawnMap.isEmpty()) {
                         sortingMark = -sortingMark;
+                        savePreferences();
                         List<Map.Entry<RenderablePokemon, Float>> sortingList = new ArrayList<>(spawnMap.entrySet());
                         Comparator<Map.Entry<RenderablePokemon, Float>> comparator = Map.Entry.comparingByValue(
                                 (c1, c2) -> sortingMark * Float.compare(c1, c2)
@@ -252,5 +264,12 @@ public class LocationScreen extends AbstractPokenavItemScreen {
 
     public int getSortingMark() {
         return sortingMark;
+    }
+
+    private void savePreferences() {
+        PacketByteBuf buf = PacketByteBufs.create();
+        buf.writeInt(bucketIndex);
+        buf.writeInt(sortingMark);
+        ClientPlayNetworking.send(CobblenavPackets.SAVE_PREFERENCES_PACKET, buf);
     }
 }
