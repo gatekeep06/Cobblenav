@@ -36,11 +36,11 @@ public class LocationScreen extends AbstractPokenavItemScreen {
     private List<PokemonSpawnInfoWidget> spawnInfoWidgets = new ArrayList<>();
     private TableWidget<PokemonSpawnInfoWidget> spawnTable;
     private ScrollableViewWidget<TableWidget<PokemonSpawnInfoWidget>> scrollableSpawnTable;
-    private int bucketIndex = 0;
+    private int bucketIndex = -1;
     private boolean isLoading = false;
     private int ticker = 0;
     private int animProgress = 0;
-    private int sortingMark = 1;
+    private int sortingMark = 0;
     private int borderX;
     private int borderY;
 
@@ -61,7 +61,7 @@ public class LocationScreen extends AbstractPokenavItemScreen {
     }
 
     public void setPreferences(int bucketIndex, int sortingMark) {
-        this.bucketIndex = bucketIndex;
+        this.bucketIndex = Math.max(bucketIndex, 0);
         this.sortingMark = sortingMark == 0 ? 1 : sortingMark;
     }
 
@@ -109,7 +109,7 @@ public class LocationScreen extends AbstractPokenavItemScreen {
         borderX = (width - BORDER_WIDTH) / 2;
         borderY = (height - BORDER_HEIGHT) / 2 - 10;
 
-        if (sortingMark == 1 && bucketIndex == 0) {
+        if (sortingMark == 0 && bucketIndex == -1) {
             requestSavedPreferences();
         }
         else {

@@ -2,7 +2,6 @@ package com.metacontent.cobblenav.item;
 
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity;
 import com.cobblemon.mod.common.pokemon.RenderablePokemon;
-import com.metacontent.cobblenav.Cobblenav;
 import com.metacontent.cobblenav.client.CobblenavClient;
 import com.metacontent.cobblenav.networking.CobblenavPackets;
 import com.metacontent.cobblenav.util.BestPokemonFinder;
@@ -20,7 +19,6 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.text.MutableText;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
@@ -61,6 +59,10 @@ public class PokefinderItem extends Item {
                                 .setStyle(Style.EMPTY.withItalic(true).withColor(0xff9a38)));
                     }
                 }
+                else {
+                    playerEntity.sendMessage(Text.translatable("message.cobblenav.no_saved_pokemon")
+                            .setStyle(Style.EMPTY.withItalic(true).withColor(0xff9a38)));
+                }
             }
             return TypedActionResult.success(playerEntity.getStackInHand(hand));
         }
@@ -71,7 +73,7 @@ public class PokefinderItem extends Item {
     public void appendTooltip(ItemStack itemStack, @Nullable World world, List<Text> list, TooltipContext tooltipContext) {
         if (world != null) {
             NbtCompound nbt = itemStack.getNbt();
-            if (nbt != null) {
+            if (nbt != null && nbt.contains("saved_pokemon")) {
                 list.add(Text.literal(nbt.getString("saved_pokemon")).formatted(Formatting.AQUA));
             }
         }
@@ -89,6 +91,9 @@ public class PokefinderItem extends Item {
                     if (!nbt.getString("saved_pokemon").equals(savedPokemon)) {
                         nbt.putString("saved_pokemon", savedPokemon);
                     }
+                }
+                else if (nbt.contains("saved_pokemon")) {
+                    nbt.remove("saved_pokemon");
                 }
             }
         }
