@@ -41,5 +41,8 @@
 "gui.cobblenav.pokenav_item.track_button": "잡으러 가자!",
 "message.cobblenav.updating_contacts": "<포켓내비> 연락처 정보 업데이트 중",
 "message.cobblenav.pokenav_is_not_in_hand": "이 작업을 수행하려면 포켓내비가 손에 있어야 합니다",
-"gui.cobblenav.pokenav_item.last_found": "마지막 발견"
+"gui.cobblenav.pokenav_item.last_found": "마지막 발견",
+"item.cobblenav.pokefinder_item": "Pokefinder",
+"message.cobblenav.not_found_message": "<포켓내비> 아무 것도 찾을 수 없습니다",
+"message.cobblenav.no_saved_pokemon": "<포켓내비> You have no saved pokemon"
 }
