@@ -31,6 +31,7 @@ import java.util.List;
 import java.util.Map;
 
 public class PokefinderItem extends Item {
+    private static final String TRANSLATION_KEY = "item.cobblenav.pokefinder_item";
     public PokefinderItem(Settings settings) {
         super(settings);
     }
@@ -97,5 +98,10 @@ public class PokefinderItem extends Item {
                 }
             }
         }
+    }
+
+    @Override
+    public String getTranslationKey(ItemStack itemStack) {
+        return TRANSLATION_KEY;
     }
 }

@@ -15,6 +15,7 @@ import net.minecraft.util.TypedActionResult;
 import net.minecraft.world.World;
 
 public class PokenavItem extends Item {
+    private static final String TRANSLATION_KEY = "item.cobblenav.pokenav_item";
     public PokenavItem(Settings settings) {
         super(settings);
     }
@@ -37,5 +38,10 @@ public class PokenavItem extends Item {
             MinecraftClient.getInstance().setScreen(new MainScreen());
         }
         return  TypedActionResult.success(playerEntity.getStackInHand(hand), false);
+    }
+
+    @Override
+    public String getTranslationKey(ItemStack itemStack) {
+        return TRANSLATION_KEY;
     }
 }
