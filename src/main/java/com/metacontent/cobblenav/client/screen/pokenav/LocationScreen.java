@@ -217,11 +217,13 @@ public class LocationScreen extends AbstractPokenavItemScreen {
     @Override
     public boolean mouseClicked(double d, double e, int i) {
         backButton.mouseClicked(d, e, i);
-        refreshButton.mouseClicked(d, e, i);
-        decreaseBucketIndexButton.mouseClicked(d, e, i);
-        increaseBucketIndexButton.mouseClicked(d, e, i);
-        scrollableSpawnTable.mouseClicked(d, e, i);
-        reverseSortingButton.mouseClicked(d, e, i);
+        if (!isLoading) {
+            refreshButton.mouseClicked(d, e, i);
+            decreaseBucketIndexButton.mouseClicked(d, e, i);
+            increaseBucketIndexButton.mouseClicked(d, e, i);
+            scrollableSpawnTable.mouseClicked(d, e, i);
+            reverseSortingButton.mouseClicked(d, e, i);
+        }
         return super.mouseClicked(d, e, i);
     }
 
