@@ -111,7 +111,7 @@ public class LocationScreen extends AbstractPokenavItemScreen {
         borderX = (width - BORDER_WIDTH) / 2;
         borderY = (height - BORDER_HEIGHT) / 2 - 10;
 
-        if (sortingMark == 0 && bucketIndex == -1) {
+        if (sortingMark == 0 || bucketIndex == -1) {
             requestSavedPreferences();
         }
         else {
@@ -181,8 +181,6 @@ public class LocationScreen extends AbstractPokenavItemScreen {
                 borderX, borderY + BORDER_HEIGHT - BORDER_DEPTH - 14, 14, BORDER_WIDTH, 0, BORDER_HEIGHT + 1, 256,
                 256, 0, 1,1,1,1,false,1);
 
-        renderBucketSelector(drawContext, i, j, f);
-
         backButton.render(drawContext, i, j, f);
         refreshButton.render(drawContext, i, j, f);
         reverseSortingButton.render(drawContext, i, j, f);
@@ -191,6 +189,7 @@ public class LocationScreen extends AbstractPokenavItemScreen {
             renderLoadingAnimation(drawContext, i, j, f);
         }
         else {
+            renderBucketSelector(drawContext, i, j, f);
             if (!spawnInfoWidgets.isEmpty()) {
                 try {
                     scrollableSpawnTable.render(drawContext, i, j, f);
