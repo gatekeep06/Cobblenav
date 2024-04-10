@@ -24,13 +24,15 @@ public class CobblenavNbtHelper {
 
     @Nullable
     public static RenderablePokemon getRenderablePokemonByNbtData(NbtCompound nbt) {
-        String name = nbt.getString("name");
-        String formAspectsString = nbt.getString("form");
-        Species species = PokemonSpecies.INSTANCE.getByName(name);
-        if (species != null) {
-            Pokemon pokemon = species.create(10);
-            pokemon.setAspects(new HashSet<>(Arrays.stream((new Gson()).fromJson(formAspectsString, String[].class)).toList()));
-            return pokemon.asRenderablePokemon();
+        if (nbt.contains("name")) {
+            String name = nbt.getString("name");
+            String formAspectsString = nbt.getString("form");
+            Species species = PokemonSpecies.INSTANCE.getByName(name);
+            if (species != null) {
+                Pokemon pokemon = species.create(10);
+                pokemon.setAspects(new HashSet<>(Arrays.stream((new Gson()).fromJson(formAspectsString, String[].class)).toList()));
+                return pokemon.asRenderablePokemon();
+            }
         }
         return null;
     }
