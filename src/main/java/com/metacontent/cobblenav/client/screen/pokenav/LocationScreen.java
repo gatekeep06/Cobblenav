@@ -57,6 +57,8 @@ public class LocationScreen extends AbstractPokenavItemScreen {
     }
 
     private void requestSavedPreferences() {
+        spawnMap.clear();
+        isLoading = true;
         ClientPlayNetworking.send(CobblenavPackets.SAVED_PREFERENCES_PACKET_SERVER, PacketByteBufs.create());
     }
 
