@@ -7,7 +7,7 @@
   ],
   "key": {
     "R": {
-      "item": "cobblemon:red_apricorn"
+      "item": "cobblemon:yellow_apricorn"
     },
     "C": {
       "item": "minecraft:compass"
@@ -20,6 +20,6 @@
     }
   },
   "result": {
-    "item": "cobblenav:pokefinder_item"
+    "item": "cobblenav:pokefinder_item_yellow"
   }
 }
