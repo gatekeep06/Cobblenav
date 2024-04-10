@@ -1,5 +1,5 @@
 {
-  "parent": "item/generated",
+  "parent": "cobblenav:item/cobblenav_template",
   "textures": {
     "layer0": "cobblenav:item/pokenav_item_white"
   }
