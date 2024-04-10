@@ -5,7 +5,7 @@
       "item": "minecraft:lime_dye"
     },
     {
-      "item": "cobblenav:pokenav_item"
+      "tag": "cobblenav:pokenav"
     }
   ],
   "result": {

@@ -5,7 +5,7 @@
       "item": "minecraft:brown_dye"
     },
     {
-      "item": "cobblenav:pokenav_item"
+      "tag": "cobblenav:pokenav"
     }
   ],
   "result": {
