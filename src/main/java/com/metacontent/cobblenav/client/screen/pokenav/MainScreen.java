@@ -1,18 +1,13 @@
 package com.metacontent.cobblenav.client.screen.pokenav;
 
 import com.cobblemon.mod.common.CobblemonSounds;
-import com.cobblemon.mod.common.client.CobblemonClient;
-import com.cobblemon.mod.common.client.gui.summary.widgets.ModelWidget;
-import com.cobblemon.mod.common.pokemon.Pokemon;
 import com.cobblemon.mod.common.pokemon.RenderablePokemon;
-import com.cobblemon.mod.common.pokemon.activestate.ShoulderedState;
 import com.metacontent.cobblenav.Cobblenav;
 import com.metacontent.cobblenav.client.screen.AbstractPokenavItemScreen;
 import com.metacontent.cobblenav.client.widget.FinderShortcutWidget;
 import com.metacontent.cobblenav.client.widget.MainScreenButton;
 import com.metacontent.cobblenav.client.widget.main_screen.MainScreenWidget;
 import com.metacontent.cobblenav.client.widget.main_screen.PartyWidget;
-import com.metacontent.cobblenav.config.CobblenavConfig;
 import com.metacontent.cobblenav.networking.CobblenavPackets;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -20,16 +15,10 @@ import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.screen.ingame.InventoryScreen;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
-import org.joml.Quaternionf;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import static com.cobblemon.mod.common.api.gui.GuiUtilsKt.blitk;
 import static com.cobblemon.mod.common.client.render.RenderHelperKt.drawScaledText;
@@ -75,7 +64,7 @@ public class MainScreen extends AbstractPokenavItemScreen {
         int x = (width + BORDER_WIDTH) / 2 - 68 - BORDER_DEPTH;
         int y = (height) / 2 + 1;
 
-        if (CobblenavConfig.MAIN_MENU_WIDGET == 1) {
+        if (Cobblenav.CONFIG.mainScreenWidget == 1) {
             playerX = width / 2 - 50 + BORDER_DEPTH;
             playerY = borderY + 45;
             mainScreenWidget = new PartyWidget(playerX, playerY, borderX, borderY);

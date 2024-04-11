@@ -1,6 +1,6 @@
 package com.metacontent.cobblenav.command;
 
-import com.metacontent.cobblenav.config.CobblenavConfig;
+import com.metacontent.cobblenav.Cobblenav;
 import com.metacontent.cobblenav.util.ContactSaverEntity;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
@@ -13,7 +13,7 @@ import net.minecraft.server.command.ServerCommandSource;
 
 public class SetPlayerTitleCommand {
     public static void register(CommandDispatcher<ServerCommandSource> dispatcher, CommandRegistryAccess commandRegistryAccess, CommandManager.RegistrationEnvironment registrationEnvironment) {
-        dispatcher.register(CommandManager.literal("pokenav").requires(source -> source.hasPermissionLevel(CobblenavConfig.TITLE_COMMANDS_PERMISSION_LEVEL))
+        dispatcher.register(CommandManager.literal("pokenav").requires(source -> source.hasPermissionLevel(Cobblenav.CONFIG.titleCommandsPermissionLevel))
                 .then(CommandManager.literal("title")
                         .then(CommandManager.literal("set")
                                 .then(CommandManager.argument("title", StringArgumentType.string())
