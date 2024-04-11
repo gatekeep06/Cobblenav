@@ -1,7 +1,7 @@
 package com.metacontent.cobblenav.client.hud;
 
 import com.metacontent.cobblenav.Cobblenav;
-import com.metacontent.cobblenav.config.CobblenavConfig;
+import com.metacontent.cobblenav.client.CobblenavClient;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
@@ -49,7 +49,7 @@ public class TrackArrowHudOverlay implements HudRenderCallback {
                 float height = client.getWindow().getScaledHeight();
                 MatrixStack matrixStack = drawContext.getMatrices();
                 float x = width / 2;
-                float y = height - CobblenavConfig.TRACK_ARROW_VERTICAL_POSITION;
+                float y = height - CobblenavClient.CONFIG.trackArrowVerticalOffset;
 
                 double trackedPosX = trackedEntity.getX();
                 double trackedPosZ = trackedEntity.getZ();

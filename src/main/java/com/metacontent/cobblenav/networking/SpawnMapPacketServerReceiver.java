@@ -1,7 +1,6 @@
 package com.metacontent.cobblenav.networking;
 
 import com.cobblemon.mod.common.Cobblemon;
-import com.cobblemon.mod.common.api.pokemon.PokemonSpecies;
 import com.cobblemon.mod.common.api.spawning.CobblemonWorldSpawnerManager;
 import com.cobblemon.mod.common.api.spawning.SpawnBucket;
 import com.cobblemon.mod.common.api.spawning.SpawnCause;
@@ -13,9 +12,7 @@ import com.cobblemon.mod.common.api.spawning.spawner.PlayerSpawner;
 import com.cobblemon.mod.common.api.spawning.spawner.SpawningArea;
 import com.cobblemon.mod.common.config.CobblemonConfig;
 import com.cobblemon.mod.common.pokemon.RenderablePokemon;
-import com.cobblemon.mod.common.pokemon.Species;
 import com.metacontent.cobblenav.Cobblenav;
-import com.metacontent.cobblenav.config.CobblenavConfig;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.minecraft.network.PacketByteBuf;
@@ -23,7 +20,6 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayNetworkHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.text.Text;
 
 import java.util.*;
 
@@ -47,9 +43,9 @@ public class SpawnMapPacketServerReceiver {
                                 (int) Math.ceil(player.getX() - config.getWorldSliceDiameter() / 2f),
                                 (int) Math.ceil(player.getY() - config.getWorldSliceHeight() / 2f),
                                 (int) Math.ceil(player.getZ() - config.getWorldSliceDiameter() / 2f),
-                                CobblenavConfig.CHECK_SPAWNS_WIDTH == -1 ? config.getWorldSliceDiameter() : CobblenavConfig.CHECK_SPAWNS_WIDTH,
-                                CobblenavConfig.CHECK_SPAWNS_HEIGHT == -1 ? config.getWorldSliceHeight() : CobblenavConfig.CHECK_SPAWNS_HEIGHT,
-                                CobblenavConfig.CHECK_SPAWNS_WIDTH == -1 ? config.getWorldSliceDiameter() : CobblenavConfig.CHECK_SPAWNS_WIDTH));
+                                Cobblenav.CONFIG.checkSpawnWidth == -1 ? config.getWorldSliceDiameter() : Cobblenav.CONFIG.checkSpawnWidth,
+                                Cobblenav.CONFIG.checkSpawnHeight == -1 ? config.getWorldSliceHeight() : Cobblenav.CONFIG.checkSpawnHeight,
+                                Cobblenav.CONFIG.checkSpawnWidth == -1 ? config.getWorldSliceDiameter() : Cobblenav.CONFIG.checkSpawnWidth));
 
                         List<AreaSpawningContext> contexts = Cobblenav.RESOLVER.resolve(spawner, spawner.getContextCalculators(), slice);
                         Map<SpawnDetail, Float> spawnProbabilities = spawner.getSpawningSelector().getProbabilities(spawner, contexts);
@@ -58,7 +54,7 @@ public class SpawnMapPacketServerReceiver {
                             try {
                                 if (key instanceof PokemonSpawnDetail pokemonSpawnDetail && pokemonSpawnDetail.isValid()) {
                                     RenderablePokemon renderablePokemon = pokemonSpawnDetail.getPokemon().asRenderablePokemon();
-                                    boolean isIgnored = Arrays.stream(CobblenavConfig.IGNORED_LABELS).anyMatch(
+                                    boolean isIgnored = Cobblenav.CONFIG.ignoredLabels.stream().anyMatch(
                                             string -> renderablePokemon.getSpecies().getLabels().contains(string)
                                     );
                                     if (!isIgnored) {

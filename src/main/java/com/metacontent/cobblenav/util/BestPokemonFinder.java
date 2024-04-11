@@ -7,7 +7,7 @@ import com.cobblemon.mod.common.api.moves.MoveTemplate;
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity;
 import com.cobblemon.mod.common.pokemon.Pokemon;
 import com.cobblemon.mod.common.pokemon.abilities.HiddenAbility;
-import com.metacontent.cobblenav.config.CobblenavConfig;
+import com.metacontent.cobblenav.Cobblenav;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.Box;
@@ -34,9 +34,9 @@ public class BestPokemonFinder {
                 PokemonEntity.class,
                 Box.of(
                         player.getPos(),
-                        CobblenavConfig.FINDING_WIDTH,
-                        CobblenavConfig.FINDING_HEIGHT,
-                        CobblenavConfig.FINDING_WIDTH
+                        Cobblenav.CONFIG.findingAreaWidth,
+                        Cobblenav.CONFIG.findingAreaHeight,
+                        Cobblenav.CONFIG.findingAreaWidth
                 ),
                 (pokemonEntity -> pokemonEntity.getPokemon().isWild() && pokemonEntity.getPokemon().showdownId().equals(name))
         );

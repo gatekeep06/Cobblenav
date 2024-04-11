@@ -1,7 +1,6 @@
 package com.metacontent.cobblenav.command;
 
 import com.metacontent.cobblenav.Cobblenav;
-import com.metacontent.cobblenav.config.CobblenavConfig;
 import com.metacontent.cobblenav.item.CobblenavItems;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
@@ -22,7 +21,7 @@ public class GiveCustomPokenavCommand {
         dispatcher.register(CommandManager.literal("giveCustomPokenav").requires(source -> source.hasPermissionLevel(2))
                 .then(CommandManager.argument("players", EntityArgumentType.players())
                         .then(CommandManager.argument("predicate", IntegerArgumentType.integer()).suggests((context, builder) -> {
-                            for (Integer integer : CobblenavConfig.CUSTOM_POKENAV_PREDICATES) {
+                            for (Integer integer : Cobblenav.CONFIG.customPokenavPredicates) {
                                 if (CommandSource.shouldSuggest(builder.getRemaining(), integer.toString())) {
                                     builder.suggest(integer);
                                 }
