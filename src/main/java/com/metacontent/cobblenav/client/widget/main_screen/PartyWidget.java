@@ -2,6 +2,8 @@ package com.metacontent.cobblenav.client.widget.main_screen;
 
 import com.cobblemon.mod.common.client.CobblemonClient;
 import com.cobblemon.mod.common.client.gui.summary.widgets.ModelWidget;
+import com.cobblemon.mod.common.client.render.models.blockbench.pokemon.PokemonPoseableModel;
+import com.cobblemon.mod.common.client.render.models.blockbench.repository.PokemonModelRepository;
 import com.cobblemon.mod.common.pokemon.Pokemon;
 import com.cobblemon.mod.common.pokemon.activestate.ShoulderedState;
 import net.minecraft.client.MinecraftClient;
@@ -9,6 +11,7 @@ import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.ingame.InventoryScreen;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.text.Text;
 import org.joml.Quaternionf;
 
 import java.util.ArrayList;
@@ -40,10 +43,11 @@ public class PartyWidget extends MainScreenWidget {
                 if (pokemon.getState() instanceof ShoulderedState) {
                     continue;
                 }
-                float scale = pokemon.getForm().getBaseScale() * pokemon.getScaleModifier() * 1.27f;
-                pX += (index * 18 * (index % 2 == 1 ? -1 : 1)) + (index % 2 == 1 ? -1 : 1) * 18;
+                PokemonPoseableModel model = PokemonModelRepository.INSTANCE.getPoser(pokemon.getSpecies().getResourceIdentifier(), pokemon.getAspects());
+                float scale = pokemon.getForm().getBaseScale() / model.getProfileScale();
+                pX += (index * 20 * (index % 2 == 1 ? -1 : 1)) + (index % 2 == 1 ? -1 : 1) * 20;
                 ModelWidget modelWidget = new ModelWidget(pX - 101, playerY + BORDER_HEIGHT / 2 - 135, 200, 200,
-                        pokemon.asRenderablePokemon(), scale - 0.01f * (index % 2 == 1 ? index - 1 : index), 350f + 20 * (index % 2 == 1 ? 1 : 0), 102 + (1 - scale) * 30);
+                        pokemon.asRenderablePokemon(), scale, 350f + 20 * (index % 2 == 1 ? 1 : 0), 130 - scale * 32);
                 partyModels.add(modelWidget);
                 index++;
             }
@@ -56,12 +60,12 @@ public class PartyWidget extends MainScreenWidget {
         drawContext.enableScissor(borderX + BORDER_DEPTH, borderY + BORDER_DEPTH + 20,
                 borderX + BORDER_WIDTH - BORDER_DEPTH, borderY + BORDER_HEIGHT - BORDER_DEPTH);
         matrixStack.push();
-        matrixStack.translate(0f, 0f, 600f);
+        matrixStack.translate(0f, 0f, 2000f);
         renderPlayer(drawContext, playerX, playerY, player);
         for (int index = 0; index < partyModels.size(); ++index) {
             partyModels.get(index).render(drawContext, i, j, f);
             if (index % 2 != 0) {
-                matrixStack.translate(0f, 0f, -200f);
+                matrixStack.translate(0f, 0f, -500f);
             }
         }
         matrixStack.pop();
@@ -85,7 +89,7 @@ public class PartyWidget extends MainScreenWidget {
 
         drawContext.getMatrices().push();
         drawContext.getMatrices().translate(0f, 0f, 100f);
-        InventoryScreen.drawEntity(drawContext, x, y + BORDER_HEIGHT / 2, 18, (new Quaternionf()).rotateZ(3.1415927F), (new Quaternionf()).rotateX(120.0F * 0.017453292F), this.player);
+        InventoryScreen.drawEntity(drawContext, x, y + BORDER_HEIGHT / 2, 20, (new Quaternionf()).rotateZ(3.1415927F), (new Quaternionf()).rotateX(120.0F * 0.017453292F), this.player);
         drawContext.getMatrices().pop();
 
         player.bodyYaw = m;
