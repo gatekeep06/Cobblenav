@@ -2,6 +2,9 @@ package com.metacontent.cobblenav.config;
 
 import com.metacontent.cobblenav.Cobblenav;
 
+import java.util.Arrays;
+import java.util.stream.Collectors;
+
 public class CobblenavConfig {
     public static int MAIN_MENU_WIDGET;
     public static int CHECK_SPAWNS_WIDTH;
@@ -11,6 +14,7 @@ public class CobblenavConfig {
     public static String[] IGNORED_LABELS;
     public static int TITLE_COMMANDS_PERMISSION_LEVEL;
     public static int TRACK_ARROW_VERTICAL_POSITION;
+    public static Integer[] CUSTOM_POKENAV_PREDICATES;
 
     public static void initConfig() {
         CobblenavConfigProvider provider = new CobblenavConfigProvider();
@@ -36,6 +40,8 @@ public class CobblenavConfig {
                 "Integer between 0 and 4, Determines the permission level for title commands, google for more info");
         provider.addParameter("trackArrowVerticalPosition", 70,
                 "Integer, Determines the height at which the track arrow will be positioned");
+        provider.addParameter("customPokenavPredicates", "0",
+                "Integer array, ");
     }
 
     private static void assignParameters(SimpleConfig config) {
@@ -47,5 +53,7 @@ public class CobblenavConfig {
         IGNORED_LABELS = config.getOrDefault("ignoredPokemonLabels", "not_modeled").replaceAll(" ", "").split(",");
         TITLE_COMMANDS_PERMISSION_LEVEL = config.getOrDefault("titleCommandsPermissionLevel", 2);
         TRACK_ARROW_VERTICAL_POSITION = config.getOrDefault("trackArrowVerticalPosition", 70);
+        CUSTOM_POKENAV_PREDICATES = Arrays.stream(config.getOrDefault("customPokenavPredicates", "0").replaceAll(" ", "").split(","))
+                .map(Integer::valueOf).toArray(Integer[]::new);
     }
 }
