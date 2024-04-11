@@ -25,26 +25,21 @@ public class ClearContactDataCommand {
                                 .executes(ClearContactDataCommand::run))));
     }
 
-    private static int run(CommandContext<ServerCommandSource> context) {
-        try {
-            List<ServerPlayerEntity> players = context.getArgument("player", EntitySelector.class).getPlayers(context.getSource());
-            if (!players.isEmpty()) {
-                players.forEach(player -> {
-                    if (player instanceof ContactSaverEntity contactSaverEntity) {
-                        NbtCompound nbt = contactSaverEntity.cobblenav$getContactData();
-                        for (Iterator<String> iterator = nbt.getKeys().iterator(); iterator.hasNext(); ) {
-                            String key = iterator.next();
-                            if (!key.equals("title")) {
-                                nbt.remove(key);
-                            }
+    private static int run(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
+        List<ServerPlayerEntity> players = context.getArgument("player", EntitySelector.class).getPlayers(context.getSource());
+        if (!players.isEmpty()) {
+            players.forEach(player -> {
+                if (player instanceof ContactSaverEntity contactSaverEntity) {
+                    NbtCompound nbt = contactSaverEntity.cobblenav$getContactData();
+                    for (Iterator<String> iterator = nbt.getKeys().iterator(); iterator.hasNext(); ) {
+                        String key = iterator.next();
+                        if (!key.equals("title")) {
+                            nbt.remove(key);
                         }
                     }
-                });
-                return 1;
-            }
-        }
-        catch (Throwable e) {
-            Cobblenav.LOGGER.error(e.getMessage(), e);
+                }
+            });
+            return 1;
         }
         return -1;
     }
