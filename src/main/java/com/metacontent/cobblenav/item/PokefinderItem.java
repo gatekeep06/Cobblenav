@@ -8,6 +8,7 @@ import com.metacontent.cobblenav.util.BestPokemonFinder;
 import com.metacontent.cobblenav.util.CobblenavNbtHelper;
 import com.metacontent.cobblenav.util.FoundPokemon;
 import com.metacontent.cobblenav.util.LastFoundPokemonSaverEntity;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.client.item.TooltipContext;
@@ -38,34 +39,14 @@ public class PokefinderItem extends Item {
 
     @Override
     public TypedActionResult<ItemStack> use(World world, PlayerEntity playerEntity, Hand hand) {
-        if (!world.isClient()) {
+        if (world.isClient()) {
             if (CobblenavClient.TRACK_ARROW_HUD_OVERLAY.isTracking()) {
                 CobblenavClient.TRACK_ARROW_HUD_OVERLAY.resetTracking();
             }
-            else if (playerEntity instanceof LastFoundPokemonSaverEntity lastFoundPokemonSaver) {
-                RenderablePokemon renderablePokemon = CobblenavNbtHelper.getRenderablePokemonByNbtData(lastFoundPokemonSaver.cobblenav$getLastFoundPokemonData());
-                if (renderablePokemon != null) {
-                    BestPokemonFinder finder = new BestPokemonFinder(playerEntity, (ServerWorld) world);
-                    String name = renderablePokemon.getSpecies().showdownId();
-                    List<PokemonEntity> entities = finder.find(name);
-                    Map.Entry<FoundPokemon, Integer> entry = BestPokemonFinder.selectBest(entities);
-                    if (entry != null) {
-                        FoundPokemon foundPokemon = entry.getKey();
-                        PacketByteBuf buf = PacketByteBufs.create();
-                        buf.writeInt(foundPokemon.getEntityId());
-                        ServerPlayNetworking.send((ServerPlayerEntity) playerEntity, CobblenavPackets.TRACKED_ENTITY_ID_PACKET, buf);
-                    }
-                    else {
-                        playerEntity.sendMessage(Text.translatable("message.cobblenav.not_found_message")
-                                .setStyle(Style.EMPTY.withItalic(true).withColor(0xff9a38)));
-                    }
-                }
-                else {
-                    playerEntity.sendMessage(Text.translatable("message.cobblenav.no_saved_pokemon")
-                            .setStyle(Style.EMPTY.withItalic(true).withColor(0xff9a38)));
-                }
+            else {
+                ClientPlayNetworking.send(CobblenavPackets.TRACKED_ENTITY_ID_PACKET_SERVER, PacketByteBufs.create());
             }
-            return TypedActionResult.success(playerEntity.getStackInHand(hand));
+            return TypedActionResult.success(playerEntity.getStackInHand(hand), false);
         }
         return TypedActionResult.pass(playerEntity.getStackInHand(hand));
     }

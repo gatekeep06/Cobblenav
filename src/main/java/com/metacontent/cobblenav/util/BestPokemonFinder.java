@@ -38,7 +38,7 @@ public class BestPokemonFinder {
                         Cobblenav.CONFIG.findingAreaHeight,
                         Cobblenav.CONFIG.findingAreaWidth
                 ),
-                (pokemonEntity -> pokemonEntity.getPokemon().isWild() && pokemonEntity.getPokemon().showdownId().equals(name))
+                (pokemonEntity -> pokemonEntity.getPokemon().isWild() && pokemonEntity.getPokemon().getForm().showdownId().equals(name))
         );
     }
 

@@ -37,7 +37,7 @@ public class PokenavItem extends Item {
             playerEntity.playSound(CobblemonSounds.PC_ON, 0.1f, 1.25f);
             MinecraftClient.getInstance().setScreen(new MainScreen());
         }
-        return  TypedActionResult.success(playerEntity.getStackInHand(hand), false);
+        return TypedActionResult.success(playerEntity.getStackInHand(hand), false);
     }
 
     @Override

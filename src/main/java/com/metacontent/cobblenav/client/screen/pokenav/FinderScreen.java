@@ -61,12 +61,7 @@ public class FinderScreen extends AbstractPokenavItemScreen {
 
     private void requestBestPokemon() {
         PacketByteBuf buf = PacketByteBufs.create();
-        if (pokemon.getForm().formOnlyShowdownId().equals("normal")) {
-            buf.writeString(pokemon.getSpecies().showdownId());
-        }
-        else {
-            buf.writeString(pokemon.getForm().showdownId());
-        }
+        buf.writeString(pokemon.getForm().showdownId());
         ClientPlayNetworking.send(CobblenavPackets.BEST_POKEMON_PACKET_SERVER, buf);
     }
 

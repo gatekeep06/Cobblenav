@@ -6,7 +6,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.network.PacketByteBuf;
 
-public class TrackedEntityIdPacketReceiver {
+public class TrackedEntityIdPacketClientReceiver {
     public static void receive(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender responseSender) {
         int id = buf.readInt();
         CobblenavClient.TRACK_ARROW_HUD_OVERLAY.setTrackedEntityId(id);
