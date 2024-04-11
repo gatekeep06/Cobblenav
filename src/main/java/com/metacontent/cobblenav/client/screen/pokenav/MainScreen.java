@@ -124,7 +124,7 @@ public class MainScreen extends AbstractPokenavItemScreen {
         mainScreenWidget.render(drawContext, i, j, f);
 
         matrixStack.push();
-        matrixStack.translate(0f, 0f, 500f);
+        matrixStack.translate(0f, 0f, 2500f);
         closeButton.render(drawContext, i, j, f);
         contactsButton.render(drawContext, i, j, f);
         spawnCheckButton.render(drawContext, i, j, f);
