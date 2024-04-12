@@ -30,13 +30,7 @@ public class ClearContactDataCommand {
         if (!players.isEmpty()) {
             players.forEach(player -> {
                 if (player instanceof ContactSaverEntity contactSaverEntity) {
-                    NbtCompound nbt = contactSaverEntity.cobblenav$getContactData();
-                    for (Iterator<String> iterator = nbt.getKeys().iterator(); iterator.hasNext(); ) {
-                        String key = iterator.next();
-                        if (!key.equals("title")) {
-                            nbt.remove(key);
-                        }
-                    }
+                    contactSaverEntity.cobblenav$clearContacts();
                 }
             });
             return 1;

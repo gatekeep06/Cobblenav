@@ -6,6 +6,7 @@ import com.metacontent.cobblenav.util.PreferencesSaverEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NbtCompound;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -35,6 +36,13 @@ public abstract class CobblenavDataSaverEntityMixin implements ContactSaverEntit
             contactData = new NbtCompound();
         }
         return contactData;
+    }
+
+    @Override
+    public void cobblenav$clearContacts() {
+        String title = contactData.getString("title");
+        contactData = new NbtCompound();
+        contactData.putString("title", title);
     }
 
     @Override
