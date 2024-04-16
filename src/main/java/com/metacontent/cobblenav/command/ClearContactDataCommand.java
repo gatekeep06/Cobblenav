@@ -1,5 +1,6 @@
 package com.metacontent.cobblenav.command;
 
+import com.metacontent.cobblenav.Cobblenav;
 import com.metacontent.cobblenav.util.ContactSaverEntity;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.context.CommandContext;
@@ -12,6 +13,7 @@ import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 
@@ -28,12 +30,7 @@ public class ClearContactDataCommand {
         if (!players.isEmpty()) {
             players.forEach(player -> {
                 if (player instanceof ContactSaverEntity contactSaverEntity) {
-                    NbtCompound nbt = contactSaverEntity.cobblenav$getContactData();
-                    nbt.getKeys().forEach(key -> {
-                        if (!Objects.equals(key, "title")) {
-                            nbt.remove(key);
-                        }
-                    });
+                    contactSaverEntity.cobblenav$clearContacts();
                 }
             });
             return 1;

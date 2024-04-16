@@ -15,6 +15,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class CobblenavItems {
     public static final Item POKENAV_ITEM = registerPokenavItem(null);
+    public static final Item CUSTOM_POKENAV_ITEM = registerPokenavItem("custom");
     public static final Item POKENAV_ITEM_WHITE = registerPokenavItem("white");
     public static final Item POKENAV_ITEM_LIGHT_GRAY = registerPokenavItem("light_gray");
     public static final Item POKENAV_ITEM_GRAY = registerPokenavItem("gray");
