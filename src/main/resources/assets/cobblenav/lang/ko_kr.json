@@ -28,5 +28,6 @@
 "gui.cobblenav.pokenav_item.last_found": "마지막 발견",
 "item.cobblenav.pokefinder_item": "Pokefinder",
 "message.cobblenav.not_found_message": "<포켓내비> 아무 것도 찾을 수 없습니다",
-"message.cobblenav.no_saved_pokemon": "<포켓내비> You have no saved pokemon"
+"message.cobblenav.no_saved_pokemon": "<포켓내비> You have no saved pokemon",
+"gui.cobblenav.pokenav_item.last_found.tooltip": "Right-click to reset"
 }
