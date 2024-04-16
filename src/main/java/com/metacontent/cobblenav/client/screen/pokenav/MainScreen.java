@@ -46,7 +46,7 @@ public class MainScreen extends AbstractPokenavItemScreen {
 
     public void createFinderShortcutWidget(RenderablePokemon pokemon) {
         finderShortcutWidget = new FinderShortcutWidget(borderX + BORDER_WIDTH - BORDER_DEPTH - 30,
-                borderY + BORDER_DEPTH + 30, pokemon, this);
+                borderY + BORDER_DEPTH + 30, pokemon, this, textRenderer);
     }
 
     public void removeFinderShortcutWidget() {

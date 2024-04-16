@@ -10,6 +10,7 @@ import com.metacontent.cobblenav.networking.CobblenavPackets;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
 import net.minecraft.client.gui.widget.ClickableWidget;
@@ -30,17 +31,20 @@ public class FinderShortcutWidget extends ClickableWidget {
     private final ModelWidget pokemonModel;
     private final PlayerEntity player;
     private boolean isSoundPlayed = false;
+    private final TextRenderer textRenderer;
 
-    public FinderShortcutWidget(int x, int y, RenderablePokemon pokemon, MainScreen parent) {
+    public FinderShortcutWidget(int x, int y, RenderablePokemon pokemon, MainScreen parent, TextRenderer textRenderer) {
         super(x, y, 20, 30, pokemon.getSpecies().getTranslatedName());
         this.pokemonModel = new ModelWidget(getX(), getY(), getWidth(), 2 * getHeight() / 3, pokemon, 0.5f, 340, 0);
         player = MinecraftClient.getInstance().player;
         this.parent = parent;
+        this.textRenderer = textRenderer;
     }
 
     @Override
     protected void renderButton(DrawContext drawContext, int i, int j, float f) {
         if (isHovered()) {
+            drawContext.drawTooltip(textRenderer, getMessage().copy(), i, j);
             if (!isSoundPlayed) {
                 isSoundPlayed = true;
                 if (player != null) {
@@ -59,8 +63,6 @@ public class FinderShortcutWidget extends ClickableWidget {
                         .setStyle(Style.EMPTY.withBold(true)),
                 getX() + getWidth() / 2 + 1, getY(), 1f, 1f, getWidth() - 2, 0xFFFFFF, true, true, i, j);
         pokemonModel.render(drawContext, i, j, f);
-        drawScaledText(drawContext, FONT, getMessage().copy(), getX() + getWidth() / 2 + 1, getY() + 2 * getHeight() / 3,
-                1f, 1f, getWidth() - 2, 0xFFFFFF, true, false, i, j);
     }
 
     @Override
