@@ -1,5 +1,6 @@
 package com.metacontent.cobblenav.item;
 
+import com.cobblemon.mod.common.CobblemonSounds;
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity;
 import com.cobblemon.mod.common.pokemon.RenderablePokemon;
 import com.metacontent.cobblenav.client.CobblenavClient;
@@ -40,6 +41,7 @@ public class PokefinderItem extends Item {
     @Override
     public TypedActionResult<ItemStack> use(World world, PlayerEntity playerEntity, Hand hand) {
         if (world.isClient()) {
+            playerEntity.playSound(CobblemonSounds.PC_ON, 0.1f, 1.25f);
             if (CobblenavClient.TRACK_ARROW_HUD_OVERLAY.isTracking()) {
                 CobblenavClient.TRACK_ARROW_HUD_OVERLAY.resetTracking();
             }
