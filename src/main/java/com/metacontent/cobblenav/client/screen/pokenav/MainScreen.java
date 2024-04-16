@@ -20,6 +20,8 @@ import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
+import java.util.List;
+
 import static com.cobblemon.mod.common.api.gui.GuiUtilsKt.blitk;
 import static com.cobblemon.mod.common.client.render.RenderHelperKt.drawScaledText;
 
@@ -46,7 +48,7 @@ public class MainScreen extends AbstractPokenavItemScreen {
 
     public void createFinderShortcutWidget(RenderablePokemon pokemon) {
         finderShortcutWidget = new FinderShortcutWidget(borderX + BORDER_WIDTH - BORDER_DEPTH - 30,
-                borderY + BORDER_DEPTH + 30, pokemon, this, textRenderer);
+                borderY + BORDER_DEPTH + 30, pokemon, this);
     }
 
     public void removeFinderShortcutWidget() {
@@ -106,10 +108,6 @@ public class MainScreen extends AbstractPokenavItemScreen {
                 borderX + BORDER_DEPTH, borderY + BORDER_DEPTH + 20, BORDER_HEIGHT - 2 * BORDER_DEPTH - 20, BORDER_WIDTH - 2 * BORDER_DEPTH, 0, 0, 256,
                 256, 0, 1, 1, 1, 1, false, 1);
 
-        if (finderShortcutWidget != null) {
-            finderShortcutWidget.render(drawContext, i, j, f);
-        }
-
         mainScreenWidget.render(drawContext, i, j, f);
 
         matrixStack.push();
@@ -125,6 +123,15 @@ public class MainScreen extends AbstractPokenavItemScreen {
         matrixStack.pop();
 
         super.render(drawContext, i, j, f);
+
+        if (finderShortcutWidget != null) {
+            finderShortcutWidget.render(drawContext, i, j, f);
+            if (finderShortcutWidget.isHovered()) {
+                drawContext.drawTooltip(textRenderer, List.of(finderShortcutWidget.getMessage(),
+                        Text.translatable("gui.cobblenav.pokenav_item.last_found.tooltip")
+                                .setStyle(Style.EMPTY.withItalic(true).withColor(0x4D4D4D))), i, j);
+            }
+        }
     }
 
     @Override
