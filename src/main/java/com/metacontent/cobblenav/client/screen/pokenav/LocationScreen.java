@@ -278,7 +278,7 @@ public class LocationScreen extends AbstractPokenavItemScreen {
         super.close();
     }
 
-    private void savePreferences() {
+    public void savePreferences() {
         PacketByteBuf buf = PacketByteBufs.create();
         buf.writeInt(bucketIndex);
         buf.writeInt(sortingMark);

@@ -63,6 +63,7 @@ public class PokemonSpawnInfoWidget extends ClickableWidget {
         findButton = new IconButton(getX() + getWidth() / 2 - 12, getY() + getHeight() - 12, 11, 11, 85, 12,
                 0,
                 () -> {
+                    parent.savePreferences();
                     player.playSound(CobblemonSounds.PC_CLICK, 0.1f, 1.25f);
                     MinecraftClient.getInstance().setScreen(new FinderScreen(pokemonModel.getPokemon(), parent));
                 }
