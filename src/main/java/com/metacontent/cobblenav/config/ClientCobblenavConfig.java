@@ -8,16 +8,19 @@ import net.fabricmc.loader.api.FabricLoader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.PrintWriter;
+import java.util.Map;
 
 public class ClientCobblenavConfig {
     public final int trackArrowVerticalOffset;
+    public final Map<String, Double> partyWidgetAdjustments;
 
-    private ClientCobblenavConfig(int trackArrowVerticalOffset) {
+    private ClientCobblenavConfig(int trackArrowVerticalOffset, Map<String, Double> partyWidgetAdjustments) {
         this.trackArrowVerticalOffset = trackArrowVerticalOffset;
+        this.partyWidgetAdjustments = partyWidgetAdjustments;
     }
 
     private ClientCobblenavConfig() {
-        this(70);
+        this(70, Map.of());
     }
 
     public static ClientCobblenavConfig init() {

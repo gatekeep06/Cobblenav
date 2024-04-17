@@ -6,6 +6,7 @@ import com.cobblemon.mod.common.client.render.models.blockbench.pokemon.PokemonP
 import com.cobblemon.mod.common.client.render.models.blockbench.repository.PokemonModelRepository;
 import com.cobblemon.mod.common.pokemon.Pokemon;
 import com.cobblemon.mod.common.pokemon.activestate.ShoulderedState;
+import com.metacontent.cobblenav.client.CobblenavClient;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.ingame.InventoryScreen;
@@ -44,10 +45,11 @@ public class PartyWidget extends MainScreenWidget {
                     continue;
                 }
                 PokemonPoseableModel model = PokemonModelRepository.INSTANCE.getPoser(pokemon.getSpecies().getResourceIdentifier(), pokemon.getAspects());
+                double adjustment = CobblenavClient.CONFIG.partyWidgetAdjustments.getOrDefault(pokemon.showdownId(), 0d);
                 float scale = pokemon.getForm().getBaseScale() / model.getProfileScale();
                 pX += (index * 20 * (index % 2 == 1 ? -1 : 1)) + (index % 2 == 1 ? -1 : 1) * 20;
                 ModelWidget modelWidget = new ModelWidget(pX - 101, playerY + BORDER_HEIGHT / 2 - 135, 200, 200,
-                        pokemon.asRenderablePokemon(), scale, 350f + 20 * (index % 2 == 1 ? 1 : 0), 130 - scale * 32);
+                        pokemon.asRenderablePokemon(), scale, 350f + 20 * (index % 2 == 1 ? 1 : 0), 130 - scale * 32 - adjustment);
                 partyModels.add(modelWidget);
                 index++;
             }
