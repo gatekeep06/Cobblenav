@@ -41,12 +41,13 @@ public class PokefinderItem extends Item {
     @Override
     public TypedActionResult<ItemStack> use(World world, PlayerEntity playerEntity, Hand hand) {
         if (world.isClient()) {
-            playerEntity.playSound(CobblemonSounds.PC_ON, 0.1f, 1.25f);
             if (CobblenavClient.TRACK_ARROW_HUD_OVERLAY.isTracking()) {
                 CobblenavClient.TRACK_ARROW_HUD_OVERLAY.resetTracking();
+                playerEntity.playSound(CobblemonSounds.PC_OFF, 0.1f, 1.25f);
             }
             else {
                 ClientPlayNetworking.send(CobblenavPackets.TRACKED_ENTITY_ID_PACKET_SERVER, PacketByteBufs.create());
+                playerEntity.playSound(CobblemonSounds.PC_ON, 0.1f, 1.25f);
             }
             return TypedActionResult.success(playerEntity.getStackInHand(hand), false);
         }
