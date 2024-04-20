@@ -24,9 +24,10 @@
   "gui.cobblenav.pokenav_item.found_pokemon_massage": "%s был в последний раз виден около координат %s",
   "gui.cobblenav.pokenav_item.track_button": "Поймаем его!",
   "gamerule.titleCommandsPermissionLevel": "Уровень доступа команд титула",
-  "gui.cobblenav.pokenav_item.last_found": "ИСКАЛОСЬ",
+  "gui.cobblenav.pokenav_item.last_found": "Искалось:",
   "item.cobblenav.pokefinder_item": "Покефайндер",
   "message.cobblenav.not_found_message": "<Покенав> Не удалось ничего найти",
   "message.cobblenav.no_saved_pokemon": "<Покенав> У Вас нет сохраненного покемона",
-  "message.cobblenav.pokenav_is_not_in_hand": "For this action, the pokenav must be in your hand"
+  "message.cobblenav.pokenav_is_not_in_hand": "For this action, the pokenav must be in your hand",
+  "gui.cobblenav.pokenav_item.last_found.tooltip": "ПКМ для сброса"
 }

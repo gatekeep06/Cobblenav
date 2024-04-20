@@ -10,11 +10,11 @@ import com.metacontent.cobblenav.networking.CobblenavPackets;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
 import net.minecraft.client.gui.widget.ClickableWidget;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.network.PacketByteBuf;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
@@ -32,8 +32,8 @@ public class FinderShortcutWidget extends ClickableWidget {
     private boolean isSoundPlayed = false;
 
     public FinderShortcutWidget(int x, int y, RenderablePokemon pokemon, MainScreen parent) {
-        super(x, y, 20, 30, pokemon.getSpecies().getTranslatedName());
-        this.pokemonModel = new ModelWidget(getX(), getY(), getWidth(), 2 * getHeight() / 3, pokemon, 0.5f, 340, 0);
+        super(x, y, 25, 25, pokemon.getSpecies().getTranslatedName());
+        this.pokemonModel = new ModelWidget(getX(), getY(), getWidth(), getHeight(), pokemon, 0.5f, 340, 0);
         player = MinecraftClient.getInstance().player;
         this.parent = parent;
     }
@@ -47,20 +47,18 @@ public class FinderShortcutWidget extends ClickableWidget {
                     player.playSound(CobblemonSounds.POKE_BALL_SHAKE, 0.2f, 1.5f);
                 }
             }
-            blitk(drawContext.getMatrices(), BACKGROUND_HOVERED, getX(), getY(), getHeight(), getWidth() + 1,
-                    0, 104, 256, 256, 0, 1, 1, 1, 1, false, 1);
+            blitk(drawContext.getMatrices(), BACKGROUND_HOVERED, getX(), getY(), getHeight(), getWidth(),
+                    0, 104, 256, 256, 0, 1, 1, 1, 0.75, true, 1);
         }
         else {
             isSoundPlayed = false;
-            blitk(drawContext.getMatrices(), BACKGROUND, getX(), getY(), getHeight(), getWidth() + 1,
-                    0, 104, 256, 256, 0, 1, 1, 1, 1, false, 1);
+            blitk(drawContext.getMatrices(), BACKGROUND, getX(), getY(), getHeight(), getWidth(),
+                    0, 104, 256, 256, 0, 1, 1, 1, 0.75, true, 1);
         }
         drawScaledText(drawContext, FONT, Text.translatable("gui.cobblenav.pokenav_item.last_found")
                         .setStyle(Style.EMPTY.withBold(true)),
-                getX() + getWidth() / 2 + 1, getY(), 1f, 1f, getWidth() - 2, 0xFFFFFF, true, true, i, j);
+                getX() + getWidth() / 2 + 1, getY() - 7, 1f, 1f, 32, 0xD25858, true, false, i, j);
         pokemonModel.render(drawContext, i, j, f);
-        drawScaledText(drawContext, FONT, getMessage().copy(), getX() + getWidth() / 2 + 1, getY() + 2 * getHeight() / 3,
-                1f, 1f, getWidth() - 2, 0xFFFFFF, true, false, i, j);
     }
 
     @Override

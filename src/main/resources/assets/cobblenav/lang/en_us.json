@@ -28,5 +28,6 @@
   "message.cobblenav.not_found_message": "<Pokenav> No luck finding anything",
   "message.cobblenav.no_saved_pokemon": "<Pokenav> You have no saved pokemon",
   "message.cobblenav.pokenav_is_not_in_hand": "For this action, the pokenav must be in your hand",
-  "gui.cobblenav.pokenav_item.last_found": "LAST FOUND"
+  "gui.cobblenav.pokenav_item.last_found": "Last found:",
+  "gui.cobblenav.pokenav_item.last_found.tooltip": "Right-click to reset"
 }

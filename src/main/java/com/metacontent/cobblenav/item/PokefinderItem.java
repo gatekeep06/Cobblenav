@@ -1,5 +1,6 @@
 package com.metacontent.cobblenav.item;
 
+import com.cobblemon.mod.common.CobblemonSounds;
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity;
 import com.cobblemon.mod.common.pokemon.RenderablePokemon;
 import com.metacontent.cobblenav.client.CobblenavClient;
@@ -42,9 +43,11 @@ public class PokefinderItem extends Item {
         if (world.isClient()) {
             if (CobblenavClient.TRACK_ARROW_HUD_OVERLAY.isTracking()) {
                 CobblenavClient.TRACK_ARROW_HUD_OVERLAY.resetTracking();
+                playerEntity.playSound(CobblemonSounds.PC_OFF, 0.1f, 1.25f);
             }
             else {
                 ClientPlayNetworking.send(CobblenavPackets.TRACKED_ENTITY_ID_PACKET_SERVER, PacketByteBufs.create());
+                playerEntity.playSound(CobblemonSounds.PC_ON, 0.1f, 1.25f);
             }
             return TypedActionResult.success(playerEntity.getStackInHand(hand), false);
         }

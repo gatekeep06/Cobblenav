@@ -41,7 +41,7 @@ public class CobblenavConfig {
     }
 
     private CobblenavConfig() {
-        this(1, -1, -1, 200, 200, List.of("not_modeled"), 2, List.of(0));
+        this(1, -1, -1, 100, 100, List.of("not_modeled"), 2, List.of(0));
     }
 
     public static CobblenavConfig init() {
