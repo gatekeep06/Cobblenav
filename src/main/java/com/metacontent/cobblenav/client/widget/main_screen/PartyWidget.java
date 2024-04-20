@@ -47,10 +47,12 @@ public class PartyWidget extends MainScreenWidget {
                 PokemonPoseableModel model = PokemonModelRepository.INSTANCE.getPoser(pokemon.getSpecies().getResourceIdentifier(), pokemon.getAspects());
                 double adjustment = CobblenavClient.CONFIG.partyWidgetAdjustments.getOrDefault(pokemon.showdownId(), 0d);
                 float scale = pokemon.getForm().getBaseScale() / model.getProfileScale();
+                double scaledOffsetY = 100f - 35f * scale;
+                player.sendMessage(Text.literal(pokemon.showdownId() + ": " + scale + "   " + scaledOffsetY));
                 pX += (index * 20 * (index % 2 == 1 ? -1 : 1)) + (index % 2 == 1 ? -1 : 1) * 20;
                 //wth is going on with this offsetY :skull:
-                ModelWidget modelWidget = new ModelWidget(pX - 101, playerY + BORDER_HEIGHT / 2 - 135, 200, 200,
-                        pokemon.asRenderablePokemon(), scale, 350f + 20 * (index % 2 == 1 ? 1 : 0), 130 - scale * 32 - adjustment);
+                ModelWidget modelWidget = new ModelWidget(pX - 101, borderY + 35, 200, 200,
+                        pokemon.asRenderablePokemon(), scale, 350f + 20 * (index % 2 == 1 ? 1 : 0), scaledOffsetY - model.getProfileTranslation().y - adjustment);
                 partyModels.add(modelWidget);
                 index++;
             }
