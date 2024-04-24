@@ -3,6 +3,7 @@ package com.metacontent.cobblenav.config;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.metacontent.cobblenav.Cobblenav;
+import com.metacontent.cobblenav.util.MainScreenWidgetType;
 import net.fabricmc.loader.api.FabricLoader;
 
 import java.io.File;
@@ -11,13 +12,13 @@ import java.io.PrintWriter;
 import java.util.Map;
 
 public class ClientCobblenavConfig {
-    public final int mainScreenWidget;
+    public final MainScreenWidgetType mainScreenWidget;
     public final int reverseSortingButtonCooldown;
     public final int trackArrowVerticalOffset;
     public final Map<String, Double> partyWidgetAdjustments;
 
     private ClientCobblenavConfig(
-            int mainScreenWidget,
+            MainScreenWidgetType mainScreenWidget,
             int reverseSortingButtonCooldown,
             int trackArrowVerticalOffset,
             Map<String, Double> partyWidgetAdjustments
@@ -29,7 +30,7 @@ public class ClientCobblenavConfig {
     }
 
     private ClientCobblenavConfig() {
-        this(1, 100, 70, Map.of());
+        this(MainScreenWidgetType.PARTY, 100, 70, Map.of());
     }
 
     public static ClientCobblenavConfig init() {
