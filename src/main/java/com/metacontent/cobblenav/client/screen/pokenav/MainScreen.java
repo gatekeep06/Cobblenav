@@ -35,6 +35,7 @@ public class MainScreen extends AbstractPokenavItemScreen {
     private MainScreenButton closeButton;
     private MainScreenButton contactsButton;
     private MainScreenButton spawnCheckButton;
+    private MainScreenButton statsButton;
     private FinderShortcutWidget finderShortcutWidget = null;
     private MainScreenWidget mainScreenWidget;
 
@@ -78,6 +79,13 @@ public class MainScreen extends AbstractPokenavItemScreen {
             };
         }
 
+        statsButton = new MainScreenButton(x, y, 69, 14, 0, 0, 4,
+                Text.translatable("gui.cobblenav.pokenav_item.stats_button"),
+                () -> {
+                    player.playSound(CobblemonSounds.PC_CLICK, 0.1f, 1.25f);
+                    MinecraftClient.getInstance().setScreen(new StatsScreen());
+                }
+        );
         spawnCheckButton = new MainScreenButton(x, y, 69, 14, 0, 0, 4,
                 Text.translatable("gui.cobblenav.pokenav_item.spawn_check_button"),
                 () -> {
@@ -115,6 +123,7 @@ public class MainScreen extends AbstractPokenavItemScreen {
         closeButton.render(drawContext, i, j, f);
         contactsButton.render(drawContext, i, j, f);
         spawnCheckButton.render(drawContext, i, j, f);
+        statsButton.render(drawContext, i, j, f);
         blitk(matrixStack, BUTTONS,
                 borderX + BORDER_DEPTH, borderY + BORDER_DEPTH + 30, 14, 48, 0, 45, 256,
                 256, 0, 1, 1, 1, 1, false, 1);
@@ -139,6 +148,7 @@ public class MainScreen extends AbstractPokenavItemScreen {
         if (finderShortcutWidget != null) {
             finderShortcutWidget.mouseClicked(d, e, i);
         }
+        statsButton.mouseClicked(d, e, i);
         spawnCheckButton.mouseClicked(d, e, i);
         contactsButton.mouseClicked(d, e, i);
         closeButton.mouseClicked(d, e, i);
