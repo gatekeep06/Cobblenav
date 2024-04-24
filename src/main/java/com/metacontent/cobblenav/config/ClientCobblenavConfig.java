@@ -11,22 +11,25 @@ import java.io.PrintWriter;
 import java.util.Map;
 
 public class ClientCobblenavConfig {
+    public final int mainScreenWidget;
     public final int reverseSortingButtonCooldown;
     public final int trackArrowVerticalOffset;
     public final Map<String, Double> partyWidgetAdjustments;
 
     private ClientCobblenavConfig(
+            int mainScreenWidget,
             int reverseSortingButtonCooldown,
             int trackArrowVerticalOffset,
             Map<String, Double> partyWidgetAdjustments
     ) {
+        this.mainScreenWidget = mainScreenWidget;
         this.reverseSortingButtonCooldown = reverseSortingButtonCooldown;
         this.trackArrowVerticalOffset = trackArrowVerticalOffset;
         this.partyWidgetAdjustments = partyWidgetAdjustments;
     }
 
     private ClientCobblenavConfig() {
-        this(100, 70, Map.of());
+        this(1, 100, 70, Map.of());
     }
 
     public static ClientCobblenavConfig init() {
