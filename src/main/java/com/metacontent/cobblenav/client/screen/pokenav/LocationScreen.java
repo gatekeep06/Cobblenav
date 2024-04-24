@@ -4,6 +4,7 @@ import com.cobblemon.mod.common.Cobblemon;
 import com.cobblemon.mod.common.CobblemonSounds;
 import com.cobblemon.mod.common.pokemon.RenderablePokemon;
 import com.metacontent.cobblenav.Cobblenav;
+import com.metacontent.cobblenav.client.CobblenavClient;
 import com.metacontent.cobblenav.client.screen.AbstractPokenavItemScreen;
 import com.metacontent.cobblenav.client.widget.*;
 import com.metacontent.cobblenav.networking.CobblenavPackets;
@@ -149,7 +150,7 @@ public class LocationScreen extends AbstractPokenavItemScreen {
                     }
                 }
         );
-        reverseSortingButton = new IconButton(borderX + BORDER_WIDTH - BORDER_DEPTH - 14, borderY + BORDER_HEIGHT - BORDER_DEPTH - 12, 11, 11, 97, 12, 100,
+        reverseSortingButton = new IconButton(borderX + BORDER_WIDTH - BORDER_DEPTH - 14, borderY + BORDER_HEIGHT - BORDER_DEPTH - 12, 11, 11, 97, 12, CobblenavClient.CONFIG.reverseSortingButtonCooldown,
                 () -> {
                     player.playSound(CobblemonSounds.PC_CLICK, 0.05f, 1.25f);
                     if (!spawnMap.isEmpty()) {
