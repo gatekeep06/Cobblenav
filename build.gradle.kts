@@ -11,6 +11,7 @@ repositories {
     mavenCentral()
     maven("https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/")
     maven("https://maven.impactdev.net/repository/development/")
+    maven("https://api.modrinth.com/maven")
 }
 
 dependencies {
@@ -26,6 +27,9 @@ dependencies {
 
     // Cobblemon
     modImplementation("com.cobblemon:fabric:${property("cobblemon_version")}")
+
+    // CobblemonTrainers
+    modImplementation("maven.modrinth:cobblemontrainers:${property("trainers_version")}")
 }
 
 tasks {
