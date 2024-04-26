@@ -4,8 +4,10 @@ import com.cobblemon.mod.common.api.Priority;
 import com.cobblemon.mod.common.api.events.CobblemonEvents;
 import com.cobblemon.mod.common.api.events.battles.BattleVictoryEvent;
 import com.cobblemon.mod.common.battles.pokemon.BattlePokemon;
+import com.metacontent.cobblenav.Cobblenav;
 import com.metacontent.cobblenav.util.CobblenavNbtHelper;
 import kotlin.Unit;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
@@ -43,5 +45,8 @@ public class CobblenavEvents {
 
     public static void subscribeEvents() {
         CobblemonEvents.BATTLE_VICTORY.subscribe(Priority.NORMAL, CobblenavEvents::addPlayersToContacts);
+        if (FabricLoader.getInstance().isModLoaded("cobblemontrainers")) {
+            Cobblenav.LOGGER.error("cobblemontrainers is loaded");
+        }
     }
 }
