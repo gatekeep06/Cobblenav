@@ -46,7 +46,7 @@ public class PokemonSpawnInfoWidget extends ClickableWidget {
         PercentageDisplayType type = CobblenavClient.CONFIG.percentageDisplayType;
         if (type == PercentageDisplayType.PERMILLE_ALLOWED) {
             if (probability < 0.01f) {
-                color = 0x808080;
+                color = 0xD3D3D3;
                 sign = "‰";
                 this.probability = probability * 10f;
             }
