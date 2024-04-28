@@ -17,10 +17,10 @@ public enum MainScreenWidgetType {
     public static class TypeDeserializer implements JsonDeserializer<MainScreenWidgetType> {
         @Override
         public MainScreenWidgetType deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
-            String string = jsonElement.getAsJsonPrimitive().getAsString();
-            boolean hasMatch = Arrays.stream(MainScreenWidgetType.values()).anyMatch(mainScreenWidgetType -> mainScreenWidgetType.name().toLowerCase().equals(string));
+            String string = jsonElement.getAsJsonPrimitive().getAsString().toUpperCase();
+            boolean hasMatch = Arrays.stream(MainScreenWidgetType.values()).anyMatch(mainScreenWidgetType -> mainScreenWidgetType.name().equals(string));
             if (hasMatch) {
-                return MainScreenWidgetType.valueOf(string.toUpperCase());
+                return MainScreenWidgetType.valueOf(string);
             }
             else {
                 return MainScreenWidgetType.NONE;
