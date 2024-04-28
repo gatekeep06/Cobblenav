@@ -1,4 +1,4 @@
-package com.metacontent.cobblenav.util;
+package com.metacontent.cobblenav.config.util;
 
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;

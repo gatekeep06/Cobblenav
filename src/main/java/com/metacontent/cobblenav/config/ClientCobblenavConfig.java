@@ -3,7 +3,7 @@ package com.metacontent.cobblenav.config;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.metacontent.cobblenav.Cobblenav;
-import com.metacontent.cobblenav.util.MainScreenWidgetType;
+import com.metacontent.cobblenav.config.util.MainScreenWidgetType;
 import net.fabricmc.loader.api.FabricLoader;
 
 import java.io.File;

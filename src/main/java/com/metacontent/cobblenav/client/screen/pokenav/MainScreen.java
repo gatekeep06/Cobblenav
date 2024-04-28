@@ -10,7 +10,7 @@ import com.metacontent.cobblenav.client.widget.MainScreenButton;
 import com.metacontent.cobblenav.client.widget.main_screen.MainScreenWidget;
 import com.metacontent.cobblenav.client.widget.main_screen.PartyWidget;
 import com.metacontent.cobblenav.networking.CobblenavPackets;
-import com.metacontent.cobblenav.util.MainScreenWidgetType;
+import com.metacontent.cobblenav.config.util.MainScreenWidgetType;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
