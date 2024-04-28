@@ -196,7 +196,8 @@ public class LocationScreen extends AbstractPokenavItemScreen {
                     scrollableSpawnTable.render(drawContext, i, j, f);
                     for (PokemonSpawnInfoWidget widget : spawnInfoWidgets) {
                         if (widget.isVisible() && widget.isHovered() && scrollableSpawnTable.isHovered()) {
-                            drawContext.drawTooltip(textRenderer, widget.getPokemonModel().getPokemon().getSpecies().getTranslatedName(), i, j);
+                            drawContext.drawTooltip(textRenderer, List.of(widget.getPokemonModel().getPokemon().getSpecies().getTranslatedName(),
+                                    Text.literal(widget.getProbabilityString()).setStyle(Style.EMPTY.withColor(0x4D4D4D))), i, j);
                         }
                     }
                 }

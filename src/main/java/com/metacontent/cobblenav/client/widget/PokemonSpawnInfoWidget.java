@@ -30,7 +30,8 @@ public class PokemonSpawnInfoWidget extends ClickableWidget {
     private final PlayerEntity player;
     private final float probability;
     private static final DecimalFormat df = new DecimalFormat("#.##");
-    private final String sign;
+    private String sign = "%";
+    private int color = 0xffffff;
     private boolean showActionButtons = false;
     private final int minRenderY;
     private final int maxRenderY;
@@ -45,16 +46,15 @@ public class PokemonSpawnInfoWidget extends ClickableWidget {
         PercentageDisplayType type = CobblenavClient.CONFIG.percentageDisplayType;
         if (type == PercentageDisplayType.PERMILLE_ALLOWED) {
             if (probability < 0.01f) {
+                color = 0x808080;
                 sign = "‰";
                 this.probability = probability * 10f;
             }
             else {
-                sign = "%";
                 this.probability = probability;
             }
         }
         else {
-            sign = "%";
             this.probability = probability;
         }
 
@@ -97,7 +97,7 @@ public class PokemonSpawnInfoWidget extends ClickableWidget {
         if (isVisible()) {
             pokemonModel.render(drawContext, i, j, f);
             drawScaledText(drawContext, FONT, Text.literal(df.format(probability) + sign).setStyle(Style.EMPTY.withBold(true)),
-                    getX() + getWidth() / 2, getY() + getHeight() - 10, 1, 1, 2 * getWidth(), 0xFFFFFF, true, false, i, j);
+                    getX() + getWidth() / 2, getY() + getHeight() - 10, 1, 1, 2 * getWidth(), color, true, false, i, j);
             if (showActionButtons) {
                 showActionButtons = hovered;
                 shareButton.renderButton(drawContext, i, j, f);
@@ -152,5 +152,9 @@ public class PokemonSpawnInfoWidget extends ClickableWidget {
 
     public ModelWidget getPokemonModel() {
         return pokemonModel;
+    }
+
+    public String getProbabilityString() {
+        return probability + sign;
     }
 }
