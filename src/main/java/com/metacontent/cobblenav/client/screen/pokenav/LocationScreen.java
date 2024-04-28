@@ -247,8 +247,8 @@ public class LocationScreen extends AbstractPokenavItemScreen {
 
     private void renderBucketSelector(DrawContext drawContext, int i, int j, float f) {
         decreaseBucketIndexButton.render(drawContext, i, j, f);
-        drawScaledText(drawContext, FONT, Text.translatable("gui.cobblenav.pokenav_item.bucket." + buckets.get(bucketIndex)).setStyle(Style.EMPTY.withBold(true).withColor(0xFFFFFF)),
-                width / 2 + 3, borderY + BORDER_DEPTH + 20, 1, 1, 40, 0, true, false, i, j);
+        drawScaledText(drawContext, FONT, Text.translatable("gui.cobblenav.pokenav_item.bucket." + buckets.get(bucketIndex)).setStyle(Style.EMPTY.withBold(true)),
+                width / 2 + 3, borderY + BORDER_DEPTH + 20, 1, 1, 40, 0xFFFFFF, true, false, i, j);
         increaseBucketIndexButton.render(drawContext, i, j, f);
     }
 
