@@ -4,10 +4,12 @@ import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
+import com.google.gson.annotations.JsonAdapter;
 
 import java.lang.reflect.Type;
 import java.util.Arrays;
 
+@JsonAdapter(PercentageDisplayType.TypeDeserializer.class)
 public enum PercentageDisplayType {
     PERCENT_ONLY,
     PERMILLE_ALLOWED;
