@@ -4,10 +4,11 @@ import com.cobblemon.mod.common.CobblemonSounds;
 import com.cobblemon.mod.common.client.gui.summary.widgets.ModelWidget;
 import com.cobblemon.mod.common.pokemon.RenderablePokemon;
 import com.metacontent.cobblenav.Cobblenav;
+import com.metacontent.cobblenav.client.CobblenavClient;
 import com.metacontent.cobblenav.client.screen.pokenav.FinderScreen;
 import com.metacontent.cobblenav.client.screen.pokenav.LocationScreen;
+import com.metacontent.cobblenav.config.util.PercentageDisplayType;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
 import net.minecraft.client.gui.widget.ClickableWidget;
@@ -29,6 +30,7 @@ public class PokemonSpawnInfoWidget extends ClickableWidget {
     private final PlayerEntity player;
     private final float probability;
     private static final DecimalFormat df = new DecimalFormat("#.##");
+    private final String sign;
     private boolean showActionButtons = false;
     private final int minRenderY;
     private final int maxRenderY;
@@ -39,7 +41,23 @@ public class PokemonSpawnInfoWidget extends ClickableWidget {
     public PokemonSpawnInfoWidget(int i, int j, RenderablePokemon pokemon, float probability, LocationScreen parent, int minRenderY, int maxRenderY) {
         super(i, j, 20, 30, pokemon.getSpecies().getTranslatedName());
         this.pokemonModel = new ModelWidget(getX(), getY(), getWidth(), getHeight() - getHeight() / 3, pokemon, 0.5F, 340F, 0F);
-        this.probability = probability;
+
+        PercentageDisplayType type = CobblenavClient.CONFIG.percentageDisplayType;
+        if (type == PercentageDisplayType.PERMILLE_ALLOWED) {
+            if (probability < 0.01f) {
+                sign = "‰";
+                this.probability = probability * 10f;
+            }
+            else {
+                sign = "%";
+                this.probability = probability;
+            }
+        }
+        else {
+            sign = "%";
+            this.probability = probability;
+        }
+
         this.player = MinecraftClient.getInstance().player;
         this.minRenderY = minRenderY;
         this.maxRenderY = maxRenderY;
@@ -52,7 +70,7 @@ public class PokemonSpawnInfoWidget extends ClickableWidget {
                     String name = pokemonModel.getPokemon().getSpecies().getTranslatedName().getString() + (form.equals("Normal") ? "" : " (" + form + ")");
                     Vec3d vec3d = player.getPos();
                     String coordinates = "x: " + (int) vec3d.x + " y: " + (int) vec3d.y + " z: " + (int) vec3d.z + " (" + player.getWorld().getDimensionKey().getValue() + ")";
-                    String chance = parent.getCurrentBucketName() + " - " + df.format(probability) + "%";
+                    String chance = parent.getCurrentBucketName() + " - " + df.format(probability) + sign;
                     Text text = Text.translatable("gui.cobblenav.pokenav_item.spawn_info_message", name, coordinates, chance);
                     player.sendMessage(text);
                     player.sendMessage(Text.translatable("gui.cobblenav.pokenav_item.share_spawn_info_message")
@@ -78,7 +96,7 @@ public class PokemonSpawnInfoWidget extends ClickableWidget {
     protected void renderButton(DrawContext drawContext, int i, int j, float f) {
         if (isVisible()) {
             pokemonModel.render(drawContext, i, j, f);
-            drawScaledText(drawContext, FONT, Text.literal(df.format(probability) + "%").setStyle(Style.EMPTY.withBold(true)),
+            drawScaledText(drawContext, FONT, Text.literal(df.format(probability) + sign).setStyle(Style.EMPTY.withBold(true)),
                     getX() + getWidth() / 2, getY() + getHeight() - 10, 1, 1, 2 * getWidth(), 0xFFFFFF, true, false, i, j);
             if (showActionButtons) {
                 showActionButtons = hovered;

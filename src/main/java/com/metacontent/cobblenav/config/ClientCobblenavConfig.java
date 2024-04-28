@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.metacontent.cobblenav.Cobblenav;
 import com.metacontent.cobblenav.config.util.MainScreenWidgetType;
+import com.metacontent.cobblenav.config.util.PercentageDisplayType;
 import net.fabricmc.loader.api.FabricLoader;
 
 import java.io.File;
@@ -13,24 +14,27 @@ import java.util.Map;
 
 public class ClientCobblenavConfig {
     public final MainScreenWidgetType mainScreenWidget;
+    public final PercentageDisplayType percentageDisplayType;
     public final int reverseSortingButtonCooldown;
     public final int trackArrowVerticalOffset;
     public final Map<String, Double> partyWidgetAdjustments;
 
     private ClientCobblenavConfig(
             MainScreenWidgetType mainScreenWidget,
+            PercentageDisplayType percentageDisplayType,
             int reverseSortingButtonCooldown,
             int trackArrowVerticalOffset,
             Map<String, Double> partyWidgetAdjustments
     ) {
         this.mainScreenWidget = mainScreenWidget;
+        this.percentageDisplayType = percentageDisplayType;
         this.reverseSortingButtonCooldown = reverseSortingButtonCooldown;
         this.trackArrowVerticalOffset = trackArrowVerticalOffset;
         this.partyWidgetAdjustments = partyWidgetAdjustments;
     }
 
     private ClientCobblenavConfig() {
-        this(MainScreenWidgetType.PARTY, 100, 70, Map.of());
+        this(MainScreenWidgetType.PARTY, PercentageDisplayType.PERCENT_ONLY, 100, 70, Map.of());
     }
 
     public static ClientCobblenavConfig init() {
