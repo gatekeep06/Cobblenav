@@ -2,6 +2,7 @@ package com.metacontent.cobblenav.client.screen.pokenav;
 
 import com.cobblemon.mod.common.Cobblemon;
 import com.cobblemon.mod.common.CobblemonSounds;
+import com.cobblemon.mod.common.api.spawning.SpawnBucket;
 import com.cobblemon.mod.common.pokemon.RenderablePokemon;
 import com.metacontent.cobblenav.Cobblenav;
 import com.metacontent.cobblenav.client.CobblenavClient;
@@ -23,14 +24,13 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static com.cobblemon.mod.common.api.gui.GuiUtilsKt.blitk;
 import static com.cobblemon.mod.common.client.render.RenderHelperKt.drawScaledText;
 
 @Environment(EnvType.CLIENT)
 public class LocationScreen extends AbstractPokenavItemScreen {
-    public final List<String> buckets;
+    public final List<SpawnBucket> buckets;
     private static final Identifier LOADING_ANIMATION = new Identifier(Cobblenav.ID, "textures/gui/loading_animation.png");
     private final PlayerEntity player;
     private Map<RenderablePokemon, Float> spawnMap = new HashMap<>();
@@ -54,7 +54,7 @@ public class LocationScreen extends AbstractPokenavItemScreen {
     protected LocationScreen() {
         super(Text.literal("Location"));
         this.player = MinecraftClient.getInstance().player;
-        this.buckets = Cobblemon.INSTANCE.getBestSpawner().getConfig().getBuckets().stream().map(spawnBucket -> spawnBucket.name).collect(Collectors.toList());
+        this.buckets = Cobblemon.INSTANCE.getBestSpawner().getConfig().getBuckets();
     }
 
     private void requestSavedPreferences() {
@@ -72,7 +72,7 @@ public class LocationScreen extends AbstractPokenavItemScreen {
         spawnMap.clear();
         isLoading = true;
         PacketByteBuf buf = PacketByteBufs.create();
-        buf.writeString(buckets.get(bucketIndex));
+        buf.writeString(buckets.get(bucketIndex).getName());
         ClientPlayNetworking.send(CobblenavPackets.SPAWN_MAP_PACKET_SERVER, buf);
     }
 
@@ -247,7 +247,7 @@ public class LocationScreen extends AbstractPokenavItemScreen {
 
     private void renderBucketSelector(DrawContext drawContext, int i, int j, float f) {
         decreaseBucketIndexButton.render(drawContext, i, j, f);
-        drawScaledText(drawContext, FONT, Text.translatable("gui.cobblenav.pokenav_item.bucket." + buckets.get(bucketIndex)).setStyle(Style.EMPTY.withBold(true)),
+        drawScaledText(drawContext, FONT, Text.translatable("gui.cobblenav.pokenav_item.bucket." + buckets.get(bucketIndex).getName()).setStyle(Style.EMPTY.withBold(true)),
                 width / 2 + 3, borderY + BORDER_DEPTH + 20, 1, 1, 40, 0xFFFFFF, true, false, i, j);
         increaseBucketIndexButton.render(drawContext, i, j, f);
     }
@@ -266,7 +266,7 @@ public class LocationScreen extends AbstractPokenavItemScreen {
         ticker++;
     }
 
-    public String getCurrentBucketName() {
+    public SpawnBucket getCurrentBucket() {
         return buckets.get(bucketIndex);
     }
 

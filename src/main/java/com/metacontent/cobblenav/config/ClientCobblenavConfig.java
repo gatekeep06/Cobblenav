@@ -15,6 +15,7 @@ import java.util.Map;
 public class ClientCobblenavConfig {
     public final MainScreenWidgetType mainScreenWidget;
     public final PercentageDisplayType percentageDisplayType;
+    public final boolean bucketWisePercentageCalculation;
     public final int reverseSortingButtonCooldown;
     public final int trackArrowVerticalOffset;
     public final Map<String, Double> partyWidgetAdjustments;
@@ -22,19 +23,21 @@ public class ClientCobblenavConfig {
     private ClientCobblenavConfig(
             MainScreenWidgetType mainScreenWidget,
             PercentageDisplayType percentageDisplayType,
+            boolean bucketWisePercentageCalculation,
             int reverseSortingButtonCooldown,
             int trackArrowVerticalOffset,
             Map<String, Double> partyWidgetAdjustments
     ) {
         this.mainScreenWidget = mainScreenWidget;
         this.percentageDisplayType = percentageDisplayType;
+        this.bucketWisePercentageCalculation = bucketWisePercentageCalculation;
         this.reverseSortingButtonCooldown = reverseSortingButtonCooldown;
         this.trackArrowVerticalOffset = trackArrowVerticalOffset;
         this.partyWidgetAdjustments = partyWidgetAdjustments;
     }
 
     private ClientCobblenavConfig() {
-        this(MainScreenWidgetType.PARTY, PercentageDisplayType.PERCENT_ONLY, 100, 70, Map.of());
+        this(MainScreenWidgetType.PARTY, PercentageDisplayType.PERCENT_ONLY, false, 100, 70, Map.of());
     }
 
     public static ClientCobblenavConfig init() {

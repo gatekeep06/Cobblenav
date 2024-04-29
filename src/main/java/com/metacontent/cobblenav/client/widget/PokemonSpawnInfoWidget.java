@@ -28,7 +28,7 @@ public class PokemonSpawnInfoWidget extends ClickableWidget {
     private static final Identifier BUTTONS = new Identifier(Cobblenav.ID, "textures/gui/pokenav_item_gui_buttons.png");
     private final ModelWidget pokemonModel;
     private final PlayerEntity player;
-    private final float probability;
+    private float probability;
     private static final DecimalFormat df = new DecimalFormat("#.##");
     private String sign = "%";
     private int color = 0xffffff;
@@ -43,19 +43,20 @@ public class PokemonSpawnInfoWidget extends ClickableWidget {
         super(i, j, 20, 30, pokemon.getSpecies().getTranslatedName());
         this.pokemonModel = new ModelWidget(getX(), getY(), getWidth(), getHeight() - getHeight() / 3, pokemon, 0.5F, 340F, 0F);
 
-        PercentageDisplayType type = CobblenavClient.CONFIG.percentageDisplayType;
-        if (type == PercentageDisplayType.PERMILLE_ALLOWED) {
-            if (probability < 0.01f) {
-                color = 0xD3D3D3;
-                sign = "‰";
-                this.probability = probability * 10f;
-            }
-            else {
-                this.probability = probability;
-            }
+        this.probability = probability;
+        boolean bucketWise = CobblenavClient.CONFIG.bucketWisePercentageCalculation;
+        PercentageDisplayType percentageDisplayType = CobblenavClient.CONFIG.percentageDisplayType;
+        if (bucketWise) {
+            this.probability *= parent.getCurrentBucket().getWeight() / 100f;
         }
-        else {
-            this.probability = probability;
+        if (percentageDisplayType == PercentageDisplayType.PERMILLE_ALLOWED && this.probability < 0.01f) {
+            color = 0xD3D3D3;
+            sign = "‰";
+            this.probability *= 10f;
+        }
+        else if (percentageDisplayType == PercentageDisplayType.PERMILLE_ONLY) {
+            sign = "‰";
+            this.probability *= 10f;
         }
 
         this.player = MinecraftClient.getInstance().player;
@@ -70,7 +71,7 @@ public class PokemonSpawnInfoWidget extends ClickableWidget {
                     String name = pokemonModel.getPokemon().getSpecies().getTranslatedName().getString() + (form.equals("Normal") ? "" : " (" + form + ")");
                     Vec3d vec3d = player.getPos();
                     String coordinates = "x: " + (int) vec3d.x + " y: " + (int) vec3d.y + " z: " + (int) vec3d.z + " (" + player.getWorld().getDimensionKey().getValue() + ")";
-                    String chance = parent.getCurrentBucketName() + " - " + df.format(probability) + sign;
+                    String chance = parent.getCurrentBucket().getName() + " - " + df.format(probability) + sign;
                     Text text = Text.translatable("gui.cobblenav.pokenav_item.spawn_info_message", name, coordinates, chance);
                     player.sendMessage(text);
                     player.sendMessage(Text.translatable("gui.cobblenav.pokenav_item.share_spawn_info_message")
