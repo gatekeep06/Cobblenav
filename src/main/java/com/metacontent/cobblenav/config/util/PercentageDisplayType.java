@@ -12,7 +12,8 @@ import java.util.Arrays;
 @JsonAdapter(PercentageDisplayType.TypeDeserializer.class)
 public enum PercentageDisplayType {
     PERCENT_ONLY,
-    PERMILLE_ALLOWED;
+    PERMILLE_ALLOWED,
+    PERMILLE_ONLY;
 
     public static class TypeDeserializer implements JsonDeserializer<PercentageDisplayType> {
         @Override
