@@ -12,6 +12,6 @@ import java.util.Map;
 @Pseudo
 @Mixin(TrainerBattleListener.class)
 public interface TrainerBattleListenerAccessor {
-    @Accessor
+    @Accessor(remap = false)
     Map<PokemonBattle, Trainer> getOnBattleVictory();
 }
