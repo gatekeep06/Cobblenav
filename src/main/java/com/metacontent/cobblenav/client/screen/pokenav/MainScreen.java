@@ -3,12 +3,14 @@ package com.metacontent.cobblenav.client.screen.pokenav;
 import com.cobblemon.mod.common.CobblemonSounds;
 import com.cobblemon.mod.common.pokemon.RenderablePokemon;
 import com.metacontent.cobblenav.Cobblenav;
+import com.metacontent.cobblenav.client.CobblenavClient;
 import com.metacontent.cobblenav.client.screen.AbstractPokenavItemScreen;
 import com.metacontent.cobblenav.client.widget.FinderShortcutWidget;
 import com.metacontent.cobblenav.client.widget.MainScreenButton;
 import com.metacontent.cobblenav.client.widget.main_screen.MainScreenWidget;
 import com.metacontent.cobblenav.client.widget.main_screen.PartyWidget;
 import com.metacontent.cobblenav.networking.CobblenavPackets;
+import com.metacontent.cobblenav.config.util.MainScreenWidgetType;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
@@ -66,7 +68,7 @@ public class MainScreen extends AbstractPokenavItemScreen {
         int x = (width + BORDER_WIDTH) / 2 - 68 - BORDER_DEPTH;
         int y = (height) / 2 + 1;
 
-        if (Cobblenav.CONFIG.mainScreenWidget == 1) {
+        if (CobblenavClient.CONFIG.mainScreenWidget == MainScreenWidgetType.PARTY) {
             playerX = width / 2 - 50 + BORDER_DEPTH;
             playerY = borderY + 45;
             mainScreenWidget = new PartyWidget(playerX, playerY, borderX, borderY);
