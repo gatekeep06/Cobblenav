@@ -89,7 +89,7 @@ public class LocationScreen extends AbstractPokenavItemScreen {
         int y = borderY + BORDER_DEPTH + 30;
         spawnTable = new TableWidget<>(borderX + BORDER_DEPTH + 3, y,
                 7, 3, new BorderBox(4, 2));
-        scrollableSpawnTable = new ScrollableViewWidget<>(spawnTable, 200, 106, 20);
+        scrollableSpawnTable = new ScrollableViewWidget<>(spawnTable, 200, 106, CobblenavClient.CONFIG.scrollSize);
         spawnInfoWidgets = new ArrayList<>();
         RenderablePokemon[] renderablePokemonArray = spawnMap.keySet().toArray(new RenderablePokemon[0]);
         Float[] probabilityArray = spawnMap.values().toArray(new Float[0]);

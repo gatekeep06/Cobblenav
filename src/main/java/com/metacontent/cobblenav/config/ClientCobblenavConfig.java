@@ -17,6 +17,7 @@ public class ClientCobblenavConfig {
     public final PercentageDisplayType percentageDisplayType;
     public final boolean bucketWisePercentageCalculation;
     public final int reverseSortingButtonCooldown;
+    public final int scrollSize;
     public final int trackArrowVerticalOffset;
     public final Map<String, Double> partyWidgetAdjustments;
 
@@ -25,19 +26,21 @@ public class ClientCobblenavConfig {
             PercentageDisplayType percentageDisplayType,
             boolean bucketWisePercentageCalculation,
             int reverseSortingButtonCooldown,
+            int scrollSize,
             int trackArrowVerticalOffset,
             Map<String, Double> partyWidgetAdjustments
     ) {
         this.mainScreenWidget = mainScreenWidget;
         this.percentageDisplayType = percentageDisplayType;
         this.bucketWisePercentageCalculation = bucketWisePercentageCalculation;
-        this.reverseSortingButtonCooldown = reverseSortingButtonCooldown;
+        this.reverseSortingButtonCooldown = checkIntegerValue(reverseSortingButtonCooldown, 0, 100);
+        this.scrollSize = checkIntegerValue(scrollSize, 1, 20);
         this.trackArrowVerticalOffset = trackArrowVerticalOffset;
         this.partyWidgetAdjustments = partyWidgetAdjustments;
     }
 
     private ClientCobblenavConfig() {
-        this(MainScreenWidgetType.PARTY, PercentageDisplayType.PERCENT_ONLY, false, 100, 70, Map.of());
+        this(MainScreenWidgetType.PARTY, PercentageDisplayType.PERCENT_ONLY, false, 100, 20, 70, Map.of());
     }
 
     public static ClientCobblenavConfig init() {
@@ -67,5 +70,12 @@ public class ClientCobblenavConfig {
         }
 
         return config;
+    }
+
+    private static int checkIntegerValue(int value, int min, int defaultValue) {
+        if (value < min) {
+            return defaultValue;
+        }
+        return value;
     }
 }
