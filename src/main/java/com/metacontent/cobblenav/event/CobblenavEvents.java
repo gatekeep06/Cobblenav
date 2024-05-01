@@ -60,6 +60,8 @@ public class CobblenavEvents {
                 else if (event.getLosers().contains(battle.getActor(player))) {
                     CobblenavNbtHelper.updateContact(player, trainer, false);
                 }
+                player.sendMessage(Text.translatable("message.cobblenav.updating_contacts")
+                        .setStyle(Style.EMPTY.withItalic(true).withColor(0xff9a38)));
             });
         }
         return Unit.INSTANCE;
@@ -68,6 +70,7 @@ public class CobblenavEvents {
     public static void subscribeEvents() {
         CobblemonEvents.BATTLE_VICTORY.subscribe(Priority.NORMAL, CobblenavEvents::addPlayersToContacts);
         if (FabricLoader.getInstance().isModLoaded("cobblemontrainers") && Cobblenav.CONFIG.useCobblemonTrainersIntegration) {
+            Cobblenav.LOGGER.info("CobblemonTrainers Integration is enabled");
             CobblemonEvents.BATTLE_VICTORY.subscribe(Priority.NORMAL, CobblenavEvents::addTrainerToContacts);
         }
         else if (!FabricLoader.getInstance().isModLoaded("cobblemontrainers") && Cobblenav.CONFIG.useCobblemonTrainersIntegration) {
