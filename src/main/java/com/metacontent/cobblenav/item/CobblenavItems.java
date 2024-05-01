@@ -40,6 +40,7 @@ public class CobblenavItems {
     public static final Item POKEFINDER_ITEM_WHITE = registerPokefinderItem("white");
     public static final Item POKEFINDER_ITEM_YELLOW = registerPokefinderItem("yellow");
 
+    @SuppressWarnings(value = "unused")
     public static final ItemGroup POKENAV_GROUP = Registry.register(Registries.ITEM_GROUP, new Identifier(Cobblenav.ID, "pokenav_group"),
             FabricItemGroup.builder()
                     .icon(() -> new ItemStack(POKENAV_ITEM))
