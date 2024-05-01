@@ -67,8 +67,11 @@ public class CobblenavEvents {
 
     public static void subscribeEvents() {
         CobblemonEvents.BATTLE_VICTORY.subscribe(Priority.NORMAL, CobblenavEvents::addPlayersToContacts);
-        if (FabricLoader.getInstance().isModLoaded("cobblemontrainers")) {
+        if (FabricLoader.getInstance().isModLoaded("cobblemontrainers") && Cobblenav.CONFIG.useCobblemonTrainersIntegration) {
             CobblemonEvents.BATTLE_VICTORY.subscribe(Priority.NORMAL, CobblenavEvents::addTrainerToContacts);
+        }
+        else if (!FabricLoader.getInstance().isModLoaded("cobblemontrainers") && Cobblenav.CONFIG.useCobblemonTrainersIntegration) {
+            Cobblenav.LOGGER.warn("CobblemonTrainers is not installed, integration will not be used");
         }
     }
 }

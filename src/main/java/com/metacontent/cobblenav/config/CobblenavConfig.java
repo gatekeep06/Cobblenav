@@ -11,6 +11,7 @@ import java.io.PrintWriter;
 import java.util.List;
 
 public class CobblenavConfig {
+    public final boolean useCobblemonTrainersIntegration;
     public final int mainScreenWidget;
     public final int checkSpawnWidth;
     public final int checkSpawnHeight;
@@ -21,6 +22,7 @@ public class CobblenavConfig {
     public final List<Integer> customPokenavPredicates;
 
     private CobblenavConfig(
+            boolean useCobblemonTrainersIntegration,
             int mainScreenWidget,
             int checkSpawnWidth,
             int checkSpawnHeight,
@@ -30,6 +32,7 @@ public class CobblenavConfig {
             int titleCommandsPermissionLevel,
             List<Integer> customPokenavPredicates
     ) {
+        this.useCobblemonTrainersIntegration = useCobblemonTrainersIntegration;
         this.mainScreenWidget = mainScreenWidget;
         this.checkSpawnWidth = checkSpawnWidth;
         this.checkSpawnHeight = checkSpawnHeight;
@@ -41,7 +44,7 @@ public class CobblenavConfig {
     }
 
     private CobblenavConfig() {
-        this(1, -1, -1, 100, 100, List.of("not_modeled"), 2, List.of(0));
+        this(false, 1, -1, -1, 100, 100, List.of("not_modeled"), 2, List.of(0));
     }
 
     public static CobblenavConfig init() {
