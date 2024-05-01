@@ -6,7 +6,7 @@
   "plugin": "com.metacontent.cobblenav.mixin.CobblenavMixinConfigPlugin",
   "mixins": [
     "CobblenavDataSaverEntityMixin",
-    "TrainerBattleListenerMixin"
+    "TrainerBattleListenerAccessor"
   ],
   "client": [
   ],

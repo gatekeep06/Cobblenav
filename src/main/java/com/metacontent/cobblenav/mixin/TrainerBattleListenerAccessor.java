@@ -11,7 +11,7 @@ import java.util.Map;
 
 @Pseudo
 @Mixin(TrainerBattleListener.class)
-public abstract class TrainerBattleListenerMixin {
+public interface TrainerBattleListenerAccessor {
     @Accessor
-    abstract Map<PokemonBattle, Trainer> getOnBattleVictory();
+    Map<PokemonBattle, Trainer> getOnBattleVictory();
 }
