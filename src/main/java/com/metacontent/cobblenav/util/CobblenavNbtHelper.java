@@ -9,6 +9,7 @@ import com.cobblemon.mod.common.pokemon.Pokemon;
 import com.cobblemon.mod.common.pokemon.RenderablePokemon;
 import com.cobblemon.mod.common.pokemon.Species;
 import com.google.gson.Gson;
+import com.selfdot.cobblemontrainers.trainer.Trainer;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -109,6 +110,38 @@ public class CobblenavNbtHelper {
             }
 
             cobblenavNbt.put(contact.getUuidAsString(), contactNbt);
+        }
+    }
+
+    public static void updateContact(ServerPlayerEntity player, Trainer contact, boolean isWinner) {
+        if (player instanceof ContactSaverEntity contactSaverEntity) {
+            String contactKey = contact.getGroup() + "." + contact.getName();
+            NbtCompound cobblenavNbt = contactSaverEntity.cobblenav$getContactData();
+            NbtCompound contactNbt = cobblenavNbt.getCompound(contactKey);
+
+            contactNbt.putString("name", contact.getName());
+            contactNbt.putString("title", "Trainer");
+
+            NbtList pokemonNbtList = new NbtList();
+            for (BattlePokemon pokemon : contact.getBattleTeam()) {
+                NbtCompound pokemonNbt = new NbtCompound();
+                pokemonNbt.putString("pokemon", pokemon.getOriginalPokemon().showdownId());
+                pokemonNbt.putInt("level", pokemon.getOriginalPokemon().getLevel());
+                pokemonNbtList.add(pokemonNbt);
+            }
+            contactNbt.put("team", pokemonNbtList);
+
+            if (isWinner) {
+                int winnings = contactNbt.getInt("winnings");
+                winnings++;
+                contactNbt.putInt("winnings", winnings);
+            } else {
+                int losses = contactNbt.getInt("losses");
+                losses++;
+                contactNbt.putInt("losses", losses);
+            }
+
+            cobblenavNbt.put(contactKey, contactNbt);
         }
     }
 }
