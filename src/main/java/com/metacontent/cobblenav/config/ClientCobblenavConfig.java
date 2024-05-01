@@ -33,8 +33,8 @@ public class ClientCobblenavConfig {
         this.mainScreenWidget = mainScreenWidget;
         this.percentageDisplayType = percentageDisplayType;
         this.bucketWisePercentageCalculation = bucketWisePercentageCalculation;
-        this.reverseSortingButtonCooldown = checkIntegerValue(reverseSortingButtonCooldown, 0, 100);
-        this.scrollSize = checkIntegerValue(scrollSize, 1, 20);
+        this.reverseSortingButtonCooldown = reverseSortingButtonCooldown;
+        this.scrollSize = scrollSize;
         this.trackArrowVerticalOffset = trackArrowVerticalOffset;
         this.partyWidgetAdjustments = partyWidgetAdjustments;
     }
@@ -70,12 +70,5 @@ public class ClientCobblenavConfig {
         }
 
         return config;
-    }
-
-    private static int checkIntegerValue(int value, int min, int defaultValue) {
-        if (value < min) {
-            return defaultValue;
-        }
-        return value;
     }
 }
