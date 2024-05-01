@@ -6,14 +6,13 @@ import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.network.PacketByteBuf;
-import net.minecraft.text.Text;
 
 import java.util.*;
 
 public class SpawnMapPacketClientReceiver {
     public static void receive(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender responseSender) {
         if (client.currentScreen instanceof LocationScreen locationScreen) {
-            if (!locationScreen.getCurrentBucketName().equals(buf.readString())) {
+            if (!locationScreen.getCurrentBucket().getName().equals(buf.readString())) {
                 return;
             }
             PacketByteBuf.PacketReader<RenderablePokemon> renderablePokemonPacketReader = RenderablePokemon.Companion::loadFromBuffer;
