@@ -1,3 +1,10 @@
+# Update 1.2.4
+
+- Added CobblemonTrainers Integration.
+- Slightly reworked pokefinder.
+- Added percentage display options.
+- Added more client config parameters.
+
 # Update 1.2.3
 
 ![team-widget.png](https://cdn.modrinth.com/data/bI8Nt3uA/images/91b5a3e246c1c81faab8dd1833cf66b33cf1412d.png)

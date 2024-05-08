@@ -76,6 +76,7 @@ public class FinderScreen extends AbstractPokenavItemScreen {
         super.init();
 
         requestBestPokemon();
+        saveLastFoundPokemon();
 
         borderX = (width - BORDER_WIDTH) / 2;
         borderY = (height - BORDER_HEIGHT) / 2 - 10;
@@ -92,7 +93,6 @@ public class FinderScreen extends AbstractPokenavItemScreen {
         trackButton = new TextButton(borderX + BORDER_WIDTH / 2 - 34, borderY + BORDER_HEIGHT - BORDER_DEPTH - 27, 70, 23, 0, 80,
                 Text.translatable("gui.cobblenav.pokenav_item.track_button").setStyle(Style.EMPTY.withBold(true)),
                 () -> {
-                    saveLastFoundPokemon();
                     player.playSound(CobblemonSounds.POKE_BALL_CAPTURE_SUCCEEDED, 0.5f, 0.75f);
                     CobblenavClient.TRACK_ARROW_HUD_OVERLAY.setTrackedEntityId(foundPokemon.getEntityId());
                     close();
