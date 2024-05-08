@@ -11,7 +11,7 @@ public record PokemonFeatureWeights(
 ) {
     public static final PokemonFeatureWeights BASE_WEIGHTS = new PokemonFeatureWeights(
             Map.of(0, 0f, 1, 1f, 2, 2f, 3, 3f, 4, 4f, 5, 5f, 6, 6f),
-            1f, 1f, 0f, 1f
+            1f, 1f, 0f, 10f
     );
 
     public float getIvsWeight(int amount) {
