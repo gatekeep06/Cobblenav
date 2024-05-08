@@ -3,6 +3,7 @@ package com.metacontent.cobblenav.config;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.metacontent.cobblenav.Cobblenav;
+import com.metacontent.cobblenav.util.PokemonFeatureWeights;
 import net.fabricmc.loader.api.FabricLoader;
 
 import java.io.File;
@@ -16,6 +17,7 @@ public class CobblenavConfig {
     public final int checkSpawnHeight;
     public final int findingAreaWidth;
     public final int findingAreaHeight;
+    public final PokemonFeatureWeights pokemonFeatureWeights;
     public final List<String> ignoredLabels;
     public final int titleCommandsPermissionLevel;
     public final List<Integer> customPokenavPredicates;
@@ -26,6 +28,7 @@ public class CobblenavConfig {
             int checkSpawnHeight,
             int findingAreaWidth,
             int findingAreaHeight,
+            PokemonFeatureWeights pokemonFeatureWeights,
             List<String> ignoredLabels,
             int titleCommandsPermissionLevel,
             List<Integer> customPokenavPredicates
@@ -35,13 +38,14 @@ public class CobblenavConfig {
         this.checkSpawnHeight = checkSpawnHeight;
         this.findingAreaWidth = findingAreaWidth;
         this.findingAreaHeight = findingAreaHeight;
+        this.pokemonFeatureWeights = pokemonFeatureWeights;
         this.ignoredLabels = ignoredLabels;
         this.titleCommandsPermissionLevel = titleCommandsPermissionLevel;
         this.customPokenavPredicates = customPokenavPredicates;
     }
 
     private CobblenavConfig() {
-        this(false, -1, -1, 100, 100, List.of("not_modeled"), 2, List.of(0));
+        this(false, -1, -1, 100, 100, PokemonFeatureWeights.BASE_WEIGHTS, List.of("not_modeled"), 2, List.of(0));
     }
 
     public static CobblenavConfig init() {
