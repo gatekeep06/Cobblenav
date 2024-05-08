@@ -7,6 +7,7 @@ import com.cobblemon.mod.common.api.moves.MoveTemplate;
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity;
 import com.cobblemon.mod.common.pokemon.Pokemon;
 import com.cobblemon.mod.common.pokemon.abilities.HiddenAbility;
+import com.google.common.util.concurrent.AtomicDouble;
 import com.metacontent.cobblenav.Cobblenav;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.world.ServerWorld;
@@ -43,12 +44,14 @@ public class BestPokemonFinder {
     }
 
     @Nullable
-    public static Map.Entry<FoundPokemon, Integer> selectBest(@NotNull List<PokemonEntity> entities) {
-        Map<FoundPokemon, Integer> ratedFoundPokemonMap = new HashMap<>();
+    public static Map.Entry<FoundPokemon, Float> selectBest(@NotNull List<PokemonEntity> entities) {
+        Map<FoundPokemon, Float> ratedFoundPokemonMap = new HashMap<>();
+        PokemonFeatureWeights weights = Cobblenav.CONFIG.pokemonFeatureWeights;
+        FoundPokemon highestLevelPokemon = null;
 
-        entities.forEach(pokemonEntity -> {
+        for (PokemonEntity pokemonEntity : entities) {
             Pokemon pokemon = pokemonEntity.getPokemon();
-            AtomicInteger rating = new AtomicInteger(0);
+            AtomicDouble rating = new AtomicDouble(0d);
             AtomicInteger potentialStarsAmount = new AtomicInteger(0);
             boolean hasHiddenAbility = false;
             String eggMoveName = "";
@@ -56,13 +59,16 @@ public class BestPokemonFinder {
                 int value = entry.getValue();
                 if (value == 31) {
                     potentialStarsAmount.getAndIncrement();
-                    rating.getAndIncrement();
                 }
             });
+            rating.addAndGet(weights.getIvsWeight(potentialStarsAmount.get()));
             for (PotentialAbility potentialAbility : pokemon.getForm().getAbilities()) {
                 if (potentialAbility instanceof HiddenAbility && pokemon.getAbility().getTemplate() == potentialAbility.getTemplate()) {
-                    rating.getAndIncrement();
+                    rating.addAndGet(weights.hiddenAbility());
                     hasHiddenAbility = true;
+                    break;
+                }
+                else if (potentialAbility instanceof HiddenAbility) {
                     break;
                 }
             }
@@ -73,7 +79,7 @@ public class BestPokemonFinder {
             for (Move move : pokemon.getMoveSet()) {
                 MoveTemplate moveTemplate = move.getTemplate();
                 if (eggMoves.contains(moveTemplate) && !levelupMoves.contains(moveTemplate)) {
-                    rating.getAndIncrement();
+                    rating.addAndGet(weights.eggMove());
                     eggMoveName = move.getName();
                     break;
                 }
@@ -82,18 +88,33 @@ public class BestPokemonFinder {
                 for (BenchedMove benchedMove : pokemon.getBenchedMoves()) {
                     MoveTemplate moveTemplate = benchedMove.getMoveTemplate();
                     if (eggMoves.contains(moveTemplate) && !levelupMoves.contains(moveTemplate)) {
-                        rating.getAndIncrement();
+                        rating.addAndGet(weights.eggMove());
                         eggMoveName = moveTemplate.getName();
                         break;
                     }
                 }
             }
+            if (pokemon.getShiny()) {
+                rating.addAndGet(weights.shiny());
+            }
 
             FoundPokemon foundPokemon = new FoundPokemon(pokemonEntity.getId(), pokemonEntity.getBlockPos(), pokemon.getLevel(),
                     potentialStarsAmount.get(), pokemon.getAbility().getName(), eggMoveName, hasHiddenAbility);
 
-            ratedFoundPokemonMap.put(foundPokemon, rating.get());
-        });
+            if (highestLevelPokemon == null) {
+                highestLevelPokemon = foundPokemon;
+            }
+            else if (foundPokemon.getLevel() > highestLevelPokemon.getLevel()) {
+                highestLevelPokemon = foundPokemon;
+            }
+
+            ratedFoundPokemonMap.put(foundPokemon, rating.floatValue());
+        };
+
+        if (highestLevelPokemon != null && ratedFoundPokemonMap.containsKey(highestLevelPokemon)) {
+            float f = ratedFoundPokemonMap.get(highestLevelPokemon);
+            ratedFoundPokemonMap.put(highestLevelPokemon, f + weights.highestLevel());
+        }
 
         return ratedFoundPokemonMap.entrySet().stream()
                 .max(Map.Entry.comparingByValue()).orElse(null);
