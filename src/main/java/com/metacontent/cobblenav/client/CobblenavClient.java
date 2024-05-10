@@ -15,7 +15,7 @@ public class CobblenavClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) ->
-                dispatcher.register(ClientCommandManager.literal("cobblenav")
+                dispatcher.register(ClientCommandManager.literal("cobblenavclient")
                         .then(ClientCommandManager.literal("reloadClientConfig")
                                 .executes(context -> {
                                     reloadConfig();
