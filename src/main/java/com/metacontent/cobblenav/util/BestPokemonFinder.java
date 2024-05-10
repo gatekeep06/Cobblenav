@@ -98,7 +98,7 @@ public class BestPokemonFinder {
                 rating.addAndGet(weights.shiny());
             }
 
-            FoundPokemon foundPokemon = new FoundPokemon(pokemonEntity.getId(), pokemonEntity.getBlockPos(), pokemon.getLevel(),
+            FoundPokemon foundPokemon = new FoundPokemon(pokemonEntity.getId(), pokemonEntity.getBlockPos(), pokemon.getShiny(), pokemon.getLevel(),
                     potentialStarsAmount.get(), pokemon.getAbility().getName(), eggMoveName, hasHiddenAbility);
 
             if (highestLevelPokemon == null) {
