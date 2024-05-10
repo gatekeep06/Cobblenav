@@ -23,6 +23,8 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Set;
+
 import static com.cobblemon.mod.common.api.gui.GuiUtilsKt.blitk;
 import static com.cobblemon.mod.common.client.render.RenderHelperKt.drawScaledText;
 
@@ -52,6 +54,12 @@ public class FinderScreen extends AbstractPokenavItemScreen {
     }
 
     public void setFoundPokemon(@Nullable FoundPokemon foundPokemon) {
+        if (foundPokemon != null && foundPokemon.isShiny()) {
+            Set<String> aspects = pokemon.getAspects();
+            aspects.add("shiny");
+            pokemon.setAspects(aspects);
+            pokemonModel.setPokemon(pokemon);
+        }
         this.foundPokemon = foundPokemon;
     }
 

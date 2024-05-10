@@ -23,7 +23,7 @@ public class BestPokemonPacketServerReceiver {
         List<PokemonEntity> pokemonEntities = finder.find(name);
 
         if (!pokemonEntities.isEmpty()) {
-            Map.Entry<FoundPokemon, Integer> entry = BestPokemonFinder.selectBest(pokemonEntities);
+            Map.Entry<FoundPokemon, Float> entry = BestPokemonFinder.selectBest(pokemonEntities);
 
             if (entry != null) {
                 responseBuf.writeBoolean(true);
