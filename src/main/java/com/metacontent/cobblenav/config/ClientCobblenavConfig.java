@@ -18,6 +18,7 @@ public class ClientCobblenavConfig {
     public final boolean bucketWisePercentageCalculation;
     public final int reverseSortingButtonCooldown;
     public final int scrollSize;
+    public final boolean notifyIfPokemonIsNotFound;
     public final int trackArrowVerticalOffset;
     public final Map<String, Double> partyWidgetAdjustments;
 
@@ -27,6 +28,7 @@ public class ClientCobblenavConfig {
             boolean bucketWisePercentageCalculation,
             int reverseSortingButtonCooldown,
             int scrollSize,
+            boolean notifyIfPokemonIsNotFound,
             int trackArrowVerticalOffset,
             Map<String, Double> partyWidgetAdjustments
     ) {
@@ -35,12 +37,13 @@ public class ClientCobblenavConfig {
         this.bucketWisePercentageCalculation = bucketWisePercentageCalculation;
         this.reverseSortingButtonCooldown = reverseSortingButtonCooldown;
         this.scrollSize = scrollSize;
+        this.notifyIfPokemonIsNotFound = notifyIfPokemonIsNotFound;
         this.trackArrowVerticalOffset = trackArrowVerticalOffset;
         this.partyWidgetAdjustments = partyWidgetAdjustments;
     }
 
     private ClientCobblenavConfig() {
-        this(MainScreenWidgetType.PARTY, PercentageDisplayType.PERCENT_ONLY, false, 100, 20, 70, Map.of());
+        this(MainScreenWidgetType.PARTY, PercentageDisplayType.PERCENT_ONLY, false, 100, 20, true, 70, Map.of());
     }
 
     public static ClientCobblenavConfig init() {
