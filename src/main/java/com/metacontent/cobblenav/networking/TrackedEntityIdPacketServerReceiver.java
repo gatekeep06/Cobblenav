@@ -27,7 +27,7 @@ public class TrackedEntityIdPacketServerReceiver {
                     BestPokemonFinder finder = new BestPokemonFinder(player, player.getServerWorld());
                     String name = renderablePokemon.getForm().showdownId();
                     List<PokemonEntity> entities = finder.find(name);
-                    Map.Entry<FoundPokemon, Integer> entry = BestPokemonFinder.selectBest(entities);
+                    Map.Entry<FoundPokemon, Float> entry = BestPokemonFinder.selectBest(entities);
                     if (entry != null) {
                         FoundPokemon foundPokemon = entry.getKey();
                         PacketByteBuf responseBuf = PacketByteBufs.create();
