@@ -9,5 +9,6 @@ public class CobblenavCommands {
         CommandRegistrationCallback.EVENT.register(ClearContactDataCommand::register);
         CommandRegistrationCallback.EVENT.register(AddContactCommand::register);
         CommandRegistrationCallback.EVENT.register(GiveCustomPokenavCommand::register);
+        CommandRegistrationCallback.EVENT.register(CheckConfigCommand::register);
     }
 }
