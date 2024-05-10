@@ -76,4 +76,19 @@ public class CobblenavConfig {
 
         return config;
     }
+
+    @Override
+    public String toString() {
+        return "CobblenavConfig{" +
+                "\nuseCobblemonTrainersIntegration=" + useCobblemonTrainersIntegration +
+                ", \ncheckSpawnWidth=" + checkSpawnWidth +
+                ", \ncheckSpawnHeight=" + checkSpawnHeight +
+                ", \nfindingAreaWidth=" + findingAreaWidth +
+                ", \nfindingAreaHeight=" + findingAreaHeight +
+                ", \npokemonFeatureWeights=" + pokemonFeatureWeights +
+                ", \nignoredLabels=" + ignoredLabels +
+                ", \ntitleCommandsPermissionLevel=" + titleCommandsPermissionLevel +
+                ", \ncustomPokenavPredicates=" + customPokenavPredicates +
+                "\n}";
+    }
 }
