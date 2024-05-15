@@ -19,6 +19,7 @@ public class CobblenavConfig {
     public final int findingAreaHeight;
     public final PokemonFeatureWeights pokemonFeatureWeights;
     public final List<String> ignoredLabels;
+    public final List<String> hiddenPokemon;
     public final int titleCommandsPermissionLevel;
     public final List<Integer> customPokenavPredicates;
 
@@ -30,6 +31,7 @@ public class CobblenavConfig {
             int findingAreaHeight,
             PokemonFeatureWeights pokemonFeatureWeights,
             List<String> ignoredLabels,
+            List<String> hiddenPokemon,
             int titleCommandsPermissionLevel,
             List<Integer> customPokenavPredicates
     ) {
@@ -40,12 +42,13 @@ public class CobblenavConfig {
         this.findingAreaHeight = findingAreaHeight;
         this.pokemonFeatureWeights = pokemonFeatureWeights;
         this.ignoredLabels = ignoredLabels;
+        this.hiddenPokemon = hiddenPokemon;
         this.titleCommandsPermissionLevel = titleCommandsPermissionLevel;
         this.customPokenavPredicates = customPokenavPredicates;
     }
 
     private CobblenavConfig() {
-        this(false, -1, -1, 100, 100, PokemonFeatureWeights.BASE_WEIGHTS, List.of("not_modeled"), 2, List.of(0));
+        this(false, -1, -1, 100, 100, PokemonFeatureWeights.BASE_WEIGHTS, List.of("not_modeled"), List.of(), 2, List.of(0));
     }
 
     public static CobblenavConfig init() {
@@ -87,6 +90,7 @@ public class CobblenavConfig {
                 ", \nfindingAreaHeight=" + findingAreaHeight +
                 ", \npokemonFeatureWeights=" + pokemonFeatureWeights +
                 ", \nignoredLabels=" + ignoredLabels +
+                ", \nhiddenPokemon=" + hiddenPokemon +
                 ", \ntitleCommandsPermissionLevel=" + titleCommandsPermissionLevel +
                 ", \ncustomPokenavPredicates=" + customPokenavPredicates +
                 "\n}";
