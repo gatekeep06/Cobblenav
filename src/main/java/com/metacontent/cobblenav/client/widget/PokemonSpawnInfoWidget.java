@@ -101,8 +101,8 @@ public class PokemonSpawnInfoWidget extends ClickableWidget {
                     getX() + getWidth() / 2, getY() + getHeight() - 10, 1, 1, 2 * getWidth(), color, true, false, i, j);
             if (showActionButtons) {
                 showActionButtons = hovered;
-                shareButton.renderButton(drawContext, i, j, f);
-                findButton.renderButton(drawContext, i, j, f);
+                shareButton.render(drawContext, i, j, f);
+                findButton.render(drawContext, i, j, f);
             }
         }
     }
