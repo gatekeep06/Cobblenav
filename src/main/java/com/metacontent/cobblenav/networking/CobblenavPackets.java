@@ -3,6 +3,7 @@ package com.metacontent.cobblenav.networking;
 import com.metacontent.cobblenav.Cobblenav;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.util.Identifier;
 
 public class CobblenavPackets {
@@ -22,7 +23,8 @@ public class CobblenavPackets {
     public static final Identifier SAVE_PREFERENCES_PACKET = new Identifier(Cobblenav.ID, "save_preferences_packet");
     public static final Identifier SAVED_PREFERENCES_PACKET_CLIENT = new Identifier(Cobblenav.ID, "saved_preferences_packet_client");
     public static final Identifier SAVED_PREFERENCES_PACKET_SERVER = new Identifier(Cobblenav.ID, "saved_preferences_packet_server");
-
+    public static final Identifier STREAK_PACKET_SERVER = new Identifier(Cobblenav.ID, "streak_packet_server");
+    public static final Identifier STREAK_PACKET_CLIENT = new Identifier(Cobblenav.ID, "streak_packet_client");
 
     public static void registerC2SPackets() {
         ServerPlayNetworking.registerGlobalReceiver(SPAWN_MAP_PACKET_SERVER, SpawnMapPacketServerReceiver::receive);
@@ -35,6 +37,10 @@ public class CobblenavPackets {
         ServerPlayNetworking.registerGlobalReceiver(TRACKED_ENTITY_ID_PACKET_SERVER, TrackedEntityIdPacketServerReceiver::receive);
         ServerPlayNetworking.registerGlobalReceiver(SAVED_PREFERENCES_PACKET_SERVER, SavedPreferencesPacketServerReceiver::receive);
         ServerPlayNetworking.registerGlobalReceiver(SAVE_PREFERENCES_PACKET, SavePreferencesPacketReceiver::receive);
+
+        if (FabricLoader.getInstance().isModLoaded("cobblemon_counter") && Cobblenav.CONFIG.useCounterIntegration) {
+            ServerPlayNetworking.registerGlobalReceiver(STREAK_PACKET_SERVER, StreakPacketServerReceiver::receive);
+        }
     }
 
     public static void registerS2CPackets() {
@@ -44,5 +50,9 @@ public class CobblenavPackets {
         ClientPlayNetworking.registerGlobalReceiver(RENDERABLE_POKEMON_PACKET_CLIENT, RenderablePokemonPacketClientReceiver::receive);
         ClientPlayNetworking.registerGlobalReceiver(TRACKED_ENTITY_ID_PACKET_CLIENT, TrackedEntityIdPacketClientReceiver::receive);
         ClientPlayNetworking.registerGlobalReceiver(SAVED_PREFERENCES_PACKET_CLIENT, SavedPreferencesPacketClientReceiver::receive);
+
+        if (FabricLoader.getInstance().isModLoaded("cobblemon_counter") && Cobblenav.CONFIG.useCounterIntegration) {
+            ClientPlayNetworking.registerGlobalReceiver(STREAK_PACKET_CLIENT, StreakPacketClientReceiver::receive);
+        }
     }
 }
