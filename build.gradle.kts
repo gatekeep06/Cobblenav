@@ -33,6 +33,9 @@ dependencies {
     modImplementation(files("/run/mods/SelfdotModLibs-2.2.0+1.20.1.jar",
         "run/mods/SelfdotModLibs-2.2.0+1.20.1-dev-shadow.jar",
         "run/mods/SelfdotModLibs-2.2.0+1.20.1-sources.jar"))
+
+    // Permission API
+    // modImplementation("me.lucko:fabric-permissions-api:${property("permissions_api_version")}")
 }
 
 tasks {
