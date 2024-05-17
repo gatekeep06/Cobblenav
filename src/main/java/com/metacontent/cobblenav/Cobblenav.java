@@ -31,5 +31,8 @@ public class Cobblenav implements ModInitializer {
             LOGGER.info("Cobblemon Counter Integration is enabled");
             EggMoveGiver.subscribe();
         }
+        else if (!FabricLoader.getInstance().isModLoaded("cobblemon_counter") && Cobblenav.CONFIG.useCounterIntegration) {
+            LOGGER.warn("Cobblemon Counter is not installed, integration will not be used");
+        }
     }
 }
