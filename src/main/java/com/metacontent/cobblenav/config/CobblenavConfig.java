@@ -23,6 +23,7 @@ public class CobblenavConfig {
     public final List<String> hiddenPokemon;
     public final int titleCommandsPermissionLevel;
     public final List<Integer> customPokenavPredicates;
+    public final CounterIntegrationConfig counterIntegrationConfig;
 
     private CobblenavConfig(
             boolean useCounterIntegration,
@@ -35,8 +36,8 @@ public class CobblenavConfig {
             List<String> ignoredLabels,
             List<String> hiddenPokemon,
             int titleCommandsPermissionLevel,
-            List<Integer> customPokenavPredicates
-    ) {
+            List<Integer> customPokenavPredicates,
+            CounterIntegrationConfig counterIntegrationConfig) {
         this.useCounterIntegration = useCounterIntegration;
         this.useCobblemonTrainersIntegration = useCobblemonTrainersIntegration;
         this.checkSpawnWidth = checkSpawnWidth;
@@ -48,10 +49,11 @@ public class CobblenavConfig {
         this.hiddenPokemon = hiddenPokemon;
         this.titleCommandsPermissionLevel = titleCommandsPermissionLevel;
         this.customPokenavPredicates = customPokenavPredicates;
+        this.counterIntegrationConfig = counterIntegrationConfig;
     }
 
     private CobblenavConfig() {
-        this(false, false, -1, -1, 100, 100, PokemonFeatureWeights.BASE_WEIGHTS, List.of("not_modeled"), List.of(), 2, List.of(0));
+        this(false, false, -1, -1, 100, 100, PokemonFeatureWeights.BASE_WEIGHTS, List.of("not_modeled"), List.of(), 2, List.of(0), new CounterIntegrationConfig());
     }
 
     public static CobblenavConfig init() {
@@ -97,5 +99,44 @@ public class CobblenavConfig {
                 ", \ntitleCommandsPermissionLevel=" + titleCommandsPermissionLevel +
                 ", \ncustomPokenavPredicates=" + customPokenavPredicates +
                 "\n}";
+    }
+
+    public static class CounterIntegrationConfig {
+        public final int levelOneStreak;
+        public final int levelTwoStreak;
+        public final int levelThreeStreak;
+        public final int levelFourStreak;
+        public final int levelZeroEggMoveChance;
+        public final int levelOneEggMoveChance;
+        public final int levelTwoEggMoveChance;
+        public final int levelThreeEggMoveChance;
+        public final int levelFourEggMoveChance;
+
+        private CounterIntegrationConfig(
+                int levelOneStreak,
+                int levelTwoStreak,
+                int levelThreeStreak,
+                int levelFourStreak,
+                int levelZeroEggMoveChance,
+                int levelOneEggMoveChance,
+                int levelTwoEggMoveChance,
+                int levelThreeEggMoveChance,
+                int levelFourEggMoveChance
+        ) {
+            this.levelOneStreak = levelOneStreak;
+            this.levelTwoStreak = levelTwoStreak;
+            this.levelThreeStreak = levelThreeStreak;
+            this.levelFourStreak = levelFourStreak;
+            this.levelZeroEggMoveChance = levelZeroEggMoveChance;
+            this.levelOneEggMoveChance = levelOneEggMoveChance;
+            this.levelTwoEggMoveChance = levelTwoEggMoveChance;
+            this.levelThreeEggMoveChance = levelThreeEggMoveChance;
+            this.levelFourEggMoveChance = levelFourEggMoveChance;
+        }
+
+        private CounterIntegrationConfig() {
+            this(5, 10, 20, 30, 0, 21, 46, 58, 65);
+        }
+
     }
 }
