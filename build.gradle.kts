@@ -34,6 +34,9 @@ dependencies {
         "run/mods/SelfdotModLibs-2.2.0+1.20.1-dev-shadow.jar",
         "run/mods/SelfdotModLibs-2.2.0+1.20.1-sources.jar"))
 
+    // Cobblemon Counter
+    modImplementation("maven.modrinth:cobblemon-counter:${property("cobblemon_counter_version")}")
+
     // Permission API
     // modImplementation("me.lucko:fabric-permissions-api:${property("permissions_api_version")}")
 }
