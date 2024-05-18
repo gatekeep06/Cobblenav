@@ -1,5 +1,7 @@
 package com.metacontent.cobblenav.util;
 
+import net.minecraft.network.PacketByteBuf;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -66,6 +68,25 @@ public class PokenavContact {
 
     public List<ContactTeamMember> getTeam() {
         return team;
+    }
+
+    public void saveToBuf(PacketByteBuf buf) {
+        buf.writeString(uuid);
+        buf.writeString(name);
+        buf.writeString(title);
+        buf.writeInt(winnings);
+        buf.writeInt(losses);
+        buf.writeCollection(team, (buf1, member) -> member.saveToBuf(buf1));
+    }
+
+    public static PokenavContact fromBuf(PacketByteBuf buf) {
+        String uuid = buf.readString();
+        String name = buf.readString();
+        String title = buf.readString();
+        int winnings = buf.readInt();
+        int losses = buf.readInt();
+        List<ContactTeamMember> team = buf.readList(ContactTeamMember::fromBuf);
+        return new PokenavContact(uuid, name, title, winnings, losses, team);
     }
 
     @Override
