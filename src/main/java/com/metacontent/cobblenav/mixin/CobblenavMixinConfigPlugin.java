@@ -22,8 +22,10 @@ public class CobblenavMixinConfigPlugin implements IMixinConfigPlugin {
 
     @Override
     public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
-        return FabricLoader.getInstance().isModLoaded("cobblemontrainers") && Cobblenav.CONFIG.useCobblemonTrainersIntegration
-                || !mixinClassName.endsWith("TrainerBattleListenerAccessor");
+        if (mixinClassName.equals("com.metacontent.cobblenav.mixin.TrainerBattleListenerAccessor")) {
+            return FabricLoader.getInstance().isModLoaded("cobblemontrainers");
+        }
+        return true;
     }
 
     @Override
