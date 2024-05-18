@@ -10,6 +10,7 @@ import com.cobblemon.mod.common.battles.pokemon.BattlePokemon;
 import com.google.gson.*;
 import com.metacontent.cobblenav.util.ContactTeamMember;
 import com.metacontent.cobblenav.util.PokenavContact;
+import com.selfdot.cobblemontrainers.trainer.Trainer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -66,6 +67,28 @@ public class ContactData implements PlayerDataExtension {
         }
 
         contacts.put(contact.getUuidAsString(), pokenavContact);
+    }
+
+    public void updateContact(Trainer contact, boolean isWinner) {
+        String contactKey = contact.getGroup() + "." + contact.getName();
+        PokenavContact pokenavContact = contacts.getOrDefault(contactKey, new PokenavContact(contactKey, contact.getName()));
+
+        pokenavContact.setTitle("Trainer");
+
+        pokenavContact.getTeam().clear();
+        for (BattlePokemon pokemon : contact.getBattleTeam()) {
+            ContactTeamMember teamMember = new ContactTeamMember(pokemon.getOriginalPokemon().getSpecies().getTranslatedName().getString(), pokemon.getOriginalPokemon().getLevel());
+            pokenavContact.getTeam().add(teamMember);
+        }
+
+        if (isWinner) {
+            pokenavContact.updateWinnings();
+        }
+        else {
+            pokenavContact.updateLosses();
+        }
+
+        contacts.put(contactKey, pokenavContact);
     }
 
     public void setTitle(String title) {
