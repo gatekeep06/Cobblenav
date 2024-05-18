@@ -147,4 +147,12 @@ public class ContactData implements PlayerDataExtension {
     public Map<String, PokenavContact> getContacts() {
         return contacts;
     }
+
+    @Override
+    public String toString() {
+        return "ContactData{" +
+                "title='" + title + '\'' +
+                ", contacts=" + contacts +
+                '}';
+    }
 }
