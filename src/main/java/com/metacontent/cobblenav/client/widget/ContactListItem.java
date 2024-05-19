@@ -11,6 +11,7 @@ import net.minecraft.util.Identifier;
 import static com.cobblemon.mod.common.api.gui.GuiUtilsKt.blitk;
 import static com.cobblemon.mod.common.client.render.RenderHelperKt.drawScaledText;
 
+//TODO: Avatar icons and title animation
 public class ContactListItem extends ClickableWidget {
     private static final Identifier FONT = new Identifier("uniform");
     private static final Identifier TEXTURE = new Identifier(Cobblenav.ID, "textures/gui/pokenav_item_gui_buttons.png");
