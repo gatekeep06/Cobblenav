@@ -35,6 +35,9 @@ dependencies {
         "run/mods/SelfdotModLibs-2.2.0+1.20.1-dev-shadow.jar",
         "run/mods/SelfdotModLibs-2.2.0+1.20.1-sources.jar"))
 
+    // Cobblemon Counter
+    modImplementation("maven.modrinth:cobblemon-counter:${property("cobblemon_counter_version")}")
+
     // Architectury API
     modImplementation("maven.modrinth:architectury-api:${property("architectury_version")}")
 
