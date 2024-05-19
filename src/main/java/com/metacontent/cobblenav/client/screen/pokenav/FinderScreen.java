@@ -167,7 +167,7 @@ public class FinderScreen extends AbstractPokenavItemScreen {
             }
             else {
                 drawScaledText(drawContext, FONT, Text.translatable("gui.cobblenav.pokenav_item.not_found_message"),
-                        borderX + BORDER_WIDTH / 2, borderY + BORDER_HEIGHT / 2, 1, 1, BORDER_WIDTH, 0xFFFFFF, true, true, i, j);
+                        borderX + BORDER_WIDTH / 2 + 2, borderY + BORDER_HEIGHT / 2, 1, 1, 100, 0xFFFFFF, true, true, i, j);
             }
         }
 
