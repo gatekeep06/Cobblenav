@@ -21,4 +21,12 @@ public class ContactTeamMember {
         int level = buf.readInt();
         return new ContactTeamMember(name, level);
     }
+
+    @Override
+    public String toString() {
+        return "ContactTeamMember{" +
+                "name='" + name + '\'' +
+                ", level=" + level +
+                '}';
+    }
 }
