@@ -51,7 +51,7 @@ public class ContactData implements PlayerDataExtension {
             if (actor != null) {
                 pokenavContact.getTeam().clear();
                 for (BattlePokemon pokemon : actor.getPokemonList()) {
-                    ContactTeamMember teamMember = new ContactTeamMember(pokemon.getOriginalPokemon().getSpecies().getTranslatedName().getString(), pokemon.getOriginalPokemon().getLevel());
+                    ContactTeamMember teamMember = new ContactTeamMember(pokemon.getOriginalPokemon().getSpecies().showdownId(), pokemon.getOriginalPokemon().getLevel());
                     pokenavContact.getTeam().add(teamMember);
                 }
             }
@@ -77,7 +77,7 @@ public class ContactData implements PlayerDataExtension {
 
         pokenavContact.getTeam().clear();
         for (BattlePokemon pokemon : contact.getBattleTeam()) {
-            ContactTeamMember teamMember = new ContactTeamMember(pokemon.getOriginalPokemon().getSpecies().getTranslatedName().getString(), pokemon.getOriginalPokemon().getLevel());
+            ContactTeamMember teamMember = new ContactTeamMember(pokemon.getOriginalPokemon().getSpecies().showdownId(), pokemon.getOriginalPokemon().getLevel());
             pokenavContact.getTeam().add(teamMember);
         }
 
