@@ -6,6 +6,7 @@ import com.metacontent.cobblenav.event.CobblenavEvents;
 import com.metacontent.cobblenav.event.EggMoveGiver;
 import com.metacontent.cobblenav.item.CobblenavItems;
 import com.metacontent.cobblenav.networking.CobblenavPackets;
+import com.metacontent.cobblenav.store.ContactData;
 import com.metacontent.cobblenav.util.PokenavAreaContextResolver;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.loader.api.FabricLoader;
@@ -23,6 +24,7 @@ public class Cobblenav implements ModInitializer {
 
     @Override
     public void onInitialize() {
+        ContactData.register();
         CobblenavItems.registerCobblenavItems();
         CobblenavPackets.registerC2SPackets();
         CobblenavCommands.registerCommands();

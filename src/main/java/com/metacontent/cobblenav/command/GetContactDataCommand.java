@@ -1,6 +1,6 @@
 package com.metacontent.cobblenav.command;
 
-import com.metacontent.cobblenav.util.ContactSaverEntity;
+import com.metacontent.cobblenav.store.ContactData;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
@@ -27,9 +27,7 @@ public class GetContactDataCommand {
         if (player != null) {
             List<ServerPlayerEntity> players = context.getArgument("player", EntitySelector.class).getPlayers(context.getSource());
             players.forEach(p -> {
-                if (p instanceof ContactSaverEntity contactSaverEntity) {
-                    player.sendMessage(Text.literal(p.getEntityName() + ": " + contactSaverEntity.cobblenav$getContactData().toString()));
-                }
+                ContactData.executeForDataOf(p, contactData -> player.sendMessage(Text.literal(contactData.toString())));
             });
             return 1;
         }

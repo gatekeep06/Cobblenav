@@ -7,6 +7,7 @@ import com.cobblemon.mod.common.api.events.battles.BattleVictoryEvent;
 import com.cobblemon.mod.common.battles.pokemon.BattlePokemon;
 import com.metacontent.cobblenav.Cobblenav;
 import com.metacontent.cobblenav.mixin.TrainerBattleListenerAccessor;
+import com.metacontent.cobblenav.store.ContactData;
 import com.metacontent.cobblenav.util.CobblenavNbtHelper;
 import com.selfdot.cobblemontrainers.trainer.Trainer;
 import com.selfdot.cobblemontrainers.trainer.TrainerBattleListener;
@@ -30,7 +31,7 @@ public class CobblenavEvents {
                         continue;
                     }
                     boolean isWinner = event.getWinners().contains(event.getBattle().getActor(player));
-                    boolean isAlly = false;
+                    boolean isAlly;
                     if (event.getWinners().size() > 1 && isWinner) {
                         isAlly = event.getWinners().contains(event.getBattle().getActor(player)) &&
                                 event.getWinners().contains(event.getBattle().getActor(p));
@@ -39,7 +40,10 @@ public class CobblenavEvents {
                         isAlly = event.getLosers().contains(event.getBattle().getActor(player)) &&
                                 event.getLosers().contains(event.getBattle().getActor(p));
                     }
-                    CobblenavNbtHelper.updateContact(player, p, event.getBattle(), isWinner, isAlly);
+                    else {
+                        isAlly = false;
+                    }
+                    ContactData.executeForDataOf(player, contactData -> contactData.updateContact(p, event.getBattle(), isWinner, isAlly));
                 }
                 player.sendMessage(Text.translatable("message.cobblenav.updating_contacts")
                         .setStyle(Style.EMPTY.withItalic(true).withColor(0xff9a38)));
@@ -54,12 +58,8 @@ public class CobblenavEvents {
         if (trainerBattles.containsKey(battle)) {
             Trainer trainer = trainerBattles.get(battle);
             battle.getPlayers().forEach(player -> {
-                if (event.getWinners().contains(battle.getActor(player))) {
-                    CobblenavNbtHelper.updateContact(player, trainer, true);
-                }
-                else if (event.getLosers().contains(battle.getActor(player))) {
-                    CobblenavNbtHelper.updateContact(player, trainer, false);
-                }
+                boolean isWinner = event.getWinners().contains(battle.getActor(player));
+                ContactData.executeForDataOf(player, contactData -> contactData.updateContact(trainer, isWinner));
                 player.sendMessage(Text.translatable("message.cobblenav.updating_contacts")
                         .setStyle(Style.EMPTY.withItalic(true).withColor(0xff9a38)));
             });

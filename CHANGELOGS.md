@@ -1,3 +1,7 @@
+# Hotfix 1.2.5
+
+- Fixed an early initialization of the config that caused some other mods' mixins to be unable to be applied.
+
 # Update 1.2.4
 
 - Added CobblemonTrainers Integration. 

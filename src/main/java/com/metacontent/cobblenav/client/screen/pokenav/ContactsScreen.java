@@ -45,15 +45,8 @@ public class ContactsScreen extends AbstractPokenavItemScreen implements Contact
         ClientPlayNetworking.send(CobblenavPackets.CONTACT_DATA_PACKET_SERVER, PacketByteBufs.create());
     }
 
-    public void createContactList(NbtCompound nbt) {
-        Set<String> keys = nbt.getKeys();
-        keys.forEach(key -> {
-            if (!Objects.equals(key, "title")) {
-                NbtCompound contactData = nbt.getCompound(key);
-                PokenavContact pokenavContact = CobblenavNbtHelper.toPokenavContact(contactData, key);
-                contacts.add(pokenavContact);
-            }
-        });
+    public void createContactList(List<PokenavContact> contacts) {
+        this.contacts = contacts;
         contactListWidget = new ContactListWidget(borderX - BORDER_DEPTH + BORDER_WIDTH - ContactListWidget.WIDTH,
                 borderY + BORDER_DEPTH + 24, contacts, this);
         contactInfoWidget = new ContactInfoWidget(borderX + BORDER_DEPTH, borderY + BORDER_DEPTH + 27);
