@@ -80,6 +80,7 @@ public class ContactsScreen extends AbstractPokenavItemScreen implements Contact
                     selectedContactIndex = -1;
                     contactListWidget.deleteContact(contactInfoWidget.getContact());
                     contactInfoWidget.deleteContact();
+                    scrollableView.resetScrollY();
                 }
         );
     }
