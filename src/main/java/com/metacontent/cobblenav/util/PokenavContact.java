@@ -7,13 +7,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PokenavContact {
+    private final String key;
     private GameProfile profile;
     private String title;
     private int winnings;
     private int losses;
     private final List<ContactTeamMember> team;
 
-    public PokenavContact(GameProfile profile, String title, int winnings, int losses, List<ContactTeamMember> team) {
+    public PokenavContact(String key, GameProfile profile, String title, int winnings, int losses, List<ContactTeamMember> team) {
+        this.key = key;
         this.profile = profile;
         this.title = title;
         this.winnings = winnings;
@@ -21,12 +23,16 @@ public class PokenavContact {
         this.team = team;
     }
 
-    public PokenavContact(GameProfile profile) {
-        this(profile, "", 0, 0, new ArrayList<>());
+    public PokenavContact(String key, GameProfile profile) {
+        this(key, profile, "", 0, 0, new ArrayList<>());
     }
 
     public String getTitleOrElseName() {
         return title.isEmpty() ? profile.getName() : title;
+    }
+
+    public String getKey() {
+        return key;
     }
 
     public GameProfile getProfile() {
@@ -66,6 +72,7 @@ public class PokenavContact {
     }
 
     public void saveToBuf(PacketByteBuf buf) {
+        buf.writeString(key);
         buf.writeGameProfile(profile);
         buf.writeString(title);
         buf.writeInt(winnings);
@@ -74,18 +81,19 @@ public class PokenavContact {
     }
 
     public static PokenavContact fromBuf(PacketByteBuf buf) {
+        String key = buf.readString();
         GameProfile profile = buf.readGameProfile();
         String title = buf.readString();
         int winnings = buf.readInt();
         int losses = buf.readInt();
         List<ContactTeamMember> team = buf.readList(ContactTeamMember::fromBuf);
-        return new PokenavContact(profile, title, winnings, losses, team);
+        return new PokenavContact(key, profile, title, winnings, losses, team);
     }
 
     @Override
     public String toString() {
         return "PokenavContact{" +
-                "uuid='" + profile.getId() + '\'' +
+                "key='" + key + '\'' +
                 ", name='" + profile.getName() + '\'' +
                 ", title='" + title + '\'' +
                 ", winnings=" + winnings +
