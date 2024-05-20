@@ -12,6 +12,7 @@ import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 
+import java.util.List;
 import java.util.UUID;
 
 public class AddDebugingContactsCommand {
@@ -27,7 +28,7 @@ public class AddDebugingContactsCommand {
         ContactData.executeForDataOf(player, contactData -> {
             for (int i = 0; i < amount; i++) {
                 GameProfile profile = new GameProfile(UUID.randomUUID(), "Player" + i);
-                PokenavContact contact = new PokenavContact(profile.getId().toString(), profile);
+                PokenavContact contact = new PokenavContact(profile.getId().toString(), profile, "damn that's very long title", 100, 100, List.of());
                 contactData.getContacts().put(contact.getKey(), contact);
             }
         });
