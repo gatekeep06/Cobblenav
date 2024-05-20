@@ -9,7 +9,6 @@ import com.metacontent.cobblenav.client.widget.ContactListWidget;
 import com.metacontent.cobblenav.client.widget.IconButton;
 import com.metacontent.cobblenav.client.widget.ScrollableViewWidget;
 import com.metacontent.cobblenav.networking.CobblenavPackets;
-import com.metacontent.cobblenav.util.CobblenavNbtHelper;
 import com.metacontent.cobblenav.util.ContactSelector;
 import com.metacontent.cobblenav.util.PokenavContact;
 import net.fabricmc.api.EnvType;
@@ -19,7 +18,6 @@ import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.nbt.NbtCompound;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
