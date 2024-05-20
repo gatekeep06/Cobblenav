@@ -24,6 +24,7 @@ public class CobblenavConfig {
     public final int titleCommandsPermissionLevel;
     public final List<Integer> customPokenavPredicates;
     public final CounterIntegrationConfig counterIntegrationConfig;
+    public final boolean enableDebugMode;
 
     private CobblenavConfig(
             boolean useCounterIntegration,
@@ -37,7 +38,9 @@ public class CobblenavConfig {
             List<String> hiddenPokemon,
             int titleCommandsPermissionLevel,
             List<Integer> customPokenavPredicates,
-            CounterIntegrationConfig counterIntegrationConfig) {
+            CounterIntegrationConfig counterIntegrationConfig,
+            boolean enableDebugMode
+    ) {
         this.useCounterIntegration = useCounterIntegration;
         this.useCobblemonTrainersIntegration = useCobblemonTrainersIntegration;
         this.checkSpawnWidth = checkSpawnWidth;
@@ -50,10 +53,11 @@ public class CobblenavConfig {
         this.titleCommandsPermissionLevel = titleCommandsPermissionLevel;
         this.customPokenavPredicates = customPokenavPredicates;
         this.counterIntegrationConfig = counterIntegrationConfig;
+        this.enableDebugMode = enableDebugMode;
     }
 
     private CobblenavConfig() {
-        this(false, false, -1, -1, 100, 100, PokemonFeatureWeights.BASE_WEIGHTS, List.of("not_modeled"), List.of(), 2, List.of(0), new CounterIntegrationConfig());
+        this(false, false, -1, -1, 100, 100, PokemonFeatureWeights.BASE_WEIGHTS, List.of("not_modeled"), List.of(), 2, List.of(0), new CounterIntegrationConfig(), false);
     }
 
     public static CobblenavConfig init() {
