@@ -43,7 +43,7 @@ public class ContactListWidget extends ClickableWidget {
             );
             items.add(item);
         }
-        height = items.size() * 12;
+        height = Math.max(items.size() * 12, HEIGHT);
     }
 
     public ContactListWidget(int x, int y, List<PokenavContact> contactList, ContactSelector selector) {
