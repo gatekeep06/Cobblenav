@@ -1,5 +1,6 @@
 package com.metacontent.cobblenav.util;
 
+import com.google.gson.annotations.JsonAdapter;
 import com.mojang.authlib.GameProfile;
 import net.minecraft.network.PacketByteBuf;
 
@@ -8,6 +9,7 @@ import java.util.List;
 
 public class PokenavContact {
     private final String key;
+    @JsonAdapter(GameProfile.Serializer.class)
     private GameProfile profile;
     private String title;
     private int winnings;
