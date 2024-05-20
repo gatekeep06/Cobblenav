@@ -87,14 +87,13 @@ public class ScrollableViewWidget<T extends ClickableWidget> extends ClickableWi
         else if (scrollY > widget.getHeight() - getHeight()) {
             scrollY = widget.getHeight() - getHeight();
         }
-        scrollerWidget.setY((int) calcScrollerPos(scrollY));
         widget.setY((int) (getY() - scrollY));
+        scrollerWidget.setY((int) calcScrollerPos(scrollY));
     }
 
     public void resetScrollY() {
-        this.scrollY = 0;
-        widget.setY(getY());
-        scrollerWidget.setY((int) calcScrollerPos(scrollY));
+        scrollY = 0;
+        scroll();
     }
 
     @Override
