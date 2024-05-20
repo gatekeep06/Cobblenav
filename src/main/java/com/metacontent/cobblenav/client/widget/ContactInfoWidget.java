@@ -119,7 +119,7 @@ public class ContactInfoWidget implements Drawable, Widget {
 
     public void deleteContact() {
         PacketByteBuf buf = PacketByteBufs.create();
-        buf.writeString(contact.getUuid());
+        buf.writeString(contact.getKey());
         ClientPlayNetworking.send(CobblenavPackets.DELETE_CONTACT_PACKET, buf);
     }
 
