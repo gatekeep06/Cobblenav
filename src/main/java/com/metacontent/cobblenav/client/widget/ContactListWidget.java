@@ -2,8 +2,6 @@ package com.metacontent.cobblenav.client.widget;
 
 import com.cobblemon.mod.common.CobblemonSounds;
 import com.metacontent.cobblenav.Cobblenav;
-import com.metacontent.cobblenav.client.CobblenavClient;
-import com.metacontent.cobblenav.util.BorderBox;
 import com.metacontent.cobblenav.util.ContactSelector;
 import com.metacontent.cobblenav.util.PokenavContact;
 import net.minecraft.client.MinecraftClient;
@@ -90,7 +88,8 @@ public class ContactListWidget extends ClickableWidget {
 
     @Override
     public void setY(int i) {
+        int deltaY = i - getY();
+        items.forEach(item -> item.setY(item.getY() + deltaY));
         super.setY(i);
-        createItems();
     }
 }
