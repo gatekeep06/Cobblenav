@@ -78,7 +78,6 @@ public class ContactsScreen extends AbstractPokenavItemScreen implements Contact
                 () -> {
                     player.playSound(CobblemonSounds.PC_RELEASE, 0.1f, 1.25f);
                     selectedContactIndex = -1;
-                    scrollableView.resetScrollY();
                     contactListWidget.deleteContact(contactInfoWidget.getContact());
                     contactInfoWidget.deleteContact();
                 }
@@ -119,9 +118,12 @@ public class ContactsScreen extends AbstractPokenavItemScreen implements Contact
     public boolean mouseClicked(double d, double e, int i) {
         backButton.mouseClicked(d, e, i);
         if (scrollableView != null) {
-            scrollableView.mouseClicked(d, e, i);
+            boolean viewClicked = scrollableView.mouseClicked(d, e, i);
             if (selectedContactIndex != -1) {
                 deleteButton.mouseClicked(d, e, i);
+            }
+            if (!viewClicked) {
+                setContactIndex(-1);
             }
         }
         return super.mouseClicked(d, e, i);
