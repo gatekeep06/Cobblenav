@@ -10,6 +10,7 @@ import com.cobblemon.mod.common.battles.pokemon.BattlePokemon;
 import com.google.gson.*;
 import com.metacontent.cobblenav.util.ContactTeamMember;
 import com.metacontent.cobblenav.util.PokenavContact;
+import com.mojang.authlib.GameProfile;
 import com.selfdot.cobblemontrainers.trainer.Trainer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import org.jetbrains.annotations.NotNull;
@@ -17,6 +18,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 import java.util.function.Consumer;
 
 public class ContactData implements PlayerDataExtension {
@@ -38,8 +40,8 @@ public class ContactData implements PlayerDataExtension {
     }
 
     public void updateContact(ServerPlayerEntity contact, @Nullable PokemonBattle battle, boolean isWinner, boolean isAlly) {
-        PokenavContact pokenavContact = contacts.getOrDefault(contact.getUuidAsString(), new PokenavContact(contact.getUuidAsString(), contact.getEntityName()));
-        pokenavContact.setName(contact.getEntityName());
+        PokenavContact pokenavContact = contacts.getOrDefault(contact.getUuidAsString(), new PokenavContact(contact.getUuidAsString(), contact.getGameProfile()));
+        pokenavContact.setProfile(contact.getGameProfile());
 
         ContactData contactData = (ContactData) Cobblemon.playerData.get(contact).getExtraData().getOrDefault(NAME, null);
         if (contactData != null) {
@@ -70,8 +72,9 @@ public class ContactData implements PlayerDataExtension {
     }
 
     public void updateContact(Trainer contact, boolean isWinner) {
-        String contactKey = contact.getGroup() + "." + contact.getName();
-        PokenavContact pokenavContact = contacts.getOrDefault(contactKey, new PokenavContact(contactKey, contact.getName()));
+        String contactKey = contact.getGroup().toLowerCase() + "-" + contact.getName().toLowerCase();
+        GameProfile pseudoTrainerProfile = new GameProfile(UUID.randomUUID(), contact.getName());
+        PokenavContact pokenavContact = contacts.getOrDefault(contactKey, new PokenavContact(contactKey, pseudoTrainerProfile));
 
         pokenavContact.setTitle("Trainer");
 
@@ -102,7 +105,7 @@ public class ContactData implements PlayerDataExtension {
         if (!jsonArray.isJsonNull()) {
             for (JsonElement jsonElement: jsonArray) {
                 PokenavContact contact = GSON.fromJson(jsonElement, PokenavContact.class);
-                contacts.put(contact.getUuid(), contact);
+                contacts.put(contact.getKey(), contact);
             }
         }
 

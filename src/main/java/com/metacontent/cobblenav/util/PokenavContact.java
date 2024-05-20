@@ -1,45 +1,48 @@
 package com.metacontent.cobblenav.util;
 
+import com.google.gson.annotations.JsonAdapter;
+import com.mojang.authlib.GameProfile;
 import net.minecraft.network.PacketByteBuf;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class PokenavContact {
-    private final String uuid;
-    private String name;
+    private final String key;
+    @JsonAdapter(GameProfile.Serializer.class)
+    private GameProfile profile;
     private String title;
     private int winnings;
     private int losses;
     private final List<ContactTeamMember> team;
 
-    public PokenavContact(String uuid, String name, String title, int winnings, int losses, List<ContactTeamMember> team) {
-        this.uuid = uuid;
-        this.name = name;
+    public PokenavContact(String key, GameProfile profile, String title, int winnings, int losses, List<ContactTeamMember> team) {
+        this.key = key;
+        this.profile = profile;
         this.title = title;
         this.winnings = winnings;
         this.losses = losses;
         this.team = team;
     }
 
-    public PokenavContact(String uuid, String name) {
-        this(uuid, name, "", 0, 0, new ArrayList<>());
+    public PokenavContact(String key, GameProfile profile) {
+        this(key, profile, "", 0, 0, new ArrayList<>());
     }
 
     public String getTitleOrElseName() {
-        return title.isEmpty() ? name : title;
+        return title.isEmpty() ? profile.getName() : title;
     }
 
-    public String getUuid() {
-        return uuid;
+    public String getKey() {
+        return key;
     }
 
-    public String getName() {
-        return name;
+    public GameProfile getProfile() {
+        return profile;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setProfile(GameProfile profile) {
+        this.profile = profile;
     }
 
     public String getTitle() {
@@ -71,8 +74,8 @@ public class PokenavContact {
     }
 
     public void saveToBuf(PacketByteBuf buf) {
-        buf.writeString(uuid);
-        buf.writeString(name);
+        buf.writeString(key);
+        buf.writeGameProfile(profile);
         buf.writeString(title);
         buf.writeInt(winnings);
         buf.writeInt(losses);
@@ -80,20 +83,20 @@ public class PokenavContact {
     }
 
     public static PokenavContact fromBuf(PacketByteBuf buf) {
-        String uuid = buf.readString();
-        String name = buf.readString();
+        String key = buf.readString();
+        GameProfile profile = buf.readGameProfile();
         String title = buf.readString();
         int winnings = buf.readInt();
         int losses = buf.readInt();
         List<ContactTeamMember> team = buf.readList(ContactTeamMember::fromBuf);
-        return new PokenavContact(uuid, name, title, winnings, losses, team);
+        return new PokenavContact(key, profile, title, winnings, losses, team);
     }
 
     @Override
     public String toString() {
         return "PokenavContact{" +
-                "uuid='" + uuid + '\'' +
-                ", name='" + name + '\'' +
+                "key='" + key + '\'' +
+                ", name='" + profile.getName() + '\'' +
                 ", title='" + title + '\'' +
                 ", winnings=" + winnings +
                 ", losses=" + losses +
