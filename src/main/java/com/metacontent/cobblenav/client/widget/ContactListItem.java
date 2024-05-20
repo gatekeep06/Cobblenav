@@ -2,12 +2,17 @@ package com.metacontent.cobblenav.client.widget;
 
 import com.metacontent.cobblenav.Cobblenav;
 import com.metacontent.cobblenav.util.PokenavContact;
+import com.mojang.authlib.minecraft.MinecraftProfileTexture;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
 import net.minecraft.client.gui.widget.ClickableWidget;
+import net.minecraft.client.texture.PlayerSkinProvider;
+import net.minecraft.client.util.DefaultSkinHelper;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.Uuids;
 
 import static com.cobblemon.mod.common.api.gui.GuiUtilsKt.blitk;
 import static com.cobblemon.mod.common.client.render.RenderHelperKt.drawScaledText;
@@ -18,6 +23,7 @@ public class ContactListItem extends ClickableWidget {
     private static final Identifier TEXTURE = new Identifier(Cobblenav.ID, "textures/gui/pokenav_item_gui_buttons.png");
     private static final int MAX_WIDTH = 56;
     private final PokenavContact contact;
+    private Identifier skinId = null;
     private final int index;
     private boolean isSelected;
     private final OnSelect action;
@@ -25,12 +31,21 @@ public class ContactListItem extends ClickableWidget {
     private final int minRenderY;
 
     public ContactListItem(int x, int y, PokenavContact contact, int index, OnSelect onSelect, int maxRenderY, int minRenderY) {
-        super(x, y, 110, 12, Text.literal(""));
+        super(x, y, 120, 12, Text.literal(""));
         this.contact = contact;
         this.index = index;
         this.action = onSelect;
         this.maxRenderY = maxRenderY;
         this.minRenderY = minRenderY;
+
+        PlayerSkinProvider skinProvider = MinecraftClient.getInstance().getSkinProvider();
+        MinecraftProfileTexture texture = skinProvider.getTextures(contact.getProfile()).get(MinecraftProfileTexture.Type.SKIN);
+        if (texture != null) {
+            skinId = skinProvider.loadSkin(texture, MinecraftProfileTexture.Type.SKIN);
+        }
+        else {
+            skinId = DefaultSkinHelper.getTexture(Uuids.getUuidFromProfile(contact.getProfile()));
+        }
     }
 
     public void renderItem(DrawContext drawContext, int i, int j, float f, int selectedIndex) {
@@ -49,12 +64,17 @@ public class ContactListItem extends ClickableWidget {
             }
 
             drawScaledText(drawContext, FONT, Text.literal(contact.getProfile().getName()).setStyle(style),
-                    getX() + 6, getY(), 1, 1,
+                    getX() + 18, getY(), 1, 1,
                     MAX_WIDTH, isHovered() ? 0xD3D3D3 : 0xFFFFFF, false, isHovered(), i, j);
 
             drawScaledText(drawContext, FONT, Text.literal(contact.getTitle()).setStyle(style),
-                    getX() + MAX_WIDTH + 8, getY(), 1, 1,
+                    getX() + MAX_WIDTH + 20, getY(), 1, 1,
                     MAX_WIDTH, isHovered() ? 0xD3D3D3 : 0xFFFFFF, false, isHovered(), i, j);
+
+            if (skinId != null) {
+                blitk(drawContext.getMatrices(), skinId, getX() + 6, getY() + 1, 8, 8, 8, 8, 64, 64,
+                        0, 1, 1, 1, 1, false, 1);
+            }
         }
     }
 
