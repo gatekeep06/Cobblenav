@@ -92,17 +92,20 @@ public class CobblenavConfig {
     @Override
     public String toString() {
         return "CobblenavConfig{" +
-                "\nuseCobblemonTrainersIntegration=" + useCobblemonTrainersIntegration +
-                ", \ncheckSpawnWidth=" + checkSpawnWidth +
-                ", \ncheckSpawnHeight=" + checkSpawnHeight +
-                ", \nfindingAreaWidth=" + findingAreaWidth +
-                ", \nfindingAreaHeight=" + findingAreaHeight +
-                ", \npokemonFeatureWeights=" + pokemonFeatureWeights +
-                ", \nignoredLabels=" + ignoredLabels +
-                ", \nhiddenPokemon=" + hiddenPokemon +
-                ", \ntitleCommandsPermissionLevel=" + titleCommandsPermissionLevel +
-                ", \ncustomPokenavPredicates=" + customPokenavPredicates +
-                "\n}";
+                "useCounterIntegration=" + useCounterIntegration +
+                ", useCobblemonTrainersIntegration=" + useCobblemonTrainersIntegration +
+                ", checkSpawnWidth=" + checkSpawnWidth +
+                ", checkSpawnHeight=" + checkSpawnHeight +
+                ", findingAreaWidth=" + findingAreaWidth +
+                ", findingAreaHeight=" + findingAreaHeight +
+                ", pokemonFeatureWeights=" + pokemonFeatureWeights +
+                ", ignoredLabels=" + ignoredLabels +
+                ", hiddenPokemon=" + hiddenPokemon +
+                ", titleCommandsPermissionLevel=" + titleCommandsPermissionLevel +
+                ", customPokenavPredicates=" + customPokenavPredicates +
+                ", counterIntegrationConfig=" + counterIntegrationConfig +
+                ", enableDebugMode=" + enableDebugMode +
+                '}';
     }
 
     public static class CounterIntegrationConfig {
