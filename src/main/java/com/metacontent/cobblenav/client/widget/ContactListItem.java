@@ -1,6 +1,7 @@
 package com.metacontent.cobblenav.client.widget;
 
 import com.metacontent.cobblenav.Cobblenav;
+import com.metacontent.cobblenav.util.PokenavContact;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
 import net.minecraft.client.gui.widget.ClickableWidget;
@@ -16,18 +17,16 @@ public class ContactListItem extends ClickableWidget {
     private static final Identifier FONT = new Identifier("uniform");
     private static final Identifier TEXTURE = new Identifier(Cobblenav.ID, "textures/gui/pokenav_item_gui_buttons.png");
     private static final int MAX_WIDTH = 56;
-    private final String name;
-    private final String title;
+    private final PokenavContact contact;
     private final int index;
     private boolean isSelected;
     private final OnSelect action;
     private final int maxRenderY;
     private final int minRenderY;
 
-    public ContactListItem(int x, int y, String name, String title, int index, OnSelect onSelect, int maxRenderY, int minRenderY) {
+    public ContactListItem(int x, int y, PokenavContact contact, int index, OnSelect onSelect, int maxRenderY, int minRenderY) {
         super(x, y, 110, 12, Text.literal(""));
-        this.name = name;
-        this.title = title;
+        this.contact = contact;
         this.index = index;
         this.action = onSelect;
         this.maxRenderY = maxRenderY;
@@ -49,11 +48,11 @@ public class ContactListItem extends ClickableWidget {
                         256, 0, 1, 1, 1, 1, false, 1);
             }
 
-            drawScaledText(drawContext, FONT, Text.literal(name).setStyle(style),
+            drawScaledText(drawContext, FONT, Text.literal(contact.getProfile().getName()).setStyle(style),
                     getX() + 6, getY(), 1, 1,
                     MAX_WIDTH, isHovered() ? 0xD3D3D3 : 0xFFFFFF, false, isHovered(), i, j);
 
-            drawScaledText(drawContext, FONT, Text.literal(title).setStyle(style),
+            drawScaledText(drawContext, FONT, Text.literal(contact.getTitle()).setStyle(style),
                     getX() + MAX_WIDTH + 8, getY(), 1, 1,
                     MAX_WIDTH, isHovered() ? 0xD3D3D3 : 0xFFFFFF, false, isHovered(), i, j);
         }

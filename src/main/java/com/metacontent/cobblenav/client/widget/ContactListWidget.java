@@ -17,6 +17,8 @@ import java.util.List;
 
 import static com.cobblemon.mod.common.api.gui.GuiUtilsKt.blitk;
 
+//TODO: min height
+
 public class ContactListWidget extends ClickableWidget {
     public static final Identifier BUTTONS = new Identifier(Cobblenav.ID, "textures/gui/pokenav_item_gui_buttons.png");
     public static final Identifier BUTTONS_HOVERED = new Identifier(Cobblenav.ID, "textures/gui/pokenav_item_gui_buttons_hovered.png");
@@ -32,7 +34,7 @@ public class ContactListWidget extends ClickableWidget {
         items = new ArrayList<>();
         for (int i = 0; i < contactList.size(); i++) {
             int index = i;
-            ContactListItem item = new ContactListItem(getX(), getY() + index * 12, contactList.get(i).getName(), contactList.get(i).getTitle(), index,
+            ContactListItem item = new ContactListItem(getX(), getY() + index * 12, contactList.get(i), index,
                     () -> {
                         player.playSound(CobblemonSounds.PC_GRAB, 0.05f, 1.25f);
                         selector.setContactIndex(index);
