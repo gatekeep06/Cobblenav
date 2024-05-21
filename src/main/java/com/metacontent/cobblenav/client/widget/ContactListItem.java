@@ -28,6 +28,8 @@ public class ContactListItem extends ClickableWidget {
     private final OnSelect action;
     private final int maxRenderY;
     private final int minRenderY;
+    private final CrawlingLineWidget nameLine;
+    private final CrawlingLineWidget titleLine;
 
     public ContactListItem(int x, int y, PokenavContact contact, int index, OnSelect onSelect, int maxRenderY, int minRenderY) {
         super(x, y, 120, 12, Text.literal(""));
@@ -36,6 +38,8 @@ public class ContactListItem extends ClickableWidget {
         this.action = onSelect;
         this.maxRenderY = maxRenderY;
         this.minRenderY = minRenderY;
+        this.nameLine = new CrawlingLineWidget(getX() + 18, getY(), 40, getHeight());
+        this.titleLine = new CrawlingLineWidget(getX() + 62, getY(), 56, getHeight());
 
         PlayerSkinProvider skinProvider = MinecraftClient.getInstance().getSkinProvider();
         MinecraftProfileTexture texture = skinProvider.getTextures(contact.getProfile()).get(MinecraftProfileTexture.Type.SKIN);
@@ -62,16 +66,17 @@ public class ContactListItem extends ClickableWidget {
                         256, 0, 1, 1, 1, 1, false, 1);
             }
 
-            drawScaledText(drawContext, FONT, Text.literal(contact.getProfile().getName()).setStyle(style),
-                    getX() + 18, getY(), 1, 1,
-                    MAX_WIDTH, isHovered() ? 0xD3D3D3 : 0xFFFFFF, false, isHovered(), i, j);
-
-            drawScaledText(drawContext, FONT, Text.literal(contact.getTitle()).setStyle(style),
-                    getX() + MAX_WIDTH + 20, getY(), 1, 1,
-                    MAX_WIDTH, isHovered() ? 0xD3D3D3 : 0xFFFFFF, false, isHovered(), i, j);
+//            drawScaledText(drawContext, FONT, Text.literal(contact.getProfile().getName()).setStyle(style),
+//                    getX() + 18, getY(), 1, 1,
+//                    MAX_WIDTH, isHovered() ? 0xD3D3D3 : 0xFFFFFF, false, isHovered(), i, j);
+//            drawScaledText(drawContext, FONT, Text.literal(contact.getTitle()).setStyle(style),
+//                    getX() + MAX_WIDTH + 20, getY(), 1, 1,
+//                    MAX_WIDTH, isHovered() ? 0xD3D3D3 : 0xFFFFFF, false, isHovered(), i, j);
+            nameLine.renderDynamic(drawContext, Text.literal(contact.getProfile().getName()).setStyle(style), isHovered(), f);
+            titleLine.renderDynamic(drawContext, Text.literal(contact.getTitle()).setStyle(style), isHovered(), f);
 
             if (skinId != null) {
-                blitk(drawContext.getMatrices(), skinId, getX() + 6, getY() + 1, 8, 8, 8, 8, 64, 64,
+                blitk(drawContext.getMatrices(), skinId, getX() + 6, getY(), 8, 8, 8, 8, 64, 64,
                         0, 1, 1, 1, 1, false, 1);
             }
         }
@@ -107,5 +112,12 @@ public class ContactListItem extends ClickableWidget {
 
     public interface OnSelect {
         void onSelect();
+    }
+
+    @Override
+    public void setY(int i) {
+        nameLine.setY(i);
+        titleLine.setY(i);
+        super.setY(i);
     }
 }
