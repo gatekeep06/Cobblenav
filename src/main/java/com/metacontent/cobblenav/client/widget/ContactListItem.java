@@ -17,13 +17,12 @@ import net.minecraft.util.Uuids;
 import static com.cobblemon.mod.common.api.gui.GuiUtilsKt.blitk;
 import static com.cobblemon.mod.common.client.render.RenderHelperKt.drawScaledText;
 
-//TODO: Avatar icons and title animation
 public class ContactListItem extends ClickableWidget {
     private static final Identifier FONT = new Identifier("uniform");
     private static final Identifier TEXTURE = new Identifier(Cobblenav.ID, "textures/gui/pokenav_item_gui_buttons.png");
     private static final int MAX_WIDTH = 56;
     private final PokenavContact contact;
-    private Identifier skinId = null;
+    private Identifier skinId;
     private final int index;
     private boolean isSelected;
     private final OnSelect action;
