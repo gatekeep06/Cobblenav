@@ -7,7 +7,7 @@ import net.minecraft.client.gui.Drawable;
 import net.minecraft.text.Text;
 
 public class CrawlingLineWidget implements Drawable {
-    private static final int DELAY = 100;
+    private static final int DELAY = 40;
     private float delayed = 0f;
     private final TextRenderer textRenderer;
     private Text text;
@@ -60,6 +60,7 @@ public class CrawlingLineWidget implements Drawable {
 
     private void crawl(float f) {
         if (textWidth <= width) {
+            textX = x;
             return;
         }
         if (delayed >= DELAY) {
