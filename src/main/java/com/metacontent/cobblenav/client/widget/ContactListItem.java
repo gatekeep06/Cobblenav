@@ -63,7 +63,7 @@ public class ContactListItem extends ClickableWidget {
     @Override
     protected void renderButton(DrawContext drawContext, int i, int j, float f) {
         if (isVisible()) {
-            Style style = Style.EMPTY.withBold(isSelected).withItalic(isSelected);
+            Style style = Style.EMPTY.withBold(isSelected);
 
             if (isSelected) {
                 blitk(drawContext.getMatrices(), TEXTURE, getX(), getY() + 1, 7, 4, 0, 72, 256,
