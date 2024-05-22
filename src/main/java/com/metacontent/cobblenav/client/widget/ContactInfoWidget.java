@@ -52,7 +52,7 @@ public class ContactInfoWidget implements Drawable, Widget {
                 256, 0, 1, 1, 1, 1, false, 1);
 
         drawScaledText(drawContext, FONT, Text.literal(contact.getTitleOrElseName()).setStyle(Style.EMPTY.withBold(true)),
-                animX + NAME_BOX_WIDTH / 2, y + 3, 1.5f, 1, NAME_BOX_WIDTH / 2,
+                animX + NAME_BOX_WIDTH / 2, y + NAME_BOX_HEIGHT / 2 - 4, 1f, 1, NAME_BOX_WIDTH - 6,
                 0xFFFFFF, true, false, i, j);
 
         drawScaledText(drawContext, FONT,
@@ -64,11 +64,11 @@ public class ContactInfoWidget implements Drawable, Widget {
         contact.getTeam().forEach(member -> {
             drawScaledText(drawContext, FONT,
                     Text.translatable("cobblemon.species." + member.name + ".name"),
-                    animX + 3, teamY, 1f, 1, (int) (0.75 * TEAM_BOX_WIDTH) - 2,
+                    animX + 3, teamY.get() + 2, 0.6f, 1, (int) (0.75 * TEAM_BOX_WIDTH) - 2,
                     0xFFFFFF, false, false, i, j);
             drawScaledText(drawContext, FONT,
                     Text.literal(member.level + "lvl"),
-                    animX + TEAM_BOX_WIDTH - 20, teamY, 1f, 1, (int) (0.25 * TEAM_BOX_WIDTH) - 2,
+                    animX + TEAM_BOX_WIDTH - 20, teamY.get() + 2, 0.6f, 1, (int) (0.5 * TEAM_BOX_WIDTH),
                     0xFFFFFF, false, false, i, j);
             teamY.addAndGet(10);
         });
