@@ -15,18 +15,20 @@ public class PokenavContact {
     private int winnings;
     private int losses;
     private final List<ContactTeamMember> team;
+    private final boolean trainer;
 
-    public PokenavContact(String key, GameProfile profile, String title, int winnings, int losses, List<ContactTeamMember> team) {
+    public PokenavContact(String key, GameProfile profile, String title, int winnings, int losses, List<ContactTeamMember> team, boolean trainer) {
         this.key = key;
         this.profile = profile;
         this.title = title;
         this.winnings = winnings;
         this.losses = losses;
         this.team = team;
+        this.trainer = trainer;
     }
 
-    public PokenavContact(String key, GameProfile profile) {
-        this(key, profile, "", 0, 0, new ArrayList<>());
+    public PokenavContact(String key, GameProfile profile, boolean trainer) {
+        this(key, profile, "", 0, 0, new ArrayList<>(), trainer);
     }
 
     public String getTitleOrElseName() {
@@ -73,6 +75,10 @@ public class PokenavContact {
         return team;
     }
 
+    public boolean isTrainer() {
+        return trainer;
+    }
+
     public void saveToBuf(PacketByteBuf buf) {
         buf.writeString(key);
         buf.writeGameProfile(profile);
@@ -80,6 +86,7 @@ public class PokenavContact {
         buf.writeInt(winnings);
         buf.writeInt(losses);
         buf.writeCollection(team, (buf1, member) -> member.saveToBuf(buf1));
+        buf.writeBoolean(trainer);
     }
 
     public static PokenavContact fromBuf(PacketByteBuf buf) {
@@ -89,18 +96,20 @@ public class PokenavContact {
         int winnings = buf.readInt();
         int losses = buf.readInt();
         List<ContactTeamMember> team = buf.readList(ContactTeamMember::fromBuf);
-        return new PokenavContact(key, profile, title, winnings, losses, team);
+        boolean trainer = buf.readBoolean();
+        return new PokenavContact(key, profile, title, winnings, losses, team, trainer);
     }
 
     @Override
     public String toString() {
         return "PokenavContact{" +
                 "key='" + key + '\'' +
-                ", name='" + profile.getName() + '\'' +
+                ", profile=" + profile +
                 ", title='" + title + '\'' +
                 ", winnings=" + winnings +
                 ", losses=" + losses +
                 ", team=" + team +
+                ", trainer=" + trainer +
                 '}';
     }
 }

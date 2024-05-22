@@ -40,7 +40,7 @@ public class ContactData implements PlayerDataExtension {
     }
 
     public void updateContact(ServerPlayerEntity contact, @Nullable PokemonBattle battle, boolean isWinner, boolean isAlly) {
-        PokenavContact pokenavContact = contacts.getOrDefault(contact.getUuidAsString(), new PokenavContact(contact.getUuidAsString(), contact.getGameProfile()));
+        PokenavContact pokenavContact = contacts.getOrDefault(contact.getUuidAsString(), new PokenavContact(contact.getUuidAsString(), contact.getGameProfile(), false));
         pokenavContact.setProfile(contact.getGameProfile());
 
         ContactData contactData = (ContactData) Cobblemon.playerData.get(contact).getExtraData().getOrDefault(NAME, null);
@@ -74,7 +74,7 @@ public class ContactData implements PlayerDataExtension {
     public void updateContact(Trainer contact, boolean isWinner) {
         String contactKey = contact.getGroup().toLowerCase() + "-" + contact.getName().toLowerCase();
         GameProfile pseudoTrainerProfile = new GameProfile(UUID.randomUUID(), contact.getName());
-        PokenavContact pokenavContact = contacts.getOrDefault(contactKey, new PokenavContact(contactKey, pseudoTrainerProfile));
+        PokenavContact pokenavContact = contacts.getOrDefault(contactKey, new PokenavContact(contactKey, pseudoTrainerProfile, true));
 
         pokenavContact.setTitle("Trainer");
 
