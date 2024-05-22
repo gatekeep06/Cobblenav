@@ -19,6 +19,7 @@ import static com.cobblemon.mod.common.client.render.RenderHelperKt.drawScaledTe
 
 public class ContactListItem extends ClickableWidget {
     private static final Identifier TEXTURE = new Identifier(Cobblenav.ID, "textures/gui/pokenav_item_gui_buttons.png");
+    private static final Identifier TRAINER_SKIN = new Identifier(Cobblenav.ID, "textures/gui/pseudo_trainer_skin.png");
     private final PokenavContact contact;
     private final Identifier skinId;
     private final int index;
@@ -39,13 +40,17 @@ public class ContactListItem extends ClickableWidget {
         this.nameLine = new CrawlingLineWidget(getX() + 18, getY(), 40, getHeight());
         this.titleLine = new CrawlingLineWidget(getX() + 62, getY(), 56, getHeight());
 
-        PlayerSkinProvider skinProvider = MinecraftClient.getInstance().getSkinProvider();
-        MinecraftProfileTexture texture = skinProvider.getTextures(contact.getProfile()).get(MinecraftProfileTexture.Type.SKIN);
-        if (texture != null) {
-            skinId = skinProvider.loadSkin(texture, MinecraftProfileTexture.Type.SKIN);
+        if (!contact.isTrainer()) {
+            PlayerSkinProvider skinProvider = MinecraftClient.getInstance().getSkinProvider();
+            MinecraftProfileTexture texture = skinProvider.getTextures(contact.getProfile()).get(MinecraftProfileTexture.Type.SKIN);
+            if (texture != null) {
+                skinId = skinProvider.loadSkin(texture, MinecraftProfileTexture.Type.SKIN);
+            } else {
+                skinId = DefaultSkinHelper.getTexture(Uuids.getUuidFromProfile(contact.getProfile()));
+            }
         }
         else {
-            skinId = DefaultSkinHelper.getTexture(Uuids.getUuidFromProfile(contact.getProfile()));
+            skinId = TRAINER_SKIN;
         }
     }
 
