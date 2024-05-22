@@ -28,7 +28,7 @@ public class AddDebugingContactsCommand {
         ContactData.executeForDataOf(player, contactData -> {
             for (int i = 0; i < amount; i++) {
                 GameProfile profile = new GameProfile(UUID.randomUUID(), "Player" + i);
-                PokenavContact contact = new PokenavContact(profile.getId().toString(), profile, "damn that's very long title", 100, 100, List.of());
+                PokenavContact contact = new PokenavContact(profile.getId().toString(), profile, "damn that's very long title", 100, 100, List.of(), false);
                 contactData.getContacts().put(contact.getKey(), contact);
             }
         });
