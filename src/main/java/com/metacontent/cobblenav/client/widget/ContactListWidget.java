@@ -17,8 +17,6 @@ import java.util.List;
 
 import static com.cobblemon.mod.common.api.gui.GuiUtilsKt.blitk;
 
-//TODO: min height
-
 public class ContactListWidget extends ClickableWidget {
     public static final Identifier BUTTONS = new Identifier(Cobblenav.ID, "textures/gui/pokenav_item_gui_buttons.png");
     public static final Identifier BUTTONS_HOVERED = new Identifier(Cobblenav.ID, "textures/gui/pokenav_item_gui_buttons_hovered.png");
