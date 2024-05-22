@@ -1,6 +1,6 @@
 plugins {
     id("java")
-    id("fabric-loom") version("1.4-SNAPSHOT")
+    id("fabric-loom") version("1.6-SNAPSHOT")
     kotlin("jvm") version ("1.8.20")
 }
 
@@ -10,7 +10,9 @@ version = property("mod_version")!!
 repositories {
     mavenCentral()
     maven("https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/")
+    maven("https://oss.sonatype.org/content/repositories/snapshots")
     maven("https://maven.impactdev.net/repository/development/")
+    maven("https://api.modrinth.com/maven")
 }
 
 dependencies {
@@ -26,6 +28,21 @@ dependencies {
 
     // Cobblemon
     modImplementation("com.cobblemon:fabric:${property("cobblemon_version")}")
+
+    // CobblemonTrainers
+    modImplementation("maven.modrinth:cobblemontrainers:${property("trainers_version")}")
+    modImplementation(files("/run/mods/SelfdotModLibs-2.2.0+1.20.1.jar",
+        "run/mods/SelfdotModLibs-2.2.0+1.20.1-dev-shadow.jar",
+        "run/mods/SelfdotModLibs-2.2.0+1.20.1-sources.jar"))
+
+    // Cobblemon Counter
+    modImplementation("maven.modrinth:cobblemon-counter:${property("cobblemon_counter_version")}")
+
+    // Architectury API
+    modImplementation("maven.modrinth:architectury-api:${property("architectury_version")}")
+
+    // Permission API
+    modImplementation("me.lucko:fabric-permissions-api:${property("permissions_api_version")}")
 }
 
 tasks {

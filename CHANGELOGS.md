@@ -1,3 +1,33 @@
+# Hotfix 1.2.5
+
+- Fixed an early initialization of the config that caused some other mods' mixins to be unable to be applied.
+
+# Update 1.2.4
+
+- Added CobblemonTrainers Integration. 
+
+If you have CobblemonTrainers installed and using the integration is allowed in the config, after a battle with a trainer, it will be logged in your contacts, just like the players.
+
+- Changed the moment when a pokemon is saved for hunting.
+
+Now it happens when you go to the finder screen, not when you press the “Let's catch” button. The change is intended to make pokefinder easier to use
+
+- The tooltips now also display more detailed spawn chances.
+- Added more client config parameters.
+
+_A guide to all the parameters will definitely be there... someday_
+
+- Added more parameters by which the finder chooses the best pokemon.
+- The finder now also displays if the pokémon is shiny.
+- Added possibility to customize weights for all parameters for choosing the best pokemon in the config.
+- Added command to check server config.
+
+```
+/cobblenav checkConfig
+```
+
+- Fixed minor UI issues.
+
 # Update 1.2.3
 
 ![team-widget.png](https://cdn.modrinth.com/data/bI8Nt3uA/images/91b5a3e246c1c81faab8dd1833cf66b33cf1412d.png)

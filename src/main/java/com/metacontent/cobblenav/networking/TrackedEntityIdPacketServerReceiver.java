@@ -27,17 +27,16 @@ public class TrackedEntityIdPacketServerReceiver {
                     BestPokemonFinder finder = new BestPokemonFinder(player, player.getServerWorld());
                     String name = renderablePokemon.getForm().showdownId();
                     List<PokemonEntity> entities = finder.find(name);
-                    Map.Entry<FoundPokemon, Integer> entry = BestPokemonFinder.selectBest(entities);
+                    Map.Entry<FoundPokemon, Float> entry = BestPokemonFinder.selectBest(entities);
+                    PacketByteBuf responseBuf = PacketByteBufs.create();
                     if (entry != null) {
                         FoundPokemon foundPokemon = entry.getKey();
-                        PacketByteBuf responseBuf = PacketByteBufs.create();
                         responseBuf.writeInt(foundPokemon.getEntityId());
-                        responseSender.sendPacket(CobblenavPackets.TRACKED_ENTITY_ID_PACKET_CLIENT, responseBuf);
                     }
                     else {
-                        player.sendMessage(Text.translatable("message.cobblenav.not_found_message")
-                                .setStyle(Style.EMPTY.withItalic(true).withColor(0xff9a38)));
+                        responseBuf.writeInt(-1);
                     }
+                    responseSender.sendPacket(CobblenavPackets.TRACKED_ENTITY_ID_PACKET_CLIENT, responseBuf);
                 }
                 else {
                     player.sendMessage(Text.translatable("message.cobblenav.no_saved_pokemon")

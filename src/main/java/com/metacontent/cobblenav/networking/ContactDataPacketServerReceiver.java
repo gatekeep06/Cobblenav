@@ -1,5 +1,7 @@
 package com.metacontent.cobblenav.networking;
 
+import com.cobblemon.mod.common.Cobblemon;
+import com.metacontent.cobblenav.store.ContactData;
 import com.metacontent.cobblenav.util.ContactSaverEntity;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
@@ -13,12 +15,15 @@ import static com.metacontent.cobblenav.networking.CobblenavPackets.CONTACT_DATA
 
 public class ContactDataPacketServerReceiver {
     public static void receive(MinecraftServer server, ServerPlayerEntity player, ServerPlayNetworkHandler handler, PacketByteBuf buf, PacketSender responseSender) {
-        if (player instanceof ContactSaverEntity contactSaverEntity) {
-            NbtCompound nbt = contactSaverEntity.cobblenav$getContactData();
-
+        server.execute(() -> {
+            ContactData contactData = (ContactData) Cobblemon.playerData.get(player).getExtraData().getOrDefault(ContactData.NAME, null);
+            if (contactData == null) {
+                contactData = new ContactData();
+                Cobblemon.playerData.get(player).getExtraData().put(ContactData.NAME, contactData);
+            }
             PacketByteBuf responseBuf = PacketByteBufs.create();
-            responseBuf.writeNbt(nbt);
+            responseBuf.writeCollection(contactData.getContacts().values(), (buf1, contact) -> contact.saveToBuf(buf1));
             responseSender.sendPacket(CONTACT_DATA_PACKET_CLIENT, responseBuf);
-        }
+        });
     }
 }

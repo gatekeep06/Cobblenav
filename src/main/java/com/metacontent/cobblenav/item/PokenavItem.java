@@ -7,17 +7,27 @@ import com.metacontent.cobblenav.client.screen.pokenav.MainScreen;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.List;
 
 public class PokenavItem extends Item {
     private static final String TRANSLATION_KEY = "item.cobblenav.pokenav_item";
-    public PokenavItem(Settings settings) {
+
+    private final String type;
+
+    public PokenavItem(@Nullable String type, Settings settings) {
         super(settings);
+        this.type = type;
     }
 
     @Override
@@ -38,6 +48,14 @@ public class PokenavItem extends Item {
             MinecraftClient.getInstance().setScreen(new MainScreen());
         }
         return TypedActionResult.success(playerEntity.getStackInHand(hand), false);
+    }
+
+    @Override
+    public void appendTooltip(ItemStack itemStack, @Nullable World world, List<Text> list, TooltipContext tooltipContext) {
+        if (type != null) {
+            list.add(Text.translatable(TRANSLATION_KEY + ".type." + type).formatted(Formatting.GRAY));
+        }
+        super.appendTooltip(itemStack, world, list, tooltipContext);
     }
 
     @Override
