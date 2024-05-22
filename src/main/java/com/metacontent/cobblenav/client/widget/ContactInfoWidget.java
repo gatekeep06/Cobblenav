@@ -22,11 +22,11 @@ import static com.cobblemon.mod.common.client.render.RenderHelperKt.drawScaledTe
 
 public class ContactInfoWidget implements Drawable, Widget {
     private static final Identifier TEXTURE = new Identifier(Cobblenav.ID, "textures/gui/contact_screen_widgets.png");
-    private static final Identifier FONT = new Identifier("uniform");
+    private static final Identifier FONT = null;
     public static final int TEAM_BOX_HEIGHT = 79;
     public static final int TEAM_BOX_WIDTH = 75;
     public static final int NAME_BOX_HEIGHT = 21;
-    public static final int NAME_BOX_WIDTH = 75 ;
+    public static final int NAME_BOX_WIDTH = 75;
     private static final int ANIMATION_LENGTH = 5;
 
     private int x;
