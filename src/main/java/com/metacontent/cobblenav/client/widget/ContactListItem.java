@@ -1,6 +1,7 @@
 package com.metacontent.cobblenav.client.widget;
 
 import com.metacontent.cobblenav.Cobblenav;
+import com.metacontent.cobblenav.util.BorderBox;
 import com.metacontent.cobblenav.util.PokenavContact;
 import com.mojang.authlib.minecraft.MinecraftProfileTexture;
 import net.minecraft.client.MinecraftClient;
@@ -37,8 +38,8 @@ public class ContactListItem extends ClickableWidget {
         this.action = onSelect;
         this.maxRenderY = maxRenderY;
         this.minRenderY = minRenderY;
-        this.nameLine = new CrawlingLineWidget(getX() + 18, getY(), 40, getHeight(), 0.6f);
-        this.titleLine = new CrawlingLineWidget(getX() + 62, getY(), 56, getHeight(), 0.6f);
+        this.nameLine = new CrawlingLineWidget(getX() + 18, getY(), 40, getHeight(), 0.6f, new BorderBox(2, 4));
+        this.titleLine = new CrawlingLineWidget(getX() + 62, getY(), 56, getHeight(), 0.6f, new BorderBox(2, 4));
 
         if (!contact.isTrainer()) {
             PlayerSkinProvider skinProvider = MinecraftClient.getInstance().getSkinProvider();
