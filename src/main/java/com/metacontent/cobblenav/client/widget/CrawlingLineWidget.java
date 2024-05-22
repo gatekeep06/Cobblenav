@@ -16,22 +16,24 @@ public class CrawlingLineWidget implements Drawable {
     private int y;
     private int width;
     private int height;
+    private final float scale;
     private int textWidth;
     private float textX;
     private boolean shouldMoveToLeft = true;
 
-    public CrawlingLineWidget(Text text, int x, int y, int width, int height, boolean shadow) {
+    public CrawlingLineWidget(Text text, int x, int y, int width, int height, float scale, boolean shadow) {
         this.textRenderer = MinecraftClient.getInstance().textRenderer;
         setText(text);
         setX(x);
         this.y = y;
         this.width = width;
         this.height = height;
+        this.scale = scale;
         this.shadow = shadow;
     }
 
-    public CrawlingLineWidget(int x, int y, int width, int height) {
-        this(Text.empty(), x, y, width, height, false);
+    public CrawlingLineWidget(int x, int y, int width, int height, float scale) {
+        this(Text.empty(), x, y, width, height, scale, false);
     }
 
     public void setText(Text text) {
@@ -42,7 +44,10 @@ public class CrawlingLineWidget implements Drawable {
     @Override
     public void render(DrawContext drawContext, int i, int j, float f) {
         drawContext.enableScissor(x, y, x + width, y + height);
-        drawContext.drawText(textRenderer, text, (int) textX, y, 0xffffff, shadow);
+        drawContext.getMatrices().push();
+        drawContext.getMatrices().scale(scale, scale, 1f);
+        drawContext.drawText(textRenderer, text, (int) (textX / scale), (int) (y / scale), 0xffffff, shadow);
+        drawContext.getMatrices().pop();
         drawContext.disableScissor();
         crawl(f);
     }
@@ -51,8 +56,8 @@ public class CrawlingLineWidget implements Drawable {
         this.textWidth = (int) (textRenderer.getWidth(text) * 0.75f);
         drawContext.enableScissor(x, y, x + width, y + height);
         drawContext.getMatrices().push();
-        drawContext.getMatrices().scale(0.75f, 0.75f, 1f);
-        drawContext.drawText(textRenderer, text, (int) (textX / 0.75f) + 1, (int) (y / 0.75f) + 2, 0xffffff, shadow);
+        drawContext.getMatrices().scale(scale, scale, 1f);
+        drawContext.drawText(textRenderer, text, (int) (textX / scale) + 1, (int) (y / scale) + 2, 0xffffff, shadow);
         drawContext.getMatrices().pop();
         drawContext.disableScissor();
         crawl(f);

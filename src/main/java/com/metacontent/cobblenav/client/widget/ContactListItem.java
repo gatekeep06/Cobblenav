@@ -37,8 +37,8 @@ public class ContactListItem extends ClickableWidget {
         this.action = onSelect;
         this.maxRenderY = maxRenderY;
         this.minRenderY = minRenderY;
-        this.nameLine = new CrawlingLineWidget(getX() + 18, getY(), 40, getHeight());
-        this.titleLine = new CrawlingLineWidget(getX() + 62, getY(), 56, getHeight());
+        this.nameLine = new CrawlingLineWidget(getX() + 18, getY(), 40, getHeight(), 0.6f);
+        this.titleLine = new CrawlingLineWidget(getX() + 62, getY(), 56, getHeight(), 0.6f);
 
         if (!contact.isTrainer()) {
             PlayerSkinProvider skinProvider = MinecraftClient.getInstance().getSkinProvider();
