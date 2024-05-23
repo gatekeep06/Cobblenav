@@ -11,7 +11,7 @@ public class PlayerStatsReceiver {
     public static void receive(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender responseSender) {
         PlayerStats playerStats = PlayerStats.fromBuf(buf);
         if (client.currentScreen instanceof StatsScreen statsScreen) {
-
+            statsScreen.setStats(playerStats);
         }
     }
 }
