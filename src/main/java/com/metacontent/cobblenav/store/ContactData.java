@@ -30,7 +30,7 @@ public class ContactData implements PlayerDataExtension {
 
     public static void executeForDataOf(ServerPlayerEntity player, Consumer<ContactData> action) {
         PlayerData data = Cobblemon.playerData.get(player);
-        ContactData contactData = (ContactData) data.getExtraData().getOrDefault(ContactData.NAME, null);
+        ContactData contactData = (ContactData) data.getExtraData().get(ContactData.NAME);
         if (contactData == null) {
             contactData = new ContactData();
             data.getExtraData().put(ContactData.NAME, contactData);
