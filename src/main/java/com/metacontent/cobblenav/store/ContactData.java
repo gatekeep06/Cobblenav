@@ -102,6 +102,7 @@ public class ContactData implements PlayerDataExtension {
     @Override
     public ContactData deserialize(@NotNull JsonObject jsonObject) {
         JsonArray jsonArray = jsonObject.getAsJsonArray("contacts");
+        contacts.clear();
         if (!jsonArray.isJsonNull()) {
             for (JsonElement jsonElement: jsonArray) {
                 PokenavContact contact = GSON.fromJson(jsonElement, PokenavContact.class);
