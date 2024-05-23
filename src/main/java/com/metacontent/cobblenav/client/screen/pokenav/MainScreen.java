@@ -81,7 +81,7 @@ public class MainScreen extends AbstractPokenavItemScreen {
             };
         }
 
-        statsButton = new MainScreenButton(x, y, 69, 14, 0, 0, 4,
+        statsButton = new MainScreenButton(x, y - 16, 69, 14, 0, 0, 4,
                 Text.translatable("gui.cobblenav.pokenav_item.stats_button"),
                 () -> {
                     player.playSound(CobblemonSounds.PC_CLICK, 0.1f, 1.25f);
