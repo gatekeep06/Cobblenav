@@ -134,8 +134,7 @@ public class ContactData implements PlayerDataExtension {
         }
         json.add("contacts", jsonArray);
 
-        JsonPrimitive jsonPrimitive = new JsonPrimitive(title);
-        json.add("title", jsonPrimitive);
+        json.addProperty("title", title);
 
         return json;
     }
