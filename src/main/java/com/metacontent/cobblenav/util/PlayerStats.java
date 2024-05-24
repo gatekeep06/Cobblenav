@@ -8,6 +8,7 @@ import net.minecraft.network.PacketByteBuf;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 public record PlayerStats(
         int totalPvp,
@@ -15,7 +16,7 @@ public record PlayerStats(
         int captures,
         int shinyCaptures,
         int evolutions,
-        Map<String, Integer> pokemonUsage,
+        Map<UUID, Integer> pokemonUsage,
         Date startDate,
         List<String> gymBadges
 ) {
@@ -28,7 +29,7 @@ public record PlayerStats(
 
         AdditionalStatsData statsData = AdditionalStatsData.getFromData(data);
         int totalPvp = statsData.getTotalPvpCount();
-        Map<String, Integer> pokemonUsage = statsData.getPokemonUsage();
+        Map<UUID, Integer> pokemonUsage = statsData.getPokemonUsage();
         Date startDate = statsData.getStartDate();
         List<String> gymBadges = statsData.getGymBadges();
 
@@ -41,7 +42,7 @@ public record PlayerStats(
         buf.writeInt(captures);
         buf.writeInt(shinyCaptures);
         buf.writeInt(evolutions);
-        buf.writeMap(pokemonUsage, PacketByteBuf::writeString, PacketByteBuf::writeInt);
+        buf.writeMap(pokemonUsage, PacketByteBuf::writeUuid, PacketByteBuf::writeInt);
         buf.writeDate(startDate);
         buf.writeCollection(gymBadges, PacketByteBuf::writeString);
     }
@@ -52,7 +53,7 @@ public record PlayerStats(
         int captures = buf.readInt();
         int shinyCaptures = buf.readInt();
         int evolutions = buf.readInt();
-        Map<String, Integer> pokemonUsage = buf.readMap(PacketByteBuf::readString, PacketByteBuf::readInt);
+        Map<UUID, Integer> pokemonUsage = buf.readMap(PacketByteBuf::readUuid, PacketByteBuf::readInt);
         Date startDate = buf.readDate();
         List<String> gymBadges = buf.readList(PacketByteBuf::readString);
         return new PlayerStats(totalPvp, pvpWinnings, captures, shinyCaptures, evolutions, pokemonUsage, startDate, gymBadges);

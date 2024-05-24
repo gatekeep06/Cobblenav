@@ -16,7 +16,7 @@ public class AdditionalStatsData implements PlayerDataExtension {
     private int totalPvpCount = 0;
     private Date startDate;
     private final List<String> gymBadges = new ArrayList<>();
-    private final Map<String, Integer> pokemonUsage = new HashMap<>();
+    private final Map<UUID, Integer> pokemonUsage = new HashMap<>();
 
     public int getTotalPvpCount() {
         return totalPvpCount;
@@ -30,7 +30,7 @@ public class AdditionalStatsData implements PlayerDataExtension {
         return gymBadges;
     }
 
-    public Map<String, Integer> getPokemonUsage() {
+    public Map<UUID, Integer> getPokemonUsage() {
         return pokemonUsage;
     }
 
@@ -57,7 +57,7 @@ public class AdditionalStatsData implements PlayerDataExtension {
 
         JsonObject pokemonUsageObject = jsonObject.getAsJsonObject("pokemonUsage");
         pokemonUsage.clear();
-        pokemonUsageObject.entrySet().forEach(entry -> pokemonUsage.put(entry.getKey(), entry.getValue().getAsInt()));
+        pokemonUsageObject.entrySet().forEach(entry -> pokemonUsage.put(UUID.fromString(entry.getKey()), entry.getValue().getAsInt()));
 
         return this;
     }
@@ -82,9 +82,9 @@ public class AdditionalStatsData implements PlayerDataExtension {
         gymBadges.forEach(gymBadgesArray::add);
         jsonObject.add("gymBadges", gymBadgesArray);
 
-        JsonObject typeUsageObject = new JsonObject();
-        pokemonUsage.forEach(typeUsageObject::addProperty);
-        jsonObject.add("pokemonUsage", typeUsageObject);
+        JsonObject pokemonUsageObject = new JsonObject();
+        pokemonUsage.forEach((uuid, integer) -> pokemonUsageObject.addProperty(uuid.toString(), integer));
+        jsonObject.add("pokemonUsage", pokemonUsageObject);
 
         return jsonObject;
     }
