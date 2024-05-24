@@ -2,7 +2,6 @@ package com.metacontent.cobblenav.client.screen.pokenav;
 
 import com.cobblemon.mod.common.api.types.ElementalType;
 import com.cobblemon.mod.common.api.types.ElementalTypes;
-import com.metacontent.cobblenav.Cobblenav;
 import com.metacontent.cobblenav.client.screen.AbstractPokenavItemScreen;
 import com.metacontent.cobblenav.networking.CobblenavPackets;
 import com.metacontent.cobblenav.util.PlayerStats;
@@ -15,9 +14,10 @@ import net.minecraft.util.math.ColorHelper;
 import net.minecraft.util.math.RotationAxis;
 
 import java.awt.*;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
+import static com.cobblemon.mod.common.api.gui.GuiUtilsKt.blitk;
 
 public class StatsScreen extends AbstractPokenavItemScreen {
     private static final int RED = ColorHelper.Argb.getArgb(255, 219, 67, 76);
@@ -46,7 +46,7 @@ public class StatsScreen extends AbstractPokenavItemScreen {
 
     public void setStats(PlayerStats stats) {
         //TODO: replace test data
-        this.stats = new PlayerStats(46, 33, 87, 4, 98, Map.of(
+        this.stats = new PlayerStats(46, 32, 87, 4, 98, Map.of(
                 "fire", 6,
                 "water", 18,
                 "flying", 36,
@@ -63,7 +63,13 @@ public class StatsScreen extends AbstractPokenavItemScreen {
 
     @Override
     public void render(DrawContext drawContext, int i, int j, float f) {
+        MatrixStack matrixStack = drawContext.getMatrices();
+
         renderBackground(drawContext);
+
+        blitk(matrixStack, BACKGROUND,
+                getBorderX() + BORDER_DEPTH, getBorderY() + BORDER_DEPTH + 20, BORDER_HEIGHT - 2 * BORDER_DEPTH - 20, BORDER_WIDTH - 2 * BORDER_DEPTH, 0, 0, 256,
+                256, 0, 1, 1, 1, 1, false, 1);
 
         if (stats != null) {
             renderPieChart(drawContext);
@@ -81,18 +87,20 @@ public class StatsScreen extends AbstractPokenavItemScreen {
         MatrixStack matrixStack = drawContext.getMatrices();
         matrixStack.push();
         matrixStack.translate(width / 2f,height / 2f, 0f);
+        drawContext.fill(-12, -12, 12, 12, ColorHelper.Argb.getArgb(90, 0, 0, 0));
         drawContext.drawCenteredTextWithShadow(textRenderer, (int) (winRatio * 100) + "%", 0, -3, 0xffffff);
-        for (int k = 0; k < 360; k++) {
+        for (int k = 0; k < 180; k++) {
             matrixStack.push();
-            matrixStack.multiply(RotationAxis.NEGATIVE_Z.rotationDegrees(k));
+            matrixStack.multiply(RotationAxis.NEGATIVE_Z.rotationDegrees(k * 2));
             int color;
-            if (k < (float) animProgress / (float) ANIM_DURATION * 360 || stats.totalPvp() == 0) {
+            if (k < (float) animProgress / (float) ANIM_DURATION * 180 || stats.totalPvp() == 0) {
                 color = GRAY;
             }
             else {
-                color = k < winRatio * 360 ? GREEN : RED;
+                color = k < winRatio * 180 ? GREEN : RED;
             }
             drawContext.drawVerticalLine(0, 10, 25, color);
+            //drawContext.drawVerticalLine(0, 23, 25, ColorHelper.Argb.getArgb(100, 0, 0, 0));
             matrixStack.pop();
         }
         matrixStack.pop();
