@@ -14,6 +14,8 @@ import net.minecraft.util.math.ColorHelper;
 import net.minecraft.util.math.RotationAxis;
 
 import java.awt.*;
+import java.time.Instant;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -28,14 +30,9 @@ public class StatsScreen extends AbstractPokenavItemScreen {
     private int animProgress;
     private PlayerStats stats;
     private float winRatio;
-    private final List<String> types;
-    private final int rosePeriod;
-    private int maxTypeUsage;
 
     protected StatsScreen() {
         super(Text.literal("Stats"));
-        types = ElementalTypes.INSTANCE.all().stream().map(ElementalType::getName).toList();
-        rosePeriod = 360 / ElementalTypes.INSTANCE.count();
     }
 
     @Override
@@ -46,18 +43,10 @@ public class StatsScreen extends AbstractPokenavItemScreen {
 
     public void setStats(PlayerStats stats) {
         //TODO: replace test data
-        this.stats = new PlayerStats(46, 32, 87, 4, 98, Map.of(
-                "fire", 6,
-                "water", 18,
-                "flying", 36,
-                "rock", 4,
-                "dark", 7,
-                "fairy", 10
-        ));
+        this.stats = new PlayerStats(46, 32, 87, 4, 98, Map.of(), Date.from(Instant.now()), List.of("dark", "fairy"));
         if (this.stats.totalPvp() != 0) {
             this.winRatio = (float) this.stats.pvpWinnings() / (float) this.stats.totalPvp();
         }
-        maxTypeUsage = this.stats.pvpTypeUsage().values().stream().max(Integer::compareTo).orElse(0);
         animProgress = ANIM_DURATION;
     }
 
@@ -73,7 +62,6 @@ public class StatsScreen extends AbstractPokenavItemScreen {
 
         if (stats != null) {
             renderPieChart(drawContext);
-            renderTypeChart(drawContext);
         }
 
         if (animProgress > 0) {
@@ -103,12 +91,6 @@ public class StatsScreen extends AbstractPokenavItemScreen {
             //drawContext.drawVerticalLine(0, 23, 25, ColorHelper.Argb.getArgb(100, 0, 0, 0));
             matrixStack.pop();
         }
-        matrixStack.pop();
-    }
-
-    private void renderTypeChart(DrawContext drawContext) {
-        MatrixStack matrixStack = drawContext.getMatrices();
-        matrixStack.push();
         matrixStack.pop();
     }
 }
