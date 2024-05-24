@@ -5,6 +5,8 @@ import com.cobblemon.mod.common.api.storage.player.PlayerData;
 import com.metacontent.cobblenav.store.AdditionalStatsData;
 import net.minecraft.network.PacketByteBuf;
 
+import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 public record PlayerStats(
@@ -13,7 +15,9 @@ public record PlayerStats(
         int captures,
         int shinyCaptures,
         int evolutions,
-        Map<String, Integer> pvpTypeUsage
+        Map<String, Integer> pokemonUsage,
+        Date startDate,
+        List<String> gymBadges
 ) {
     public static PlayerStats fromPlayerData(PlayerData data) {
         PlayerAdvancementData advancementData = data.getAdvancementData();
@@ -24,9 +28,11 @@ public record PlayerStats(
 
         AdditionalStatsData statsData = AdditionalStatsData.getFromData(data);
         int totalPvp = statsData.getTotalPvpCount();
-        Map<String, Integer> pvpTypeUsage = statsData.getPvpTypeUsageCounts();
+        Map<String, Integer> pokemonUsage = statsData.getPokemonUsage();
+        Date startDate = statsData.getStartDate();
+        List<String> gymBadges = statsData.getGymBadges();
 
-        return new PlayerStats(totalPvp, pvpWinnings, captures, shinyCaptures, evolutions, pvpTypeUsage);
+        return new PlayerStats(totalPvp, pvpWinnings, captures, shinyCaptures, evolutions, pokemonUsage, startDate, gymBadges);
     }
 
     public void saveToBuf(PacketByteBuf buf) {
@@ -35,7 +41,9 @@ public record PlayerStats(
         buf.writeInt(captures);
         buf.writeInt(shinyCaptures);
         buf.writeInt(evolutions);
-        buf.writeMap(pvpTypeUsage, PacketByteBuf::writeString, PacketByteBuf::writeInt);
+        buf.writeMap(pokemonUsage, PacketByteBuf::writeString, PacketByteBuf::writeInt);
+        buf.writeDate(startDate);
+        buf.writeCollection(gymBadges, PacketByteBuf::writeString);
     }
 
     public static PlayerStats fromBuf(PacketByteBuf buf) {
@@ -44,7 +52,9 @@ public record PlayerStats(
         int captures = buf.readInt();
         int shinyCaptures = buf.readInt();
         int evolutions = buf.readInt();
-        Map<String, Integer> pvpTypeUsage = buf.readMap(PacketByteBuf::readString, PacketByteBuf::readInt);
-        return new PlayerStats(totalPvp, pvpWinnings, captures, shinyCaptures, evolutions, pvpTypeUsage);
+        Map<String, Integer> pokemonUsage = buf.readMap(PacketByteBuf::readString, PacketByteBuf::readInt);
+        Date startDate = buf.readDate();
+        List<String> gymBadges = buf.readList(PacketByteBuf::readString);
+        return new PlayerStats(totalPvp, pvpWinnings, captures, shinyCaptures, evolutions, pokemonUsage, startDate, gymBadges);
     }
 }
