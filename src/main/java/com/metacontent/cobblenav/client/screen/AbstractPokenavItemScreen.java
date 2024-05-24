@@ -64,4 +64,12 @@ public class AbstractPokenavItemScreen extends Screen {
         player.playSound(CobblemonSounds.PC_OFF, 0.1f, 1.25f);
         super.close();
     }
+
+    public int getBorderX() {
+        return borderX;
+    }
+
+    public int getBorderY() {
+        return borderY;
+    }
 }
