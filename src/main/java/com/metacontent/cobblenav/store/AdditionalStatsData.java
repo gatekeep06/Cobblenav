@@ -4,24 +4,34 @@ import com.cobblemon.mod.common.Cobblemon;
 import com.cobblemon.mod.common.api.storage.player.PlayerData;
 import com.cobblemon.mod.common.api.storage.player.PlayerDataExtension;
 import com.cobblemon.mod.common.api.storage.player.PlayerDataExtensionRegistry;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class AdditionalStatsData implements PlayerDataExtension {
     public static final String NAME = "cobblenavPlayerStatsData";
 
     private int totalPvpCount = 0;
-    private final Map<String, Integer> pvpTypeUsageCounts = new HashMap<>(18);
+    private Date startDate;
+    private final List<String> gymBadges = new ArrayList<>();
+    private final Map<String, Integer> pokemonUsage = new HashMap<>();
 
     public int getTotalPvpCount() {
         return totalPvpCount;
     }
 
-    public Map<String, Integer> getPvpTypeUsageCounts() {
-        return pvpTypeUsageCounts;
+    public Date getStartDate() {
+        return startDate;
+    }
+
+    public List<String> getGymBadges() {
+        return gymBadges;
+    }
+
+    public Map<String, Integer> getPokemonUsage() {
+        return pokemonUsage;
     }
 
     public static AdditionalStatsData getFromData(PlayerData data) {
@@ -39,9 +49,15 @@ public class AdditionalStatsData implements PlayerDataExtension {
     public AdditionalStatsData deserialize(@NotNull JsonObject jsonObject) {
         totalPvpCount = jsonObject.getAsJsonPrimitive("totalPvpCount").getAsInt();
 
-        JsonObject typeUsageObject = jsonObject.getAsJsonObject("pvpTypeUsageCounts");
-        pvpTypeUsageCounts.clear();
-        typeUsageObject.entrySet().forEach(entry -> pvpTypeUsageCounts.put(entry.getKey(), entry.getValue().getAsJsonPrimitive().getAsInt()));
+        startDate = new Date(jsonObject.getAsJsonPrimitive("startDate").getAsLong());
+
+        JsonArray gymBadgesArray = jsonObject.getAsJsonArray("gymBadges");
+        gymBadges.clear();
+        gymBadgesArray.forEach(jsonElement -> gymBadges.add(jsonElement.getAsString()));
+
+        JsonObject pokemonUsageObject = jsonObject.getAsJsonObject("pokemonUsage");
+        pokemonUsage.clear();
+        pokemonUsageObject.entrySet().forEach(entry -> pokemonUsage.put(entry.getKey(), entry.getValue().getAsInt()));
 
         return this;
     }
@@ -60,9 +76,15 @@ public class AdditionalStatsData implements PlayerDataExtension {
 
         jsonObject.addProperty("totalPvpCount", totalPvpCount);
 
+        jsonObject.addProperty("startDate", startDate.getTime());
+
+        JsonArray gymBadgesArray = new JsonArray();
+        gymBadges.forEach(gymBadgesArray::add);
+        jsonObject.add("gymBadges", gymBadgesArray);
+
         JsonObject typeUsageObject = new JsonObject();
-        pvpTypeUsageCounts.forEach(typeUsageObject::addProperty);
-        jsonObject.add("pvpTypeUsageCounts", typeUsageObject);
+        pokemonUsage.forEach(typeUsageObject::addProperty);
+        jsonObject.add("pokemonUsage", typeUsageObject);
 
         return jsonObject;
     }
