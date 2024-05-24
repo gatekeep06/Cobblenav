@@ -1,5 +1,8 @@
 package com.metacontent.cobblenav.client.screen.pokenav;
 
+import com.cobblemon.mod.common.api.types.ElementalType;
+import com.cobblemon.mod.common.api.types.ElementalTypes;
+import com.metacontent.cobblenav.Cobblenav;
 import com.metacontent.cobblenav.client.screen.AbstractPokenavItemScreen;
 import com.metacontent.cobblenav.networking.CobblenavPackets;
 import com.metacontent.cobblenav.util.PlayerStats;
@@ -12,6 +15,9 @@ import net.minecraft.util.math.ColorHelper;
 import net.minecraft.util.math.RotationAxis;
 
 import java.awt.*;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 public class StatsScreen extends AbstractPokenavItemScreen {
     private static final int RED = ColorHelper.Argb.getArgb(255, 219, 67, 76);
@@ -21,10 +27,15 @@ public class StatsScreen extends AbstractPokenavItemScreen {
 
     private int animProgress;
     private PlayerStats stats;
-    private float winRatio = 0.34f;
+    private float winRatio;
+    private final List<String> types;
+    private final int rosePeriod;
+    private int maxTypeUsage;
 
     protected StatsScreen() {
         super(Text.literal("Stats"));
+        types = ElementalTypes.INSTANCE.all().stream().map(ElementalType::getName).toList();
+        rosePeriod = 360 / ElementalTypes.INSTANCE.count();
     }
 
     @Override
@@ -34,21 +45,29 @@ public class StatsScreen extends AbstractPokenavItemScreen {
     }
 
     public void setStats(PlayerStats stats) {
-        this.stats = stats;
-//        if (stats.totalPvp() != 0) {
-//            this.winRatio = (float) stats.pvpWinnings() / (float) stats.totalPvp();
-//        }
+        //TODO: replace test data
+        this.stats = new PlayerStats(46, 33, 87, 4, 98, Map.of(
+                "fire", 6,
+                "water", 18,
+                "flying", 36,
+                "rock", 4,
+                "dark", 7,
+                "fairy", 10
+        ));
+        if (this.stats.totalPvp() != 0) {
+            this.winRatio = (float) this.stats.pvpWinnings() / (float) this.stats.totalPvp();
+        }
+        maxTypeUsage = this.stats.pvpTypeUsage().values().stream().max(Integer::compareTo).orElse(0);
         animProgress = ANIM_DURATION;
     }
 
     @Override
     public void render(DrawContext drawContext, int i, int j, float f) {
         renderBackground(drawContext);
-        renderPieChart(drawContext);
+
         if (stats != null) {
-            if (stats.totalPvp() != 0) {
-                renderPieChart(drawContext);
-            }
+            renderPieChart(drawContext);
+            renderTypeChart(drawContext);
         }
 
         if (animProgress > 0) {
@@ -61,13 +80,13 @@ public class StatsScreen extends AbstractPokenavItemScreen {
     private void renderPieChart(DrawContext drawContext) {
         MatrixStack matrixStack = drawContext.getMatrices();
         matrixStack.push();
-        matrixStack.translate((int) (width / 2f), (int) (height / 2f), 0);
+        matrixStack.translate(width / 2f,height / 2f, 0f);
         drawContext.drawCenteredTextWithShadow(textRenderer, (int) (winRatio * 100) + "%", 0, -3, 0xffffff);
         for (int k = 0; k < 360; k++) {
             matrixStack.push();
             matrixStack.multiply(RotationAxis.NEGATIVE_Z.rotationDegrees(k));
             int color;
-            if (k < (float) animProgress / (float) ANIM_DURATION * 360) {
+            if (k < (float) animProgress / (float) ANIM_DURATION * 360 || stats.totalPvp() == 0) {
                 color = GRAY;
             }
             else {
@@ -76,6 +95,12 @@ public class StatsScreen extends AbstractPokenavItemScreen {
             drawContext.drawVerticalLine(0, 10, 25, color);
             matrixStack.pop();
         }
+        matrixStack.pop();
+    }
+
+    private void renderTypeChart(DrawContext drawContext) {
+        MatrixStack matrixStack = drawContext.getMatrices();
+        matrixStack.push();
         matrixStack.pop();
     }
 }
