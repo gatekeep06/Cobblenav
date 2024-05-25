@@ -7,11 +7,18 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.network.PacketByteBuf;
 
+import java.time.Instant;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
 public class PlayerStatsReceiver {
     public static void receive(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender responseSender) {
         PlayerStats playerStats = PlayerStats.fromBuf(buf);
         if (client.currentScreen instanceof StatsScreen statsScreen) {
-            statsScreen.createStats(playerStats);
+            //TODO: replace test data
+            PlayerStats testStats = new PlayerStats(46, 32, 87, 4, 98, Map.of(), Date.from(Instant.now()), List.of("dark", "fairy"));
+            statsScreen.createStats(testStats);
         }
     }
 }
