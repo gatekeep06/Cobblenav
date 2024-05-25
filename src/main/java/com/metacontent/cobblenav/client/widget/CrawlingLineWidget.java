@@ -5,14 +5,18 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.Drawable;
-import net.minecraft.client.gui.widget.AbstractTextWidget;
 import net.minecraft.text.Text;
 
-public class CrawlingLineWidget extends AbstractTextWidget {
+public class CrawlingLineWidget implements Drawable {
     private static final int DELAY = 40;
     private float delayed = 0f;
+    private final TextRenderer textRenderer;
     private Text text;
     private final boolean shadow;
+    private int x;
+    private int y;
+    private int width;
+    private int height;
     private final float scale;
     private final BorderBox textOffsets;
     private int textWidth;
@@ -20,8 +24,12 @@ public class CrawlingLineWidget extends AbstractTextWidget {
     private boolean shouldMoveToLeft = true;
 
     public CrawlingLineWidget(Text text, int x, int y, int width, int height, float scale, BorderBox textOffsets, boolean shadow) {
-        super(x, y, width, height, text, MinecraftClient.getInstance().textRenderer);
+        this.textRenderer = MinecraftClient.getInstance().textRenderer;
         setText(text);
+        setX(x);
+        this.y = y;
+        this.width = width;
+        this.height = height;
         this.scale = scale;
         this.textOffsets = textOffsets;
         this.shadow = shadow;
@@ -33,26 +41,26 @@ public class CrawlingLineWidget extends AbstractTextWidget {
 
     public void setText(Text text) {
         this.text = text;
-        this.textWidth = getTextRenderer().getWidth(text);
+        this.textWidth = textRenderer.getWidth(text);
     }
 
     @Override
-    protected void renderButton(DrawContext drawContext, int i, int j, float f) {
-        drawContext.enableScissor(getX(), getY(), getX() + width, getY() + height);
+    public void render(DrawContext drawContext, int i, int j, float f) {
+        drawContext.enableScissor(x, y, x + width, y + height);
         drawContext.getMatrices().push();
         drawContext.getMatrices().scale(scale, scale, 1f);
-        drawContext.drawText(getTextRenderer(), text, (int) (textX / scale) + textOffsets.left, (int) (getY() / scale) + textOffsets.top, 0xffffff, shadow);
+        drawContext.drawText(textRenderer, text, (int) (textX / scale) + textOffsets.left, (int) (y / scale) + textOffsets.top, 0xffffff, shadow);
         drawContext.getMatrices().pop();
         drawContext.disableScissor();
         crawl(f);
     }
 
     public void renderDynamic(DrawContext drawContext, Text text, boolean shadow, float f) {
-        this.textWidth = (int) (getTextRenderer().getWidth(text) * scale);
-        drawContext.enableScissor(getX(), getY(), getX() + width, getY() + height);
+        this.textWidth = (int) (textRenderer.getWidth(text) * scale);
+        drawContext.enableScissor(x, y, x + width, y + height);
         drawContext.getMatrices().push();
         drawContext.getMatrices().scale(scale, scale, 1f);
-        drawContext.drawText(getTextRenderer(), text, (int) (textX / scale) + textOffsets.left, (int) (getY() / scale) + textOffsets.top, 0xffffff, shadow);
+        drawContext.drawText(textRenderer, text, (int) (textX / scale) + textOffsets.left, (int) (y / scale) + textOffsets.top, 0xffffff, shadow);
         drawContext.getMatrices().pop();
         drawContext.disableScissor();
         crawl(f);
@@ -60,7 +68,7 @@ public class CrawlingLineWidget extends AbstractTextWidget {
 
     private void crawl(float f) {
         if (textWidth <= width) {
-            textX = getX();
+            textX = x;
             return;
         }
         if (delayed >= DELAY) {
@@ -70,7 +78,7 @@ public class CrawlingLineWidget extends AbstractTextWidget {
             else {
                 textX += 0.1f;
             }
-            if (textX >= (float) getX() || textX <= (float) (getX() - (textWidth - width))) {
+            if (textX >= (float) x || textX <= (float) (x - (textWidth - width))) {
                 delayed = 0f;
                 shouldMoveToLeft = !shouldMoveToLeft;
             }
@@ -80,9 +88,12 @@ public class CrawlingLineWidget extends AbstractTextWidget {
         }
     }
 
-    @Override
-    public void setX(int i) {
-        super.setX(i);
-        this.textX = (float) getX();
+    public void setX(int x) {
+        this.x = x;
+        this.textX = (float) x;
+    }
+
+    public void setY(int y) {
+        this.y = y;
     }
 }
