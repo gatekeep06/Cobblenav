@@ -14,7 +14,7 @@ public class AdditionalStatsData implements PlayerDataExtension {
     public static final String NAME = "cobblenavPlayerStatsData";
 
     private int totalPvpCount = 0;
-    private Date startDate;
+    private Date startDate = new Date();
     private final List<String> gymBadges = new ArrayList<>();
     private final Map<UUID, Integer> pokemonUsage = new HashMap<>();
 
