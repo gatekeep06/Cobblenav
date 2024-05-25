@@ -41,7 +41,7 @@ public class PieChartWidget implements Drawable {
     public void render(DrawContext drawContext, int i, int j, float f) {
         MatrixStack matrixStack = drawContext.getMatrices();
         matrixStack.push();
-        matrixStack.translate(x, y, 0f);
+        matrixStack.translate(x - radius, y + radius, 0f);
         drawContext.fill(-12, -12, 12, 12, ColorHelper.Argb.getArgb(90, 0, 0, 0));
         drawContext.drawCenteredTextWithShadow(textRenderer, (int) (ratio * 100) + "%", 0, -3, 0xffffff);
         for (int k = 0; k < 180; k++) {
@@ -59,6 +59,8 @@ public class PieChartWidget implements Drawable {
             matrixStack.pop();
         }
         matrixStack.pop();
-        ++animProgress;
+        if (animProgress > 0) {
+            --animProgress;
+        }
     }
 }
