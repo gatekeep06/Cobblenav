@@ -23,7 +23,6 @@ public class StatsScreen extends AbstractPokenavItemScreen {
     private static final int GREEN = ColorHelper.Argb.getArgb(255, 82, 214, 48);
     private static final int ANIM_DURATION = 50;
 
-    private int animProgress;
     private PlayerStats stats;
     private PieChartWidget pieChart;
 
@@ -45,7 +44,6 @@ public class StatsScreen extends AbstractPokenavItemScreen {
             float winRatio = (float) this.stats.pvpWinnings() / (float) this.stats.totalPvp();
             pieChart.setRatio(winRatio);
         }
-        animProgress = ANIM_DURATION;
     }
 
     @Override
@@ -60,10 +58,6 @@ public class StatsScreen extends AbstractPokenavItemScreen {
 
         if (stats != null) {
             pieChart.render(drawContext, i, j, f);
-        }
-
-        if (animProgress > 0) {
-            --animProgress;
         }
 
         super.render(drawContext, i, j, f);
