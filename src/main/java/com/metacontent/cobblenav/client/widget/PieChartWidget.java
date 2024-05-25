@@ -1,5 +1,6 @@
 package com.metacontent.cobblenav.client.widget;
 
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.Drawable;
@@ -12,17 +13,23 @@ import java.awt.*;
 public class PieChartWidget implements Drawable {
     private static final int GRAY = Color.GRAY.getRGB();
     private float ratio = -1;
+    private final int x;
+    private final int y;
+    private final int radius;
     private final int animDuration;
     private final int firstColor;
     private final int secondColor;
     private final TextRenderer textRenderer;
     private int animProgress;
 
-    public PieChartWidget(int animDuration, int firstColor, int secondColor, TextRenderer textRenderer) {
+    public PieChartWidget(int x, int y, int radius, int animDuration, int firstColor, int secondColor) {
+        this.x = x;
+        this.y = y;
+        this.radius = radius;
         this.animDuration = animDuration;
         this.firstColor = firstColor;
         this.secondColor = secondColor;
-        this.textRenderer = textRenderer;
+        this.textRenderer = MinecraftClient.getInstance().textRenderer;
     }
 
     public void setRatio(float ratio) {
@@ -34,7 +41,7 @@ public class PieChartWidget implements Drawable {
     public void render(DrawContext drawContext, int i, int j, float f) {
         MatrixStack matrixStack = drawContext.getMatrices();
         matrixStack.push();
-        matrixStack.translate(0f, 0f, 0f);
+        matrixStack.translate(x, y, 0f);
         drawContext.fill(-12, -12, 12, 12, ColorHelper.Argb.getArgb(90, 0, 0, 0));
         drawContext.drawCenteredTextWithShadow(textRenderer, (int) (ratio * 100) + "%", 0, -3, 0xffffff);
         for (int k = 0; k < 180; k++) {
@@ -47,7 +54,7 @@ public class PieChartWidget implements Drawable {
             else {
                 color = k < ratio * 180 ? firstColor : secondColor;
             }
-            drawContext.drawVerticalLine(0, 10, 25, color);
+            drawContext.drawVerticalLine(0, 10, radius, color);
             //drawContext.drawVerticalLine(0, 23, 25, ColorHelper.Argb.getArgb(100, 0, 0, 0));
             matrixStack.pop();
         }

@@ -35,7 +35,7 @@ public class StatsScreen extends AbstractPokenavItemScreen {
     protected void init() {
         super.init();
         ClientPlayNetworking.send(CobblenavPackets.REQUEST_PLAYER_STATS_PACKET, PacketByteBufs.create());
-        pieChart = new PieChartWidget(ANIM_DURATION, GREEN, RED, textRenderer);
+        pieChart = new PieChartWidget(getBorderX() + BORDER_DEPTH + BORDER_WIDTH - 54, getBorderY() + BORDER_DEPTH + 4, 25, ANIM_DURATION, GREEN, RED);
     }
 
     public void createStats(PlayerStats stats) {
