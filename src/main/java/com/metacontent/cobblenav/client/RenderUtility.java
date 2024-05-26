@@ -8,7 +8,7 @@ import org.joml.Quaternionf;
 import static com.metacontent.cobblenav.client.screen.AbstractPokenavItemScreen.BORDER_HEIGHT;
 
 public class RenderUtility {
-    public static void renderPlayer(DrawContext drawContext, int x, int y, PlayerEntity player) {
+    public static void renderPlayer(DrawContext drawContext, int x, int y, PlayerEntity player, int scale) {
         Quaternionf quaternionf = (new Quaternionf()).rotateZ(3.1415927F);
         Quaternionf quaternionf2 = (new Quaternionf()).rotateX(20.0F * 0.017453292F);
         quaternionf.mul(quaternionf2);
@@ -25,7 +25,7 @@ public class RenderUtility {
 
         drawContext.getMatrices().push();
         drawContext.getMatrices().translate(0f, 0f, 100f);
-        InventoryScreen.drawEntity(drawContext, x, y + BORDER_HEIGHT / 2, 20, (new Quaternionf()).rotateZ(3.1415927F), (new Quaternionf()).rotateX(120.0F * 0.017453292F), player);
+        InventoryScreen.drawEntity(drawContext, x, y + BORDER_HEIGHT / 2, scale, (new Quaternionf()).rotateZ(3.1415927F), (new Quaternionf()).rotateX(120.0F * 0.017453292F), player);
         drawContext.getMatrices().pop();
 
         player.bodyYaw = m;

@@ -66,7 +66,7 @@ public class PartyWidget extends MainScreenWidget {
                 borderX + BORDER_WIDTH - BORDER_DEPTH, borderY + BORDER_HEIGHT - BORDER_DEPTH);
         matrixStack.push();
         matrixStack.translate(0f, 0f, 2000f);
-        RenderUtility.renderPlayer(drawContext, playerX, playerY, player);
+        RenderUtility.renderPlayer(drawContext, playerX, playerY, player, 20);
         for (int index = 0; index < partyModels.size(); ++index) {
             partyModels.get(index).render(drawContext, i, j, f);
             if (index % 2 != 0) {
