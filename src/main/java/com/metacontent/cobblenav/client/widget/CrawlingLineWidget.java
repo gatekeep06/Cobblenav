@@ -1,5 +1,6 @@
 package com.metacontent.cobblenav.client.widget;
 
+import com.metacontent.cobblenav.Cobblenav;
 import com.metacontent.cobblenav.util.BorderBox;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
@@ -25,7 +26,6 @@ public class CrawlingLineWidget extends AbstractTextWidget {
 
     public CrawlingLineWidget(Text text, int x, int y, int width, int height, float scale, BorderBox textOffsets, boolean shadow) {
         super(x, y, width, height, text, MinecraftClient.getInstance().textRenderer);
-        setText(text);
         setX(x);
         this.y = y;
         this.width = width;
@@ -33,6 +33,7 @@ public class CrawlingLineWidget extends AbstractTextWidget {
         this.scale = scale;
         this.textOffsets = textOffsets;
         this.shadow = shadow;
+        setText(text);
     }
 
     public CrawlingLineWidget(int x, int y, int width, int height, float scale, BorderBox textOffsets) {
