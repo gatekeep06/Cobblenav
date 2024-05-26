@@ -61,7 +61,7 @@ public class StatsScreen extends AbstractPokenavItemScreen {
         int y = getBorderY() + BORDER_DEPTH + 24;
         pieChart = new PieChartWidget(x, y, 25, ANIM_DURATION, GREEN, RED);
         statsTable = new TableWidget<>(x - 58, y + 56, 2, 0, new BorderBox(0, 1));
-        startDateWidget = new TextWidget((int) ((getBorderX() + BORDER_DEPTH + 1) / 0.75f), (int) ((getBorderY() + BORDER_DEPTH + 21) / 0.75f),
+        startDateWidget = new TextWidget((int) ((x - 58) / 0.5f), (int) ((getBorderY() + BORDER_HEIGHT - BORDER_DEPTH - 5) / 0.5f),
                 50, 10, Text.empty(), textRenderer);
         startDateWidget.alignLeft();
         backButton = new IconButton(getBorderX() + BORDER_DEPTH + 3, getBorderY() + BORDER_HEIGHT - BORDER_DEPTH - 12,
@@ -115,7 +115,7 @@ public class StatsScreen extends AbstractPokenavItemScreen {
             statsTable.render(drawContext, i, j, f);
 
             matrixStack.push();
-            matrixStack.scale(0.75f, 0.75f, 1f);
+            matrixStack.scale(0.5f, 0.5f, 1f);
             startDateWidget.render(drawContext, i, j, f);
             matrixStack.pop();
         }
