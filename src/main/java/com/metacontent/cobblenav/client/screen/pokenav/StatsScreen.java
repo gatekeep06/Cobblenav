@@ -21,6 +21,8 @@ import net.minecraft.util.Formatting;
 import net.minecraft.util.math.ColorHelper;
 
 import java.time.Instant;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -44,6 +46,7 @@ public class StatsScreen extends AbstractPokenavItemScreen {
     private PlayerStats stats;
     private PieChartWidget pieChart;
     private TableWidget<AbstractTextWidget> statsTable;
+    private TextWidget startDateWidget;
     private IconButton backButton;
 
     protected StatsScreen() {
@@ -58,6 +61,9 @@ public class StatsScreen extends AbstractPokenavItemScreen {
         int y = getBorderY() + BORDER_DEPTH + 24;
         pieChart = new PieChartWidget(x, y, 25, ANIM_DURATION, GREEN, RED);
         statsTable = new TableWidget<>(x - 58, y + 56, 2, 0, new BorderBox(0, 1));
+        startDateWidget = new TextWidget((int) ((getBorderX() + BORDER_DEPTH + 1) / 0.75f), (int) ((getBorderY() + BORDER_DEPTH + 21) / 0.75f),
+                50, 10, Text.empty(), textRenderer);
+        startDateWidget.alignLeft();
         backButton = new IconButton(getBorderX() + BORDER_DEPTH + 3, getBorderY() + BORDER_HEIGHT - BORDER_DEPTH - 12,
                 11, 11, 73, 0, 0,
                 () -> {
@@ -86,6 +92,7 @@ public class StatsScreen extends AbstractPokenavItemScreen {
         textWidgets.add(new CrawlingLineWidget(Text.literal(String.valueOf(stats.evolutions())), 0, 0, STAT_VALUE_WIDTH, 10, 0.6f, new BorderBox(2), true));
         statsTable.calcRows(textWidgets.size());
         statsTable.setWidgets(textWidgets);
+        startDateWidget.setMessage(Text.literal("Start Date: " + stats.startDate().toInstant().atZone(ZoneId.systemDefault()).format(DateTimeFormatter.ISO_LOCAL_DATE)));
         this.stats = stats;
     }
 
@@ -106,6 +113,11 @@ public class StatsScreen extends AbstractPokenavItemScreen {
         if (stats != null) {
             pieChart.render(drawContext, i, j, f);
             statsTable.render(drawContext, i, j, f);
+
+            matrixStack.push();
+            matrixStack.scale(0.75f, 0.75f, 1f);
+            startDateWidget.render(drawContext, i, j, f);
+            matrixStack.pop();
         }
 
         backButton.render(drawContext, i, j, f);
