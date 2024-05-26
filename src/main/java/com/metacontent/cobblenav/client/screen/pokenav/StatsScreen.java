@@ -1,7 +1,9 @@
 package com.metacontent.cobblenav.client.screen.pokenav;
 
+import com.cobblemon.mod.common.CobblemonSounds;
 import com.metacontent.cobblenav.client.screen.AbstractPokenavItemScreen;
 import com.metacontent.cobblenav.client.widget.CrawlingLineWidget;
+import com.metacontent.cobblenav.client.widget.IconButton;
 import com.metacontent.cobblenav.client.widget.PieChartWidget;
 import com.metacontent.cobblenav.client.widget.TableWidget;
 import com.metacontent.cobblenav.networking.CobblenavPackets;
@@ -9,6 +11,7 @@ import com.metacontent.cobblenav.util.BorderBox;
 import com.metacontent.cobblenav.util.PlayerStats;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.widget.AbstractTextWidget;
 import net.minecraft.client.gui.widget.TextWidget;
@@ -41,6 +44,7 @@ public class StatsScreen extends AbstractPokenavItemScreen {
     private PlayerStats stats;
     private PieChartWidget pieChart;
     private TableWidget<AbstractTextWidget> statsTable;
+    private IconButton backButton;
 
     protected StatsScreen() {
         super(Text.literal("Stats"));
@@ -54,6 +58,13 @@ public class StatsScreen extends AbstractPokenavItemScreen {
         int y = getBorderY() + BORDER_DEPTH + 24;
         pieChart = new PieChartWidget(x, y, 25, ANIM_DURATION, GREEN, RED);
         statsTable = new TableWidget<>(x - 58, y + 56, 2, 0, new BorderBox(0, 1));
+        backButton = new IconButton(getBorderX() + BORDER_DEPTH + 3, getBorderY() + BORDER_HEIGHT - BORDER_DEPTH - 12,
+                11, 11, 73, 0, 0,
+                () -> {
+                    player.playSound(CobblemonSounds.PC_CLICK, 0.1f, 1.25f);
+                    MinecraftClient.getInstance().setScreen(new MainScreen());
+                }
+        );
     }
 
     public void createStats(PlayerStats stats) {
@@ -97,6 +108,14 @@ public class StatsScreen extends AbstractPokenavItemScreen {
             statsTable.render(drawContext, i, j, f);
         }
 
+        backButton.render(drawContext, i, j, f);
+
         super.render(drawContext, i, j, f);
+    }
+
+    @Override
+    public boolean mouseClicked(double d, double e, int i) {
+        backButton.mouseClicked(d, e, i);
+        return super.mouseClicked(d, e, i);
     }
 }
