@@ -1,6 +1,7 @@
 package com.metacontent.cobblenav.client.screen.pokenav;
 
 import com.cobblemon.mod.common.CobblemonSounds;
+import com.metacontent.cobblenav.client.RenderUtility;
 import com.metacontent.cobblenav.client.screen.AbstractPokenavItemScreen;
 import com.metacontent.cobblenav.client.widget.CrawlingLineWidget;
 import com.metacontent.cobblenav.client.widget.IconButton;
@@ -118,6 +119,9 @@ public class StatsScreen extends AbstractPokenavItemScreen {
             matrixStack.scale(0.5f, 0.5f, 1f);
             startDateWidget.render(drawContext, i, j, f);
             matrixStack.pop();
+
+            RenderUtility.renderPlayer(drawContext, getBorderX() + BORDER_DEPTH + 100, getBorderY() + BORDER_HEIGHT - BORDER_DEPTH - 100,
+                    player, 30);
         }
 
         backButton.render(drawContext, i, j, f);
