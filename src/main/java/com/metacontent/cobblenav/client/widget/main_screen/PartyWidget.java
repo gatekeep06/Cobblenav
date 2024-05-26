@@ -7,6 +7,7 @@ import com.cobblemon.mod.common.client.render.models.blockbench.repository.Pokem
 import com.cobblemon.mod.common.pokemon.Pokemon;
 import com.cobblemon.mod.common.pokemon.activestate.ShoulderedState;
 import com.metacontent.cobblenav.client.CobblenavClient;
+import com.metacontent.cobblenav.client.RenderUtility;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.ingame.InventoryScreen;
@@ -65,7 +66,7 @@ public class PartyWidget extends MainScreenWidget {
                 borderX + BORDER_WIDTH - BORDER_DEPTH, borderY + BORDER_HEIGHT - BORDER_DEPTH);
         matrixStack.push();
         matrixStack.translate(0f, 0f, 2000f);
-        renderPlayer(drawContext, playerX, playerY, player);
+        RenderUtility.renderPlayer(drawContext, playerX, playerY, player);
         for (int index = 0; index < partyModels.size(); ++index) {
             partyModels.get(index).render(drawContext, i, j, f);
             if (index % 2 != 0) {
@@ -74,32 +75,5 @@ public class PartyWidget extends MainScreenWidget {
         }
         matrixStack.pop();
         drawContext.disableScissor();
-    }
-
-    private void renderPlayer(DrawContext drawContext, int x, int y, PlayerEntity player) {
-        Quaternionf quaternionf = (new Quaternionf()).rotateZ(3.1415927F);
-        Quaternionf quaternionf2 = (new Quaternionf()).rotateX(20.0F * 0.017453292F);
-        quaternionf.mul(quaternionf2);
-        float m = player.bodyYaw;
-        float n = player.getYaw();
-        float o = player.getPitch();
-        float p = player.prevHeadYaw;
-        float q = player.headYaw;
-        player.bodyYaw = 190.0F;
-        player.setYaw(220.0F);
-        player.setPitch(0.0F);
-        player.headYaw = 180F;
-        player.prevHeadYaw = player.getYaw();
-
-        drawContext.getMatrices().push();
-        drawContext.getMatrices().translate(0f, 0f, 100f);
-        InventoryScreen.drawEntity(drawContext, x, y + BORDER_HEIGHT / 2, 20, (new Quaternionf()).rotateZ(3.1415927F), (new Quaternionf()).rotateX(120.0F * 0.017453292F), this.player);
-        drawContext.getMatrices().pop();
-
-        player.bodyYaw = m;
-        player.setYaw(n);
-        player.setPitch(o);
-        player.prevHeadYaw = p;
-        player.headYaw = q;
     }
 }
