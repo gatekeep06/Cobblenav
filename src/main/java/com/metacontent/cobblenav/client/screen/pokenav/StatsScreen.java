@@ -1,6 +1,7 @@
 package com.metacontent.cobblenav.client.screen.pokenav;
 
 import com.cobblemon.mod.common.CobblemonSounds;
+import com.cobblemon.mod.common.client.gui.summary.widgets.ModelWidget;
 import com.metacontent.cobblenav.client.RenderUtility;
 import com.metacontent.cobblenav.client.screen.AbstractPokenavItemScreen;
 import com.metacontent.cobblenav.client.widget.CrawlingLineWidget;
@@ -48,6 +49,7 @@ public class StatsScreen extends AbstractPokenavItemScreen {
     private PieChartWidget pieChart;
     private TableWidget<AbstractTextWidget> statsTable;
     private TextWidget startDateWidget;
+    private ModelWidget pokemonModel;
     private IconButton backButton;
 
     protected StatsScreen() {
@@ -120,8 +122,10 @@ public class StatsScreen extends AbstractPokenavItemScreen {
             startDateWidget.render(drawContext, i, j, f);
             matrixStack.pop();
 
+            drawContext.enableScissor(getBorderX() + BORDER_DEPTH, getBorderY() + BORDER_DEPTH + 20, getBorderX() + BORDER_WIDTH - BORDER_DEPTH, getBorderY() + BORDER_HEIGHT - BORDER_DEPTH);
             RenderUtility.renderPlayer(drawContext, getBorderX() + BORDER_DEPTH + 100, getBorderY() + BORDER_HEIGHT - BORDER_DEPTH - 100,
                     player, 30);
+            drawContext.disableScissor();
         }
 
         backButton.render(drawContext, i, j, f);
