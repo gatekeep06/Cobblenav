@@ -1,7 +1,12 @@
 package com.metacontent.cobblenav.client.screen.pokenav;
 
 import com.cobblemon.mod.common.CobblemonSounds;
+import com.cobblemon.mod.common.client.CobblemonClient;
 import com.cobblemon.mod.common.client.gui.summary.widgets.ModelWidget;
+import com.cobblemon.mod.common.client.storage.ClientPC;
+import com.cobblemon.mod.common.client.storage.ClientParty;
+import com.cobblemon.mod.common.client.storage.ClientStorageManager;
+import com.cobblemon.mod.common.pokemon.Pokemon;
 import com.metacontent.cobblenav.client.RenderUtility;
 import com.metacontent.cobblenav.client.screen.AbstractPokenavItemScreen;
 import com.metacontent.cobblenav.client.widget.CrawlingLineWidget;
@@ -19,16 +24,11 @@ import net.minecraft.client.gui.widget.AbstractTextWidget;
 import net.minecraft.client.gui.widget.TextWidget;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
 import net.minecraft.util.math.ColorHelper;
 
-import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static com.cobblemon.mod.common.api.gui.GuiUtilsKt.blitk;
 
@@ -49,7 +49,8 @@ public class StatsScreen extends AbstractPokenavItemScreen {
     private PieChartWidget pieChart;
     private TableWidget<AbstractTextWidget> statsTable;
     private TextWidget startDateWidget;
-    private ModelWidget pokemonModel;
+    private ModelWidget favoritePokemonModel;
+    private TextWidget favoritePokemonUsageWidget;
     private IconButton backButton;
 
     protected StatsScreen() {
@@ -65,8 +66,8 @@ public class StatsScreen extends AbstractPokenavItemScreen {
         pieChart = new PieChartWidget(x, y, 25, ANIM_DURATION, GREEN, RED);
         statsTable = new TableWidget<>(x - 58, y + 56, 2, 0, new BorderBox(0, 1));
         startDateWidget = new TextWidget((int) ((x - 58) / 0.5f), (int) ((getBorderY() + BORDER_HEIGHT - BORDER_DEPTH - 5) / 0.5f),
-                50, 10, Text.empty(), textRenderer);
-        startDateWidget.alignLeft();
+                50, 10, Text.empty(), textRenderer).alignLeft();
+        favoritePokemonUsageWidget = new TextWidget(0, 0, 50, 10, Text.empty(), textRenderer).alignLeft();
         backButton = new IconButton(getBorderX() + BORDER_DEPTH + 3, getBorderY() + BORDER_HEIGHT - BORDER_DEPTH - 12,
                 11, 11, 73, 0, 0,
                 () -> {
@@ -81,6 +82,7 @@ public class StatsScreen extends AbstractPokenavItemScreen {
             float winRatio = (float) stats.pvpWinnings() / (float) stats.totalPvp();
             pieChart.setRatio(winRatio);
         }
+
         //Extremely hardcode, it's worth coming up with something else
         List<AbstractTextWidget> textWidgets = new ArrayList<>(10);
         textWidgets.add(LINE_WIDGETS.get(0));
@@ -95,7 +97,36 @@ public class StatsScreen extends AbstractPokenavItemScreen {
         textWidgets.add(new CrawlingLineWidget(Text.literal(String.valueOf(stats.evolutions())), 0, 0, STAT_VALUE_WIDTH, 10, 0.6f, new BorderBox(2), true));
         statsTable.calcRows(textWidgets.size());
         statsTable.setWidgets(textWidgets);
+
         startDateWidget.setMessage(Text.literal("Start Date: " + stats.startDate().toInstant().atZone(ZoneId.systemDefault()).format(DateTimeFormatter.ISO_LOCAL_DATE)));
+
+        stats.pokemonUsage().entrySet().stream().max(Map.Entry.comparingByValue()).ifPresent(entry -> {
+            int favoritePokemonUsage = entry.getValue();
+            favoritePokemonUsageWidget.setMessage(Text.literal("Usage: " + favoritePokemonUsage));
+
+            UUID favoritePokemonUuid = entry.getKey();
+            ClientStorageManager storageManager = CobblemonClient.INSTANCE.getStorage();
+            Pokemon favoritePokemon = null;
+            for (ClientParty party : storageManager.getPartyStores().values()) {
+                favoritePokemon = party.findByUUID(favoritePokemonUuid);
+                if (favoritePokemon != null) {
+                    break;
+                }
+            }
+            if (favoritePokemon == null) {
+                for (ClientPC pc : storageManager.getPcStores().values()) {
+                    favoritePokemon = pc.findByUUID(favoritePokemonUuid);
+                    if (favoritePokemon != null) {
+                        break;
+                    }
+                }
+            }
+            if (favoritePokemon != null) {
+                favoritePokemonModel.setPokemon(favoritePokemon.asRenderablePokemon());
+            }
+
+        });
+
         this.stats = stats;
     }
 
