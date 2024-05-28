@@ -37,7 +37,20 @@ public class PartyWidget extends MainScreenWidget {
         this.borderY = borderY;
         partyModels = new ArrayList<>();
         List<Pokemon> party = CobblemonClient.INSTANCE.getStorage().getMyParty().getSlots();
+        createPartyModels(party);
+    }
 
+    public PartyWidget(int playerX, int playerY, int borderX, int borderY, List<Pokemon> party) {
+        this.player = MinecraftClient.getInstance().player;
+        this.playerX = playerX;
+        this.playerY = playerY;
+        this.borderX = borderX;
+        this.borderY = borderY;
+        partyModels = new ArrayList<>();
+        createPartyModels(party);
+    }
+
+    private void createPartyModels(List<Pokemon> party) {
         int index = 0;
         int pX = playerX;
         for (Pokemon pokemon : party) {
