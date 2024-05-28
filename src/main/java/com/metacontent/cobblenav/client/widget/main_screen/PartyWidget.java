@@ -59,12 +59,12 @@ public class PartyWidget extends MainScreenWidget {
                 }
                 PokemonPoseableModel model = PokemonModelRepository.INSTANCE.getPoser(pokemon.getSpecies().getResourceIdentifier(), pokemon.getAspects());
                 double adjustment = CobblenavClient.CONFIG.partyWidgetAdjustments.getOrDefault(pokemon.showdownId(), 0d);
-                float scale = pokemon.getForm().getBaseScale() / model.getProfileScale();
-                double scaledOffsetY = playerY + 31f - 35f * scale;
-                pX += (index * 20 * (index % 2 == 1 ? -1 : 1)) + (index % 2 == 1 ? -1 : 1) * 20;
+                float pokemonScale = pokemon.getForm().getBaseScale() / model.getProfileScale() * scale;
+                double scaledOffsetY = playerY + 31f - 35f * pokemonScale;
+                pX += (int) ((index * 20 * (index % 2 == 1 ? -1 : 1)) + (index % 2 == 1 ? -1 : 1) * 20 * scale);
                 //wth is going on with this offsetY :skull:
                 ModelWidget modelWidget = new ModelWidget(pX - 101, borderY + 35, 200, 200,
-                        pokemon.asRenderablePokemon(), scale, 350f + 20 * (index % 2 == 1 ? 1 : 0), scaledOffsetY - model.getProfileTranslation().y - adjustment);
+                        pokemon.asRenderablePokemon(), pokemonScale, 350f + 20 * (index % 2 == 1 ? 1 : 0), scaledOffsetY - model.getProfileTranslation().y - adjustment);
                 partyModels.add(modelWidget);
                 index++;
             }
@@ -78,8 +78,7 @@ public class PartyWidget extends MainScreenWidget {
                 borderX + BORDER_WIDTH - BORDER_DEPTH, borderY + BORDER_HEIGHT - BORDER_DEPTH);
         matrixStack.push();
         matrixStack.translate(0f, 0f, 2000f);
-        matrixStack.scale(scale, scale, 1f);
-        RenderUtility.renderPlayer(drawContext, playerX, playerY, player, 20);
+        RenderUtility.renderPlayer(drawContext, playerX, playerY, player, (int) (20 * scale));
         for (int index = 0; index < partyModels.size(); ++index) {
             partyModels.get(index).render(drawContext, i, j, f);
             if (index % 2 != 0) {
