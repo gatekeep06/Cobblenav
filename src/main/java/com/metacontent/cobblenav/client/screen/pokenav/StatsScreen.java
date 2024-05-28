@@ -67,7 +67,7 @@ public class StatsScreen extends AbstractPokenavItemScreen {
         statsTable = new TableWidget<>(x - 58, y + 56, 2, 0, new BorderBox(0, 1));
         startDateWidget = new TextWidget((int) ((x - 58) / 0.5f), (int) ((getBorderY() + BORDER_HEIGHT - BORDER_DEPTH - 5) / 0.5f),
                 50, 10, Text.empty(), textRenderer).alignLeft();
-        favoritePokemonWidget = new PartyWidget(getBorderX() + BORDER_DEPTH + 100, getBorderY() + BORDER_HEIGHT - BORDER_DEPTH - 100,
+        favoritePokemonWidget = new PartyWidget(getBorderX() + BORDER_DEPTH + 50, getBorderY() + BORDER_HEIGHT - BORDER_DEPTH - 105,
                 getBorderX(), getBorderY(), 1.6f, List.of());
         favoritePokemonUsageWidget = new TextWidget(0, 0, 50, 10, Text.empty(), textRenderer).alignLeft();
         backButton = new IconButton(getBorderX() + BORDER_DEPTH + 3, getBorderY() + BORDER_HEIGHT - BORDER_DEPTH - 12,
@@ -142,17 +142,19 @@ public class StatsScreen extends AbstractPokenavItemScreen {
                 getBorderX() + BORDER_DEPTH, getBorderY() + BORDER_DEPTH + 20, BORDER_HEIGHT - 2 * BORDER_DEPTH - 20, BORDER_WIDTH - 2 * BORDER_DEPTH, 0, 0, 256,
                 256, 0, 1, 1, 1, 1, false, 1);
 
-        drawContext.fill(getBorderX() + BORDER_WIDTH - BORDER_DEPTH - 72, getBorderY() + BORDER_DEPTH + 20,
-                getBorderX() + BORDER_WIDTH - BORDER_DEPTH, getBorderY() + BORDER_HEIGHT - BORDER_DEPTH,
-                ColorHelper.Argb.getArgb(100, 0, 0, 0));
-
         if (stats != null) {
+            matrixStack.push();
+            matrixStack.translate(0f, 0f, 2500f);
+            drawContext.fill(getBorderX() + BORDER_WIDTH - BORDER_DEPTH - 72, getBorderY() + BORDER_DEPTH + 20,
+                    getBorderX() + BORDER_WIDTH - BORDER_DEPTH, getBorderY() + BORDER_HEIGHT - BORDER_DEPTH,
+                    ColorHelper.Argb.getArgb(100, 0, 0, 0));
             pieChart.render(drawContext, i, j, f);
             statsTable.render(drawContext, i, j, f);
 
             matrixStack.push();
             matrixStack.scale(0.5f, 0.5f, 1f);
             startDateWidget.render(drawContext, i, j, f);
+            matrixStack.pop();
             matrixStack.pop();
 
             favoritePokemonWidget.render(drawContext, i, j, f);
