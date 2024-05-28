@@ -18,7 +18,7 @@ public class PlayerStatsReceiver {
         if (client.currentScreen instanceof StatsScreen statsScreen) {
             //TODO: replace test data
             PlayerStats testStats = new PlayerStats(46, 32, 87, 4, 98, Map.of(), Date.from(Instant.now()), List.of("dark", "fairy"));
-            statsScreen.createStats(testStats);
+            statsScreen.createStatsDisplay(testStats);
         }
     }
 }

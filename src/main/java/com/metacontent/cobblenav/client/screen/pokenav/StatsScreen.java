@@ -2,12 +2,10 @@ package com.metacontent.cobblenav.client.screen.pokenav;
 
 import com.cobblemon.mod.common.CobblemonSounds;
 import com.cobblemon.mod.common.client.CobblemonClient;
-import com.cobblemon.mod.common.client.gui.summary.widgets.ModelWidget;
 import com.cobblemon.mod.common.client.storage.ClientPC;
 import com.cobblemon.mod.common.client.storage.ClientParty;
 import com.cobblemon.mod.common.client.storage.ClientStorageManager;
 import com.cobblemon.mod.common.pokemon.Pokemon;
-import com.metacontent.cobblenav.client.RenderUtility;
 import com.metacontent.cobblenav.client.screen.AbstractPokenavItemScreen;
 import com.metacontent.cobblenav.client.widget.CrawlingLineWidget;
 import com.metacontent.cobblenav.client.widget.IconButton;
@@ -80,7 +78,7 @@ public class StatsScreen extends AbstractPokenavItemScreen {
         );
     }
 
-    public void createStats(PlayerStats stats) {
+    public void createStatsDisplay(PlayerStats stats) {
         if (stats.totalPvp() != 0) {
             float winRatio = (float) stats.pvpWinnings() / (float) stats.totalPvp();
             pieChart.setRatio(winRatio);
