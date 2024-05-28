@@ -1,5 +1,6 @@
 package com.metacontent.cobblenav.networking;
 
+import com.cobblemon.mod.common.client.CobblemonClient;
 import com.metacontent.cobblenav.client.screen.pokenav.StatsScreen;
 import com.metacontent.cobblenav.util.PlayerStats;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
@@ -17,7 +18,7 @@ public class PlayerStatsReceiver {
         PlayerStats playerStats = PlayerStats.fromBuf(buf);
         if (client.currentScreen instanceof StatsScreen statsScreen) {
             //TODO: replace test data
-            PlayerStats testStats = new PlayerStats(46, 32, 87, 4, 98, Map.of(), Date.from(Instant.now()), List.of("dark", "fairy"));
+            PlayerStats testStats = new PlayerStats(46, 32, 87, 4, 98, Map.of(CobblemonClient.INSTANCE.getClientPlayerData().getStarterUUID(), 1), Date.from(Instant.now()), List.of("dark", "fairy"));
             statsScreen.createStatsDisplay(testStats);
         }
     }
