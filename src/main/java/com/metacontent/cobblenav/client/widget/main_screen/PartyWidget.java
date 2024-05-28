@@ -25,23 +25,26 @@ public class PartyWidget extends MainScreenWidget {
     private final int playerY;
     private final int borderX;
     private final int borderY;
+    private final float scale;
 
-    public PartyWidget(int playerX, int playerY, int borderX, int borderY) {
+    public PartyWidget(int playerX, int playerY, int borderX, int borderY, float scale) {
         this.player = MinecraftClient.getInstance().player;
         this.playerX = playerX;
         this.playerY = playerY;
         this.borderX = borderX;
         this.borderY = borderY;
+        this.scale = scale;
         List<Pokemon> party = CobblemonClient.INSTANCE.getStorage().getMyParty().getSlots();
         createPartyModels(party);
     }
 
-    public PartyWidget(int playerX, int playerY, int borderX, int borderY, List<Pokemon> party) {
+    public PartyWidget(int playerX, int playerY, int borderX, int borderY, float scale, List<Pokemon> party) {
         this.player = MinecraftClient.getInstance().player;
         this.playerX = playerX;
         this.playerY = playerY;
         this.borderX = borderX;
         this.borderY = borderY;
+        this.scale = scale;
         createPartyModels(party);
     }
 
@@ -75,6 +78,7 @@ public class PartyWidget extends MainScreenWidget {
                 borderX + BORDER_WIDTH - BORDER_DEPTH, borderY + BORDER_HEIGHT - BORDER_DEPTH);
         matrixStack.push();
         matrixStack.translate(0f, 0f, 2000f);
+        matrixStack.scale(scale, scale, 1f);
         RenderUtility.renderPlayer(drawContext, playerX, playerY, player, 20);
         for (int index = 0; index < partyModels.size(); ++index) {
             partyModels.get(index).render(drawContext, i, j, f);

@@ -68,7 +68,7 @@ public class StatsScreen extends AbstractPokenavItemScreen {
         startDateWidget = new TextWidget((int) ((x - 58) / 0.5f), (int) ((getBorderY() + BORDER_HEIGHT - BORDER_DEPTH - 5) / 0.5f),
                 50, 10, Text.empty(), textRenderer).alignLeft();
         favoritePokemonWidget = new PartyWidget(getBorderX() + BORDER_DEPTH + 100, getBorderY() + BORDER_HEIGHT - BORDER_DEPTH - 100,
-                getBorderX(), getBorderY(), List.of());
+                getBorderX(), getBorderY(), 2f, List.of());
         favoritePokemonUsageWidget = new TextWidget(0, 0, 50, 10, Text.empty(), textRenderer).alignLeft();
         backButton = new IconButton(getBorderX() + BORDER_DEPTH + 3, getBorderY() + BORDER_HEIGHT - BORDER_DEPTH - 12,
                 11, 11, 73, 0, 0,

@@ -72,7 +72,7 @@ public class MainScreen extends AbstractPokenavItemScreen {
         if (CobblenavClient.CONFIG.mainScreenWidget == MainScreenWidgetType.PARTY) {
             playerX = width / 2 - 50 + BORDER_DEPTH;
             playerY = borderY + 45;
-            mainScreenWidget = new PartyWidget(playerX, playerY, borderX, borderY);
+            mainScreenWidget = new PartyWidget(playerX, playerY, borderX, borderY, 1f);
         }
         else {
             mainScreenWidget = new MainScreenWidget() {
