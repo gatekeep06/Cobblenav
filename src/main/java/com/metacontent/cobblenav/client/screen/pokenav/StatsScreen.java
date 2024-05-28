@@ -38,7 +38,7 @@ public class StatsScreen extends AbstractPokenavItemScreen {
     private static final int ANIM_DURATION = 50;
     private static final int STAT_NAME_WIDTH = 52;
     private static final int STAT_VALUE_WIDTH = 18;
-    private static final List<AbstractTextWidget> LINE_WIDGETS = new ArrayList<>(List.of(
+    private final List<AbstractTextWidget> LINE_WIDGETS = new ArrayList<>(List.of(
             new CrawlingLineWidget(Text.literal("Total PvP:"), 0, 0, STAT_NAME_WIDTH, 10, 0.6f, new BorderBox(2), true),
             new CrawlingLineWidget(Text.literal("PvP Winnings:"), 0, 0, STAT_NAME_WIDTH, 10, 0.6f, new BorderBox(2), true),
             new CrawlingLineWidget(Text.literal("Captures:"), 0, 0, STAT_NAME_WIDTH, 10, 0.6f, new BorderBox(2), true),
