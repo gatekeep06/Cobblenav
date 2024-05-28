@@ -13,6 +13,7 @@ import com.metacontent.cobblenav.client.widget.CrawlingLineWidget;
 import com.metacontent.cobblenav.client.widget.IconButton;
 import com.metacontent.cobblenav.client.widget.PieChartWidget;
 import com.metacontent.cobblenav.client.widget.TableWidget;
+import com.metacontent.cobblenav.client.widget.main_screen.PartyWidget;
 import com.metacontent.cobblenav.networking.CobblenavPackets;
 import com.metacontent.cobblenav.util.BorderBox;
 import com.metacontent.cobblenav.util.PlayerStats;
@@ -49,7 +50,7 @@ public class StatsScreen extends AbstractPokenavItemScreen {
     private PieChartWidget pieChart;
     private TableWidget<AbstractTextWidget> statsTable;
     private TextWidget startDateWidget;
-    private ModelWidget favoritePokemonModel;
+    private PartyWidget favoritePokemonWidget;
     private TextWidget favoritePokemonUsageWidget;
     private IconButton backButton;
 
@@ -67,6 +68,8 @@ public class StatsScreen extends AbstractPokenavItemScreen {
         statsTable = new TableWidget<>(x - 58, y + 56, 2, 0, new BorderBox(0, 1));
         startDateWidget = new TextWidget((int) ((x - 58) / 0.5f), (int) ((getBorderY() + BORDER_HEIGHT - BORDER_DEPTH - 5) / 0.5f),
                 50, 10, Text.empty(), textRenderer).alignLeft();
+        favoritePokemonWidget = new PartyWidget(getBorderX() + BORDER_DEPTH + 100, getBorderY() + BORDER_HEIGHT - BORDER_DEPTH - 100,
+                getBorderX(), getBorderY(), List.of());
         favoritePokemonUsageWidget = new TextWidget(0, 0, 50, 10, Text.empty(), textRenderer).alignLeft();
         backButton = new IconButton(getBorderX() + BORDER_DEPTH + 3, getBorderY() + BORDER_HEIGHT - BORDER_DEPTH - 12,
                 11, 11, 73, 0, 0,
@@ -122,7 +125,7 @@ public class StatsScreen extends AbstractPokenavItemScreen {
                 }
             }
             if (favoritePokemon != null) {
-                favoritePokemonModel.setPokemon(favoritePokemon.asRenderablePokemon());
+                favoritePokemonWidget.createPartyModels(List.of(favoritePokemon));
             }
 
         });
@@ -153,10 +156,7 @@ public class StatsScreen extends AbstractPokenavItemScreen {
             startDateWidget.render(drawContext, i, j, f);
             matrixStack.pop();
 
-            drawContext.enableScissor(getBorderX() + BORDER_DEPTH, getBorderY() + BORDER_DEPTH + 20, getBorderX() + BORDER_WIDTH - BORDER_DEPTH, getBorderY() + BORDER_HEIGHT - BORDER_DEPTH);
-            RenderUtility.renderPlayer(drawContext, getBorderX() + BORDER_DEPTH + 100, getBorderY() + BORDER_HEIGHT - BORDER_DEPTH - 100,
-                    player, 30);
-            drawContext.disableScissor();
+            favoritePokemonWidget.render(drawContext, i, j, f);
         }
 
         backButton.render(drawContext, i, j, f);
