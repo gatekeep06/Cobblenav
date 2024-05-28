@@ -10,11 +10,8 @@ import com.metacontent.cobblenav.client.CobblenavClient;
 import com.metacontent.cobblenav.client.RenderUtility;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.screen.ingame.InventoryScreen;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.text.Text;
-import org.joml.Quaternionf;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +20,7 @@ import static com.metacontent.cobblenav.client.screen.AbstractPokenavItemScreen.
 
 public class PartyWidget extends MainScreenWidget {
     private final PlayerEntity player;
-    private final List<ModelWidget> partyModels;
+    private final List<ModelWidget> partyModels = new ArrayList<>();
     private final int playerX;
     private final int playerY;
     private final int borderX;
@@ -35,7 +32,6 @@ public class PartyWidget extends MainScreenWidget {
         this.playerY = playerY;
         this.borderX = borderX;
         this.borderY = borderY;
-        partyModels = new ArrayList<>();
         List<Pokemon> party = CobblemonClient.INSTANCE.getStorage().getMyParty().getSlots();
         createPartyModels(party);
     }
@@ -46,11 +42,11 @@ public class PartyWidget extends MainScreenWidget {
         this.playerY = playerY;
         this.borderX = borderX;
         this.borderY = borderY;
-        partyModels = new ArrayList<>();
         createPartyModels(party);
     }
 
-    private void createPartyModels(List<Pokemon> party) {
+    public void createPartyModels(List<Pokemon> party) {
+        partyModels.clear();
         int index = 0;
         int pX = playerX;
         for (Pokemon pokemon : party) {
