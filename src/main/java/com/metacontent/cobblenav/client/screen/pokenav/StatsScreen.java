@@ -22,6 +22,7 @@ import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.widget.AbstractTextWidget;
 import net.minecraft.client.gui.widget.TextWidget;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.ColorHelper;
 
@@ -166,5 +167,10 @@ public class StatsScreen extends AbstractPokenavItemScreen {
     public boolean mouseClicked(double d, double e, int i) {
         backButton.mouseClicked(d, e, i);
         return super.mouseClicked(d, e, i);
+    }
+
+    @Override
+    public MutableText getTitle() {
+        return Text.literal(player.getEntityName());
     }
 }
