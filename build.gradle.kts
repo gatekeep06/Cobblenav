@@ -42,7 +42,7 @@ dependencies {
     modImplementation("maven.modrinth:architectury-api:${property("architectury_version")}")
 
     // Permission API
-    modImplementation("me.lucko:fabric-permissions-api:${property("permissions_api_version")}")
+    modImplementation("me.lucko:fabric-permissions-api:${property("permissions_api_version")}")?.let { include(it) }
 }
 
 tasks {

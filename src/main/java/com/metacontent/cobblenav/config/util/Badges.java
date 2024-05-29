@@ -7,7 +7,7 @@ import java.util.List;
 
 public class Badges {
     private final List<Badge> badges;
-    
+
     public Badges(List<Badge> badges) {
         this.badges = badges;
     }
