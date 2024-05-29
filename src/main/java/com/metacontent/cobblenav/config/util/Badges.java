@@ -6,7 +6,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Badges {
-    private final List<Badge> badges = new ArrayList<>();
+    private final List<Badge> badges;
+    
+    public Badges(List<Badge> badges) {
+        this.badges = badges;
+    }
+
+    public Badges() {
+        this.badges = new ArrayList<>();
+    }
 
     @Nullable
     public Badge getByType(String type) {
