@@ -13,6 +13,7 @@ import java.io.PrintWriter;
 import java.util.Map;
 
 public class ClientCobblenavConfig {
+    public final float screenScale;
     public final MainScreenWidgetType mainScreenWidget;
     public final PercentageDisplayType percentageDisplayType;
     public final boolean bucketWisePercentageCalculation;
@@ -23,6 +24,7 @@ public class ClientCobblenavConfig {
     public final Map<String, Double> partyWidgetAdjustments;
 
     private ClientCobblenavConfig(
+            float screenScale,
             MainScreenWidgetType mainScreenWidget,
             PercentageDisplayType percentageDisplayType,
             boolean bucketWisePercentageCalculation,
@@ -32,6 +34,7 @@ public class ClientCobblenavConfig {
             int trackArrowVerticalOffset,
             Map<String, Double> partyWidgetAdjustments
     ) {
+        this.screenScale = screenScale;
         this.mainScreenWidget = mainScreenWidget;
         this.percentageDisplayType = percentageDisplayType;
         this.bucketWisePercentageCalculation = bucketWisePercentageCalculation;
@@ -43,7 +46,7 @@ public class ClientCobblenavConfig {
     }
 
     private ClientCobblenavConfig() {
-        this(MainScreenWidgetType.PARTY, PercentageDisplayType.PERCENT_ONLY, false, 100, 20, true, 70, Map.of());
+        this(1f, MainScreenWidgetType.PARTY, PercentageDisplayType.PERCENT_ONLY, false, 100, 20, true, 70, Map.of());
     }
 
     public static ClientCobblenavConfig init() {

@@ -1,5 +1,6 @@
 package com.metacontent.cobblenav.client.widget;
 
+import com.metacontent.cobblenav.client.CobblenavClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
 import net.minecraft.client.gui.widget.ClickableWidget;
@@ -10,18 +11,21 @@ public class ScrollableViewWidget<T extends ClickableWidget> extends ClickableWi
     private final float scrollSize;
     private double scrollY = 0;
     private final ScrollerWidget scrollerWidget;
+    private final float scale;
 
     public ScrollableViewWidget(T widget, int width, int height, float scrollSize) {
         super(widget.getX(), widget.getY(), width, height, Text.literal(""));
         this.widget = widget;
         this.scrollSize = scrollSize;
         this.scrollerWidget = new ScrollerWidget(getX() + getWidth(), getY(), 4, 15, 73, 24, this::dragScroller);
+        this.scale = CobblenavClient.CONFIG.screenScale;
     }
 
     @Override
     protected void renderButton(DrawContext drawContext, int i, int j, float f) {
         if (this.visible) {
-            drawContext.enableScissor(getX() - getWidth(), getY(), getX() + getWidth() * 2, getY() + getHeight());
+            drawContext.enableScissor((int) ((getX() - getWidth()) * scale), (int) (getY() * scale),
+                    (int) ((getX() + getWidth() * 2) * scale), (int) ((getY() + getHeight()) * scale));
             widget.render(drawContext, i, j, f);
             drawContext.disableScissor();
             scrollerWidget.render(drawContext, i, j, f);

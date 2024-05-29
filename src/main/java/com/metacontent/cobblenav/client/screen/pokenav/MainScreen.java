@@ -101,9 +101,7 @@ public class MainScreen extends AbstractPokenavItemScreen {
     }
 
     @Override
-    public void render(DrawContext drawContext, int i, int j, float f) {
-        renderBackground(drawContext);
-
+    public void renderScreen(DrawContext drawContext, int i, int j, float f) {
         MatrixStack matrixStack = drawContext.getMatrices();
 
         blitk(matrixStack, BACKGROUND,
@@ -124,8 +122,6 @@ public class MainScreen extends AbstractPokenavItemScreen {
                 borderX + BORDER_DEPTH + 6, borderY + BORDER_DEPTH + 33, 1, 1, 40, 0, false, false, i, j);
         matrixStack.pop();
 
-        super.render(drawContext, i, j, f);
-
         if (finderShortcutWidget != null) {
             finderShortcutWidget.render(drawContext, i, j, f);
             if (finderShortcutWidget.isHovered()) {
@@ -137,13 +133,22 @@ public class MainScreen extends AbstractPokenavItemScreen {
     }
 
     @Override
-    public boolean mouseClicked(double d, double e, int i) {
+    public void onMouseClicked(double d, double e, int i) {
         if (finderShortcutWidget != null) {
             finderShortcutWidget.mouseClicked(d, e, i);
         }
         spawnCheckButton.mouseClicked(d, e, i);
         contactsButton.mouseClicked(d, e, i);
         closeButton.mouseClicked(d, e, i);
-        return super.mouseClicked(d, e, i);
+    }
+
+    @Override
+    public void onMouseDragged(double d, double e, int i, double f, double g) {
+
+    }
+
+    @Override
+    public void onMouseScrolled(double d, double e, double f) {
+
     }
 }

@@ -169,9 +169,7 @@ public class LocationScreen extends AbstractPokenavItemScreen {
     }
 
     @Override
-    public void render(DrawContext drawContext, int i, int j, float f) {
-        renderBackground(drawContext);
-
+    public void renderScreen(DrawContext drawContext, int i, int j, float f) {
         MatrixStack matrixStack = drawContext.getMatrices();
 
         blitk(matrixStack, BACKGROUND,
@@ -212,12 +210,10 @@ public class LocationScreen extends AbstractPokenavItemScreen {
                         borderX + BORDER_WIDTH / 2, borderY + BORDER_HEIGHT / 2 + 8, 1, 1, BORDER_WIDTH / 2, 0xFFFFFF, true, false, i, j);
             }
         }
-
-        super.render(drawContext, i, j, f);
     }
 
     @Override
-    public boolean mouseClicked(double d, double e, int i) {
+    public void onMouseClicked(double d, double e, int i) {
         backButton.mouseClicked(d, e, i);
         if (!isLoading) {
             refreshButton.mouseClicked(d, e, i);
@@ -226,23 +222,20 @@ public class LocationScreen extends AbstractPokenavItemScreen {
             scrollableSpawnTable.mouseClicked(d, e, i);
             reverseSortingButton.mouseClicked(d, e, i);
         }
-        return super.mouseClicked(d, e, i);
     }
 
     @Override
-    public boolean mouseScrolled(double d, double e, double f) {
-        if (!isLoading) {
-            scrollableSpawnTable.mouseScrolled(d, e, f);
-        }
-        return super.mouseScrolled(d, e, f);
-    }
-
-    @Override
-    public boolean mouseDragged(double d, double e, int i, double f, double g) {
+    public void onMouseDragged(double d, double e, int i, double f, double g) {
         if (!isLoading) {
             scrollableSpawnTable.mouseDragged(d, e, i, f, g);
         }
-        return super.mouseDragged(d, e, i, f, g);
+    }
+
+    @Override
+    public void onMouseScrolled(double d, double e, double f) {
+        if (!isLoading) {
+            scrollableSpawnTable.mouseScrolled(d, e, f);
+        }
     }
 
     private void renderBucketSelector(DrawContext drawContext, int i, int j, float f) {
