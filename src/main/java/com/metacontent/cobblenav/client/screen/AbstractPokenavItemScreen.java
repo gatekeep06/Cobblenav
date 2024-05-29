@@ -11,6 +11,7 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.text.MutableText;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
@@ -25,6 +26,7 @@ public abstract class AbstractPokenavItemScreen extends Screen {
     public static final Identifier FONT = new Identifier("uniform");
     public static final Identifier BACKGROUND = new Identifier(Cobblenav.ID, "textures/gui/pokenav_item_gui_background.png");
     public static final Identifier BORDERS = new Identifier(Cobblenav.ID, "textures/gui/pokenav_item_gui_borders.png");
+    public static final MutableText BASE_TITLE = Text.translatable("gui.cobblenav.pokenav_item.title");
     public static final int BORDER_WIDTH = 240;
     public static final int BORDER_HEIGHT = 180;
     public static final int BORDER_DEPTH = 15;
@@ -71,7 +73,8 @@ public abstract class AbstractPokenavItemScreen extends Screen {
         blitk(matrixStack, BORDERS,
                 borderX, borderY, BORDER_HEIGHT, BORDER_WIDTH, 0, 0, 256,
                 256, 0, 1,1,1,1,false,1);
-        drawScaledText(drawContext, FONT, Text.translatable("gui.cobblenav.pokenav_item.title").setStyle(Style.EMPTY.withBold(true).withColor(0xFFFFFF)),
+
+        drawScaledText(drawContext, FONT, getTitle().setStyle(Style.EMPTY.withBold(true).withColor(0xFFFFFF)),
                 borderX + BORDER_DEPTH + 4, borderY + BORDER_DEPTH + 2, 1, 1, (int) (BORDER_WIDTH / 1.5), 0, false, false, i, j);
 
         matrixStack.pop();
@@ -84,6 +87,7 @@ public abstract class AbstractPokenavItemScreen extends Screen {
         player.playSound(CobblemonSounds.PC_OFF, 0.1f, 1.25f);
         super.close();
     }
+
 
     @Override
     public boolean mouseClicked(double d, double e, int i) {
@@ -108,4 +112,17 @@ public abstract class AbstractPokenavItemScreen extends Screen {
     abstract public void onMouseDragged(double d, double e, int i, double f, double g);
 
     abstract public void onMouseScrolled(double d, double e, double f);
+
+    public int getBorderX() {
+        return borderX;
+    }
+
+    public int getBorderY() {
+        return borderY;
+    }
+
+    @Override
+    public MutableText getTitle() {
+        return BASE_TITLE;
+    }
 }

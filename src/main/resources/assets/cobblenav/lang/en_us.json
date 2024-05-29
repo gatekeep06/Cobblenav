@@ -25,6 +25,7 @@
   "gui.cobblenav.pokenav_item.close_button": "SWITCH OFF",
   "gui.cobblenav.pokenav_item.contact_button": "CONTACTS",
   "gui.cobblenav.pokenav_item.spawn_check_button": "LOCATION",
+  "gui.cobblenav.pokenav_item.stats_button": "STATS",
   "gui.cobblenav.pokenav_item.bucket.common": "common",
   "gui.cobblenav.pokenav_item.bucket.uncommon": "uncommon",
   "gui.cobblenav.pokenav_item.bucket.rare": "rare",

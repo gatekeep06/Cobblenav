@@ -30,7 +30,7 @@ public class ContactData implements PlayerDataExtension {
 
     public static void executeForDataOf(ServerPlayerEntity player, Consumer<ContactData> action) {
         PlayerData data = Cobblemon.playerData.get(player);
-        ContactData contactData = (ContactData) data.getExtraData().getOrDefault(ContactData.NAME, null);
+        ContactData contactData = (ContactData) data.getExtraData().get(ContactData.NAME);
         if (contactData == null) {
             contactData = new ContactData();
             data.getExtraData().put(ContactData.NAME, contactData);
@@ -102,6 +102,7 @@ public class ContactData implements PlayerDataExtension {
     @Override
     public ContactData deserialize(@NotNull JsonObject jsonObject) {
         JsonArray jsonArray = jsonObject.getAsJsonArray("contacts");
+        contacts.clear();
         if (!jsonArray.isJsonNull()) {
             for (JsonElement jsonElement: jsonArray) {
                 PokenavContact contact = GSON.fromJson(jsonElement, PokenavContact.class);
@@ -133,8 +134,7 @@ public class ContactData implements PlayerDataExtension {
         }
         json.add("contacts", jsonArray);
 
-        JsonPrimitive jsonPrimitive = new JsonPrimitive(title);
-        json.add("title", jsonPrimitive);
+        json.addProperty("title", title);
 
         return json;
     }
