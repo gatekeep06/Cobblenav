@@ -133,10 +133,8 @@ public class StatsScreen extends AbstractPokenavItemScreen {
     }
 
     @Override
-    public void render(DrawContext drawContext, int i, int j, float f) {
+    public void renderScreen(DrawContext drawContext, int i, int j, float f) {
         MatrixStack matrixStack = drawContext.getMatrices();
-
-        renderBackground(drawContext);
 
         blitk(matrixStack, BACKGROUND,
                 getBorderX() + BORDER_DEPTH, getBorderY() + BORDER_DEPTH + 20, BORDER_HEIGHT - 2 * BORDER_DEPTH - 20, BORDER_WIDTH - 2 * BORDER_DEPTH, 0, 0, 256,
@@ -161,14 +159,21 @@ public class StatsScreen extends AbstractPokenavItemScreen {
         }
 
         backButton.render(drawContext, i, j, f);
-
-        super.render(drawContext, i, j, f);
     }
 
     @Override
-    public boolean mouseClicked(double d, double e, int i) {
+    public void onMouseClicked(double d, double e, int i) {
         backButton.mouseClicked(d, e, i);
-        return super.mouseClicked(d, e, i);
+    }
+
+    @Override
+    public void onMouseDragged(double d, double e, int i, double f, double g) {
+
+    }
+
+    @Override
+    public void onMouseScrolled(double d, double e, double f) {
+
     }
 
     @Override
