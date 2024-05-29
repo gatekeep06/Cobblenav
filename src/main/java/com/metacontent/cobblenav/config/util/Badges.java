@@ -29,4 +29,8 @@ public class Badges {
     public List<String> getTypes() {
         return badges.stream().map(Badge::type).toList();
     }
+
+    public List<String> getPermissions() {
+        return badges.stream().map(Badge::permissionToGrant).toList();
+    }
 }
