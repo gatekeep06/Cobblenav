@@ -1,5 +1,6 @@
 package com.metacontent.cobblenav.client.widget;
 
+import com.metacontent.cobblenav.client.CobblenavClient;
 import com.metacontent.cobblenav.Cobblenav;
 import com.metacontent.cobblenav.util.BorderBox;
 import net.minecraft.client.MinecraftClient;
@@ -14,6 +15,7 @@ public class CrawlingLineWidget extends AbstractTextWidget {
     private float delayed = 0f;
     private Text text;
     private final boolean shadow;
+    private final float baseScale;
     private int x;
     private int y;
     private int width;
@@ -33,6 +35,7 @@ public class CrawlingLineWidget extends AbstractTextWidget {
         this.scale = scale;
         this.textOffsets = textOffsets;
         this.shadow = shadow;
+        this.baseScale = CobblenavClient.CONFIG.screenScale;
         setText(text);
     }
 
@@ -47,7 +50,8 @@ public class CrawlingLineWidget extends AbstractTextWidget {
 
     @Override
     public void render(DrawContext drawContext, int i, int j, float f) {
-        drawContext.enableScissor(x, y, x + width, y + height);
+        drawContext.enableScissor((int) (x * baseScale), (int) (y * baseScale),
+                (int) ((x + width) * baseScale), (int) ((y + height) * baseScale));
         drawContext.getMatrices().push();
         drawContext.getMatrices().scale(scale, scale, 1f);
         drawContext.drawText(getTextRenderer(), text, (int) (textX / scale) + textOffsets.left, (int) (y / scale) + textOffsets.top, 0xffffff, shadow);
@@ -63,7 +67,8 @@ public class CrawlingLineWidget extends AbstractTextWidget {
 
     public void renderDynamic(DrawContext drawContext, Text text, boolean shadow, float f) {
         this.textWidth = (int) (getTextRenderer().getWidth(text) * scale);
-        drawContext.enableScissor(x, y, x + width, y + height);
+        drawContext.enableScissor((int) (x * baseScale), (int) (y * baseScale),
+                (int) ((x + width) * baseScale), (int) ((y + height) * baseScale));
         drawContext.getMatrices().push();
         drawContext.getMatrices().scale(scale, scale, 1f);
         drawContext.drawText(getTextRenderer(), text, (int) (textX / scale) + textOffsets.left, (int) (y / scale) + textOffsets.top, 0xffffff, shadow);

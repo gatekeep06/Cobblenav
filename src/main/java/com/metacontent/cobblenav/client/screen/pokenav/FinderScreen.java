@@ -1,12 +1,12 @@
 package com.metacontent.cobblenav.client.screen.pokenav;
 
 import com.cobblemon.mod.common.CobblemonSounds;
-import com.cobblemon.mod.common.client.gui.summary.widgets.ModelWidget;
 import com.cobblemon.mod.common.pokemon.RenderablePokemon;
 import com.metacontent.cobblenav.Cobblenav;
 import com.metacontent.cobblenav.client.CobblenavClient;
 import com.metacontent.cobblenav.client.screen.AbstractPokenavItemScreen;
 import com.metacontent.cobblenav.client.widget.IconButton;
+import com.metacontent.cobblenav.client.widget.ModelWidget;
 import com.metacontent.cobblenav.client.widget.TextButton;
 import com.metacontent.cobblenav.config.CobblenavConfig;
 import com.metacontent.cobblenav.networking.CobblenavPackets;
@@ -101,7 +101,7 @@ public class FinderScreen extends AbstractPokenavItemScreen {
         borderY = (height - BORDER_HEIGHT) / 2 - 10;
 
         pokemonModel = new ModelWidget(borderX + BORDER_WIDTH / 2 - WIDTH / 2, borderY + BORDER_HEIGHT / 2 + 20 - HEIGHT / 2,
-                WIDTH, HEIGHT, pokemon, 1.5f, 340, 0);
+                WIDTH, pokemon, 1.5f, 340, 0);
 
         backButton = new IconButton(borderX + BORDER_DEPTH + 3, borderY + BORDER_HEIGHT - BORDER_DEPTH - 12, 11, 11, 73, 0, 0,
                 () -> {
@@ -120,9 +120,7 @@ public class FinderScreen extends AbstractPokenavItemScreen {
     }
 
     @Override
-    public void render(DrawContext drawContext, int i, int j, float f) {
-        renderBackground(drawContext);
-
+    public void renderScreen(DrawContext drawContext, int i, int j, float f) {
         MatrixStack matrixStack = drawContext.getMatrices();
 
         blitk(matrixStack, BORDERS,
@@ -170,8 +168,6 @@ public class FinderScreen extends AbstractPokenavItemScreen {
                         borderX + BORDER_WIDTH / 2 + 2, borderY + BORDER_HEIGHT / 2, 1, 1, 100, 0xFFFFFF, true, true, i, j);
             }
         }
-
-        super.render(drawContext, i, j, f);
     }
 
     private void renderBackgroundImage(MatrixStack matrixStack) {
@@ -258,9 +254,18 @@ public class FinderScreen extends AbstractPokenavItemScreen {
     }
 
     @Override
-    public boolean mouseClicked(double d, double e, int i) {
+    public void onMouseClicked(double d, double e, int i) {
         backButton.mouseClicked(d, e, i);
         trackButton.mouseClicked(d, e, i);
-        return super.mouseClicked(d, e, i);
+    }
+
+    @Override
+    public void onMouseDragged(double d, double e, int i, double f, double g) {
+
+    }
+
+    @Override
+    public void onMouseScrolled(double d, double e, double f) {
+
     }
 }

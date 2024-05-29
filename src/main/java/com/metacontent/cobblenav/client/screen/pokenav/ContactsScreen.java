@@ -86,9 +86,7 @@ public class ContactsScreen extends AbstractPokenavItemScreen implements Contact
     }
 
     @Override
-    public void render(DrawContext drawContext, int i, int j, float f) {
-        renderBackground(drawContext);
-
+    public void renderScreen(DrawContext drawContext, int i, int j, float f) {
         MatrixStack matrixStack = drawContext.getMatrices();
 
         blitk(matrixStack, BACKGROUND,
@@ -111,12 +109,10 @@ public class ContactsScreen extends AbstractPokenavItemScreen implements Contact
                 deleteButton.render(drawContext, i, j, f);
             }
         }
-
-        super.render(drawContext, i, j, f);
     }
 
     @Override
-    public boolean mouseClicked(double d, double e, int i) {
+    public void onMouseClicked(double d, double e, int i) {
         backButton.mouseClicked(d, e, i);
         if (scrollableView != null) {
             boolean viewClicked = scrollableView.mouseClicked(d, e, i);
@@ -127,19 +123,16 @@ public class ContactsScreen extends AbstractPokenavItemScreen implements Contact
                 setContactIndex(-1);
             }
         }
-        return super.mouseClicked(d, e, i);
     }
 
     @Override
-    public boolean mouseScrolled(double d, double e, double f) {
-        scrollableView.mouseScrolled(d, e, f);
-        return super.mouseScrolled(d, e, f);
-    }
-
-    @Override
-    public boolean mouseDragged(double d, double e, int i, double f, double g) {
+    public void onMouseDragged(double d, double e, int i, double f, double g) {
         scrollableView.mouseDragged(d, e, i, f, g);
-        return super.mouseDragged(d, e, i, f, g);
+    }
+
+    @Override
+    public void onMouseScrolled(double d, double e, double f) {
+        scrollableView.mouseScrolled(d, e, f);
     }
 
     @Override
