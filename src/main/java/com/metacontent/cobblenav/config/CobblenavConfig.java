@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.metacontent.cobblenav.Cobblenav;
 import com.metacontent.cobblenav.config.util.Badge;
+import com.metacontent.cobblenav.config.util.Badges;
 import com.metacontent.cobblenav.util.PokemonFeatureWeights;
 import net.fabricmc.loader.api.FabricLoader;
 
@@ -15,7 +16,7 @@ import java.util.List;
 public class CobblenavConfig {
     public final boolean useCounterIntegration;
     public final boolean useCobblemonTrainersIntegration;
-    public final List<Badge> badges;
+    public final Badges badges;
     public final int checkSpawnWidth;
     public final int checkSpawnHeight;
     public final int findingAreaWidth;
@@ -31,7 +32,7 @@ public class CobblenavConfig {
     private CobblenavConfig(
             boolean useCounterIntegration,
             boolean useCobblemonTrainersIntegration,
-            List<Badge> badges,
+            Badges badges,
             int checkSpawnWidth,
             int checkSpawnHeight,
             int findingAreaWidth,
@@ -61,7 +62,7 @@ public class CobblenavConfig {
     }
 
     private CobblenavConfig() {
-        this(false, false, List.of(), -1, -1, 100, 100, PokemonFeatureWeights.BASE_WEIGHTS, List.of("not_modeled"), List.of(), 2, List.of(0), new CounterIntegrationConfig(), false);
+        this(false, false, new Badges(), -1, -1, 100, 100, PokemonFeatureWeights.BASE_WEIGHTS, List.of("not_modeled"), List.of(), 2, List.of(0), new CounterIntegrationConfig(), false);
     }
 
     public static CobblenavConfig init() {
