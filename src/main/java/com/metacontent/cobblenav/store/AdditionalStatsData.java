@@ -57,6 +57,10 @@ public class AdditionalStatsData implements PlayerDataExtension {
         pokemonUsage.put(pokemonUuid, usage);
     }
 
+    public void removePokemonUsage(UUID pokemonUuid) {
+        pokemonUsage.remove(pokemonUuid);
+    }
+
     public static AdditionalStatsData getFromData(PlayerData data) {
         AdditionalStatsData statsData = (AdditionalStatsData) data.getExtraData().get(AdditionalStatsData.NAME);
         if (statsData == null) {

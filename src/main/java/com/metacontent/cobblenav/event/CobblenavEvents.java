@@ -7,6 +7,7 @@ import com.cobblemon.mod.common.api.events.CobblemonEvents;
 import com.cobblemon.mod.common.api.events.battles.BattleStartedPostEvent;
 import com.cobblemon.mod.common.api.events.battles.BattleVictoryEvent;
 import com.cobblemon.mod.common.api.events.starter.StarterChosenEvent;
+import com.cobblemon.mod.common.api.events.storage.ReleasePokemonEvent;
 import com.metacontent.cobblenav.Cobblenav;
 import com.metacontent.cobblenav.mixin.TrainerBattleListenerAccessor;
 import com.metacontent.cobblenav.store.AdditionalStatsData;
@@ -19,10 +20,7 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 public class CobblenavEvents {
     private static Unit addPlayersToContacts(BattleVictoryEvent event) {
@@ -95,11 +93,19 @@ public class CobblenavEvents {
         return Unit.INSTANCE;
     }
 
+    private static Unit removePokemonUsage(ReleasePokemonEvent event) {
+        UUID pokemonUuid = event.getPokemon().getUuid();
+        ServerPlayerEntity player = event.getPlayer();
+        AdditionalStatsData.executeForDataOf(player, statsData -> statsData.removePokemonUsage(pokemonUuid));
+        return Unit.INSTANCE;
+    }
+
     public static void subscribeEvents() {
         CobblemonEvents.BATTLE_VICTORY.subscribe(Priority.NORMAL, CobblenavEvents::addPlayersToContacts);
         CobblemonEvents.BATTLE_STARTED_POST.subscribe(Priority.NORMAL, CobblenavEvents::updateTotalPvpCount);
         CobblemonEvents.BATTLE_STARTED_POST.subscribe(Priority.NORMAL, CobblenavEvents::updatePokemonUsage);
         CobblemonEvents.STARTER_CHOSEN.subscribe(Priority.NORMAL, CobblenavEvents::setStartDate);
+        CobblemonEvents.POKEMON_RELEASED_EVENT_POST.subscribe(Priority.NORMAL, CobblenavEvents::removePokemonUsage);
         if (FabricLoader.getInstance().isModLoaded("cobblemontrainers") && Cobblenav.CONFIG.useCobblemonTrainersIntegration) {
             Cobblenav.LOGGER.info("CobblemonTrainers Integration is enabled");
             CobblemonEvents.BATTLE_VICTORY.subscribe(Priority.NORMAL, CobblenavEvents::addTrainerToContacts);
