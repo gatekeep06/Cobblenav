@@ -16,9 +16,7 @@ public class PlayerStatsReceiver {
         PlayerStats playerStats = PlayerStats.fromBuf(buf);
         Set<String> badges = new HashSet<>(buf.readList(PacketByteBuf::readString));
         if (client.currentScreen instanceof StatsScreen statsScreen) {
-            //TODO: replace test data
-            PlayerStats testStats = new PlayerStats(46, 32, 87, 4, 98, Map.of(CobblemonClient.INSTANCE.getClientPlayerData().getStarterUUID(), 1), Date.from(Instant.now()), Set.of("dark", "fairy"));
-            statsScreen.createStatsDisplay(testStats, badges);
+            statsScreen.createStatsDisplay(playerStats, badges);
         }
     }
 }
