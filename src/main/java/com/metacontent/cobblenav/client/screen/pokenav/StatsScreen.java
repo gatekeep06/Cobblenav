@@ -79,7 +79,7 @@ public class StatsScreen extends AbstractPokenavItemScreen {
         );
     }
 
-    public void createStatsDisplay(PlayerStats stats) {
+    public void createStatsDisplay(PlayerStats stats, Set<String> badges) {
         if (stats.totalPvp() != 0) {
             float winRatio = (float) stats.pvpWinnings() / (float) stats.totalPvp();
             pieChart.setRatio(winRatio);
