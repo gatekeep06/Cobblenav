@@ -2,13 +2,14 @@ package com.metacontent.cobblenav.event;
 
 import com.cobblemon.mod.common.api.Priority;
 import com.cobblemon.mod.common.api.battles.model.PokemonBattle;
+import com.cobblemon.mod.common.api.battles.model.actor.BattleActor;
 import com.cobblemon.mod.common.api.events.CobblemonEvents;
+import com.cobblemon.mod.common.api.events.battles.BattleStartedPostEvent;
 import com.cobblemon.mod.common.api.events.battles.BattleVictoryEvent;
-import com.cobblemon.mod.common.battles.pokemon.BattlePokemon;
 import com.metacontent.cobblenav.Cobblenav;
 import com.metacontent.cobblenav.mixin.TrainerBattleListenerAccessor;
+import com.metacontent.cobblenav.store.AdditionalStatsData;
 import com.metacontent.cobblenav.store.ContactData;
-import com.metacontent.cobblenav.util.CobblenavNbtHelper;
 import com.selfdot.cobblemontrainers.trainer.Trainer;
 import com.selfdot.cobblemontrainers.trainer.TrainerBattleListener;
 import kotlin.Unit;
@@ -67,8 +68,29 @@ public class CobblenavEvents {
         return Unit.INSTANCE;
     }
 
+    private static Unit updateTotalPvpCount(BattleStartedPostEvent event) {
+        PokemonBattle battle = event.getBattle();
+        if (battle.isPvP()) {
+            battle.getPlayers().forEach(player -> AdditionalStatsData.executeForDataOf(player, AdditionalStatsData::updateTotalPvpCount));
+        }
+        return Unit.INSTANCE;
+    }
+
+    private static Unit updatePokemonUsage(BattleStartedPostEvent event) {
+        PokemonBattle battle = event.getBattle();
+        battle.getPlayers().forEach(player -> {
+            BattleActor actor = battle.getActor(player);
+            if (actor != null) {
+                AdditionalStatsData.executeForDataOf(player, statsData -> actor.getPokemonList().forEach(battlePokemon -> statsData.updatePokemonUsage(battlePokemon.getOriginalPokemon().getUuid())));
+            }
+        });
+        return Unit.INSTANCE;
+    }
+
     public static void subscribeEvents() {
         CobblemonEvents.BATTLE_VICTORY.subscribe(Priority.NORMAL, CobblenavEvents::addPlayersToContacts);
+        CobblemonEvents.BATTLE_STARTED_POST.subscribe(Priority.NORMAL, CobblenavEvents::updateTotalPvpCount);
+        CobblemonEvents.BATTLE_STARTED_POST.subscribe(Priority.NORMAL, CobblenavEvents::updatePokemonUsage);
         if (FabricLoader.getInstance().isModLoaded("cobblemontrainers") && Cobblenav.CONFIG.useCobblemonTrainersIntegration) {
             Cobblenav.LOGGER.info("CobblemonTrainers Integration is enabled");
             CobblemonEvents.BATTLE_VICTORY.subscribe(Priority.NORMAL, CobblenavEvents::addTrainerToContacts);
