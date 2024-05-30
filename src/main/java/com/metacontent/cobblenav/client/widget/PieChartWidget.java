@@ -43,7 +43,7 @@ public class PieChartWidget implements Drawable {
         matrixStack.push();
         matrixStack.translate(x - radius, y + radius, 0f);
         drawContext.fill(-12, -12, 12, 12, ColorHelper.Argb.getArgb(90, 0, 0, 0));
-        drawContext.drawCenteredTextWithShadow(textRenderer, (int) (ratio * 100) + "%", 0, -3, 0xffffff);
+        drawContext.drawCenteredTextWithShadow(textRenderer, ratio == -1 ? "-" : (int) (ratio * 100) + "%", 0, -3, 0xffffff);
         for (int k = 0; k < 180; k++) {
             matrixStack.push();
             matrixStack.multiply(RotationAxis.NEGATIVE_Z.rotationDegrees(k * 2));
