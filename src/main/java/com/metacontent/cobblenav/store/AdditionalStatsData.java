@@ -6,9 +6,11 @@ import com.cobblemon.mod.common.api.storage.player.PlayerDataExtension;
 import com.cobblemon.mod.common.api.storage.player.PlayerDataExtensionRegistry;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import net.minecraft.server.network.ServerPlayerEntity;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
+import java.util.function.Consumer;
 
 public class AdditionalStatsData implements PlayerDataExtension {
     public static final String NAME = "cobblenavPlayerStatsData";
@@ -22,16 +24,37 @@ public class AdditionalStatsData implements PlayerDataExtension {
         return totalPvpCount;
     }
 
+    public void updateTotalPvpCount() {
+        totalPvpCount++;
+    }
+
     public Date getStartDate() {
         return startDate;
+    }
+
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
     }
 
     public Set<String> getGymBadges() {
         return gymBadges;
     }
 
+    public void addBadge(String badge) {
+        gymBadges.add(badge);
+    }
+
     public Map<UUID, Integer> getPokemonUsage() {
         return pokemonUsage;
+    }
+
+    public void updatePokemonUsage(UUID pokemonUuid) {
+        Integer usage = pokemonUsage.get(pokemonUuid);
+        if (usage == null) {
+            usage = 0;
+        }
+        usage++;
+        pokemonUsage.put(pokemonUuid, usage);
     }
 
     public static AdditionalStatsData getFromData(PlayerData data) {
@@ -42,6 +65,13 @@ public class AdditionalStatsData implements PlayerDataExtension {
             Cobblemon.playerData.saveSingle(data);
         }
         return statsData;
+    }
+
+    public static void executeForDataOf(ServerPlayerEntity player, Consumer<AdditionalStatsData> action) {
+        PlayerData data = Cobblemon.playerData.get(player);
+        AdditionalStatsData statsData = getFromData(data);
+        action.accept(statsData);
+        Cobblemon.playerData.saveSingle(data);
     }
 
     @NotNull
