@@ -60,7 +60,7 @@ public class StatsScreen extends AbstractPokenavItemScreen {
     @Override
     protected void init() {
         super.init();
-        ClientPlayNetworking.send(CobblenavPackets.REQUEST_PLAYER_STATS_PACKET, PacketByteBufs.create());
+        ClientPlayNetworking.send(CobblenavPackets.PLAYER_STATS_REQUEST_PACKET, PacketByteBufs.create());
         int x = getBorderX() + BORDER_WIDTH - BORDER_DEPTH - 12;
         int y = getBorderY() + BORDER_DEPTH + 24;
         pieChart = new PieChartWidget(x, y, 25, ANIM_DURATION, GREEN, RED);
