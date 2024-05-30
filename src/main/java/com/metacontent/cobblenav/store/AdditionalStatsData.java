@@ -15,7 +15,7 @@ public class AdditionalStatsData implements PlayerDataExtension {
 
     private int totalPvpCount = 0;
     private Date startDate = new Date();
-    private final List<String> gymBadges = new ArrayList<>();
+    private final Set<String> gymBadges = new HashSet<>();
     private final Map<UUID, Integer> pokemonUsage = new HashMap<>();
 
     public int getTotalPvpCount() {
@@ -26,7 +26,7 @@ public class AdditionalStatsData implements PlayerDataExtension {
         return startDate;
     }
 
-    public List<String> getGymBadges() {
+    public Set<String> getGymBadges() {
         return gymBadges;
     }
 

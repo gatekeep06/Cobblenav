@@ -3,7 +3,6 @@ package com.metacontent.cobblenav.networking;
 import com.metacontent.cobblenav.Cobblenav;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.util.Identifier;
 
 public class CobblenavPackets {
@@ -25,7 +24,7 @@ public class CobblenavPackets {
     public static final Identifier SAVED_PREFERENCES_PACKET_SERVER = new Identifier(Cobblenav.ID, "saved_preferences_packet_server");
     public static final Identifier STREAK_PACKET_SERVER = new Identifier(Cobblenav.ID, "streak_packet_server");
     public static final Identifier STREAK_PACKET_CLIENT = new Identifier(Cobblenav.ID, "streak_packet_client");
-    public static final Identifier REQUEST_PLAYER_STATS_PACKET = new Identifier(Cobblenav.ID, "request_player_stats_packet");
+    public static final Identifier PLAYER_STATS_REQUEST_PACKET = new Identifier(Cobblenav.ID, "player_stats_request_packet");
     public static final Identifier PLAYER_STATS_PACKET = new Identifier(Cobblenav.ID, "player_stats_packet");
 
     public static void registerC2SPackets() {
@@ -40,7 +39,7 @@ public class CobblenavPackets {
         ServerPlayNetworking.registerGlobalReceiver(SAVED_PREFERENCES_PACKET_SERVER, SavedPreferencesPacketServerReceiver::receive);
         ServerPlayNetworking.registerGlobalReceiver(SAVE_PREFERENCES_PACKET, SavePreferencesPacketReceiver::receive);
         ServerPlayNetworking.registerGlobalReceiver(STREAK_PACKET_SERVER, StreakPacketServerReceiver::receive);
-        ServerPlayNetworking.registerGlobalReceiver(REQUEST_PLAYER_STATS_PACKET, RequestPlayerStatsReceiver::receive);
+        ServerPlayNetworking.registerGlobalReceiver(PLAYER_STATS_REQUEST_PACKET, PlayerStatsRequestReceiver::receive);
     }
 
     public static void registerS2CPackets() {

@@ -29,17 +29,6 @@ public class PartyWidget extends MainScreenWidget {
     private final float scale;
     private final float baseScale;
 
-    public PartyWidget(int playerX, int playerY, int borderX, int borderY) {
-        this.borderX = borderX;
-        this.borderY = borderY;
-        this.player = MinecraftClient.getInstance().player;
-        this.playerX = playerX;
-        this.playerY = playerY;
-        this.baseScale = CobblenavClient.CONFIG.screenScale;
-        partyModels = new ArrayList<>();
-        this.scale = 1f
-    }
-
     public PartyWidget(int playerX, int playerY, int borderX, int borderY, float scale) {
         this.player = MinecraftClient.getInstance().player;
         this.playerX = playerX;
@@ -47,6 +36,7 @@ public class PartyWidget extends MainScreenWidget {
         this.borderX = borderX;
         this.borderY = borderY;
         this.scale = scale;
+        this.baseScale = CobblenavClient.CONFIG.screenScale;
         List<Pokemon> party = CobblemonClient.INSTANCE.getStorage().getMyParty().getSlots();
         createPartyModels(party);
     }
@@ -58,6 +48,7 @@ public class PartyWidget extends MainScreenWidget {
         this.borderX = borderX;
         this.borderY = borderY;
         this.scale = scale;
+        this.baseScale = CobblenavClient.CONFIG.screenScale;
         createPartyModels(party);
     }
 
@@ -73,11 +64,11 @@ public class PartyWidget extends MainScreenWidget {
                 PokemonPoseableModel model = PokemonModelRepository.INSTANCE.getPoser(pokemon.getSpecies().getResourceIdentifier(), pokemon.getAspects());
                 double adjustment = CobblenavClient.CONFIG.partyWidgetAdjustments.getOrDefault(pokemon.showdownId(), 0d);
                 float pokemonScale = pokemon.getForm().getBaseScale() / model.getProfileScale() * scale;
-                double scaledOffsetY = playerY + 31f - 35f * pokemonScale;
+                double scaledOffsetY = -34f * pokemonScale;
                 pX += (int) ((index * 20 * (index % 2 == 1 ? -1 : 1)) + (index % 2 == 1 ? -1 : 1) * 20 * scale);
                 //wth is going on with this offsetY :skull:
-                ModelWidget modelWidget = new ModelWidget(pX - 101, playerY - 9, 200,
-                        pokemon.asRenderablePokemon(), scale, 350f + 20 * (index % 2 == 1 ? 1 : 0), (int) (scaledOffsetY - model.getProfileTranslation().y - adjustment));
+                ModelWidget modelWidget = new ModelWidget(pX - 101, playerY + 88, 200,
+                        pokemon.asRenderablePokemon(), pokemonScale, 350f + 20 * (index % 2 == 1 ? 1 : 0), (int) (scaledOffsetY - model.getProfileTranslation().y - adjustment));
                 partyModels.add(modelWidget);
                 index++;
             }

@@ -5,10 +5,8 @@ import com.cobblemon.mod.common.api.storage.player.PlayerData;
 import com.metacontent.cobblenav.store.AdditionalStatsData;
 import net.minecraft.network.PacketByteBuf;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public record PlayerStats(
         int totalPvp,
@@ -18,7 +16,7 @@ public record PlayerStats(
         int evolutions,
         Map<UUID, Integer> pokemonUsage,
         Date startDate,
-        List<String> gymBadges
+        Set<String> gymBadges
 ) {
     public static PlayerStats fromPlayerData(PlayerData data) {
         PlayerAdvancementData advancementData = data.getAdvancementData();
@@ -31,7 +29,7 @@ public record PlayerStats(
         int totalPvp = statsData.getTotalPvpCount();
         Map<UUID, Integer> pokemonUsage = statsData.getPokemonUsage();
         Date startDate = statsData.getStartDate();
-        List<String> gymBadges = statsData.getGymBadges();
+        Set<String> gymBadges = statsData.getGymBadges();
 
         return new PlayerStats(totalPvp, pvpWinnings, captures, shinyCaptures, evolutions, pokemonUsage, startDate, gymBadges);
     }
@@ -55,7 +53,7 @@ public record PlayerStats(
         int evolutions = buf.readInt();
         Map<UUID, Integer> pokemonUsage = buf.readMap(PacketByteBuf::readUuid, PacketByteBuf::readInt);
         Date startDate = buf.readDate();
-        List<String> gymBadges = buf.readList(PacketByteBuf::readString);
+        Set<String> gymBadges = new HashSet<>(buf.readList(PacketByteBuf::readString));
         return new PlayerStats(totalPvp, pvpWinnings, captures, shinyCaptures, evolutions, pokemonUsage, startDate, gymBadges);
     }
 }

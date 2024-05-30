@@ -3,17 +3,20 @@ package com.metacontent.cobblenav.config.util;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class Badges {
-    private final List<Badge> badges;
+    private final Set<Badge> badges;
 
-    public Badges(List<Badge> badges) {
+    public Badges(Set<Badge> badges) {
         this.badges = badges;
     }
 
     public Badges() {
-        this.badges = new ArrayList<>();
+        this.badges = new HashSet<>();
     }
 
     @Nullable
@@ -26,11 +29,11 @@ public class Badges {
         return badges.stream().filter(badge -> badge.permissionToGrant().equals(permission)).findFirst().orElse(null);
     }
 
-    public List<String> getTypes() {
-        return badges.stream().map(Badge::type).toList();
+    public Set<String> getTypes() {
+        return badges.stream().map(Badge::type).collect(Collectors.toSet());
     }
 
-    public List<String> getPermissions() {
-        return badges.stream().map(Badge::permissionToGrant).toList();
+    public Set<String> getPermissions() {
+        return badges.stream().map(Badge::permissionToGrant).collect(Collectors.toSet());
     }
 }

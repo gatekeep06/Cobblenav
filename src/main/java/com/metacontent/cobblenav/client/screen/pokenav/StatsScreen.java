@@ -7,10 +7,7 @@ import com.cobblemon.mod.common.client.storage.ClientParty;
 import com.cobblemon.mod.common.client.storage.ClientStorageManager;
 import com.cobblemon.mod.common.pokemon.Pokemon;
 import com.metacontent.cobblenav.client.screen.AbstractPokenavItemScreen;
-import com.metacontent.cobblenav.client.widget.CrawlingLineWidget;
-import com.metacontent.cobblenav.client.widget.IconButton;
-import com.metacontent.cobblenav.client.widget.PieChartWidget;
-import com.metacontent.cobblenav.client.widget.TableWidget;
+import com.metacontent.cobblenav.client.widget.*;
 import com.metacontent.cobblenav.client.widget.main_screen.PartyWidget;
 import com.metacontent.cobblenav.networking.CobblenavPackets;
 import com.metacontent.cobblenav.util.BorderBox;
@@ -51,6 +48,7 @@ public class StatsScreen extends AbstractPokenavItemScreen {
     private TextWidget startDateWidget;
     private PartyWidget favoritePokemonWidget;
     private TextWidget favoritePokemonUsageWidget;
+    private BadgeDisplayWidget badgeDisplay;
     private IconButton backButton;
 
     protected StatsScreen() {
@@ -60,7 +58,7 @@ public class StatsScreen extends AbstractPokenavItemScreen {
     @Override
     protected void init() {
         super.init();
-        ClientPlayNetworking.send(CobblenavPackets.REQUEST_PLAYER_STATS_PACKET, PacketByteBufs.create());
+        ClientPlayNetworking.send(CobblenavPackets.PLAYER_STATS_REQUEST_PACKET, PacketByteBufs.create());
         int x = getBorderX() + BORDER_WIDTH - BORDER_DEPTH - 12;
         int y = getBorderY() + BORDER_DEPTH + 24;
         pieChart = new PieChartWidget(x, y, 25, ANIM_DURATION, GREEN, RED);
@@ -70,6 +68,7 @@ public class StatsScreen extends AbstractPokenavItemScreen {
         favoritePokemonWidget = new PartyWidget(getBorderX() + BORDER_DEPTH + 50, getBorderY() + BORDER_HEIGHT - BORDER_DEPTH - 105,
                 getBorderX(), getBorderY(), 1.6f, List.of());
         favoritePokemonUsageWidget = new TextWidget(0, 0, 50, 10, Text.empty(), textRenderer).alignLeft();
+        badgeDisplay = new BadgeDisplayWidget(getBorderX() + BORDER_DEPTH + 3, getBorderY() + BORDER_DEPTH + 23);
         backButton = new IconButton(getBorderX() + BORDER_DEPTH + 3, getBorderY() + BORDER_HEIGHT - BORDER_DEPTH - 12,
                 11, 11, 73, 0, 0,
                 () -> {
@@ -79,7 +78,7 @@ public class StatsScreen extends AbstractPokenavItemScreen {
         );
     }
 
-    public void createStatsDisplay(PlayerStats stats) {
+    public void createStatsDisplay(PlayerStats stats, Set<String> badges) {
         if (stats.totalPvp() != 0) {
             float winRatio = (float) stats.pvpWinnings() / (float) stats.totalPvp();
             pieChart.setRatio(winRatio);
@@ -129,14 +128,14 @@ public class StatsScreen extends AbstractPokenavItemScreen {
 
         });
 
+        badgeDisplay.setBadges(badges, stats.gymBadges());
+
         this.stats = stats;
     }
 
     @Override
-    public void render(DrawContext drawContext, int i, int j, float f) {
+    public void renderScreen(DrawContext drawContext, int i, int j, float f) {
         MatrixStack matrixStack = drawContext.getMatrices();
-
-        renderBackground(drawContext);
 
         blitk(matrixStack, BACKGROUND,
                 getBorderX() + BORDER_DEPTH, getBorderY() + BORDER_DEPTH + 20, BORDER_HEIGHT - 2 * BORDER_DEPTH - 20, BORDER_WIDTH - 2 * BORDER_DEPTH, 0, 0, 256,
@@ -158,17 +157,26 @@ public class StatsScreen extends AbstractPokenavItemScreen {
             matrixStack.pop();
 
             favoritePokemonWidget.render(drawContext, i, j, f);
+
+            badgeDisplay.render(drawContext, i, j, f);
         }
 
         backButton.render(drawContext, i, j, f);
-
-        super.render(drawContext, i, j, f);
     }
 
     @Override
-    public boolean mouseClicked(double d, double e, int i) {
+    public void onMouseClicked(double d, double e, int i) {
         backButton.mouseClicked(d, e, i);
-        return super.mouseClicked(d, e, i);
+    }
+
+    @Override
+    public void onMouseDragged(double d, double e, int i, double f, double g) {
+
+    }
+
+    @Override
+    public void onMouseScrolled(double d, double e, double f) {
+
     }
 
     @Override
