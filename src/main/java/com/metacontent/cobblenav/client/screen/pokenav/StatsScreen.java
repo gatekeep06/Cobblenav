@@ -7,10 +7,7 @@ import com.cobblemon.mod.common.client.storage.ClientParty;
 import com.cobblemon.mod.common.client.storage.ClientStorageManager;
 import com.cobblemon.mod.common.pokemon.Pokemon;
 import com.metacontent.cobblenav.client.screen.AbstractPokenavItemScreen;
-import com.metacontent.cobblenav.client.widget.CrawlingLineWidget;
-import com.metacontent.cobblenav.client.widget.IconButton;
-import com.metacontent.cobblenav.client.widget.PieChartWidget;
-import com.metacontent.cobblenav.client.widget.TableWidget;
+import com.metacontent.cobblenav.client.widget.*;
 import com.metacontent.cobblenav.client.widget.main_screen.PartyWidget;
 import com.metacontent.cobblenav.networking.CobblenavPackets;
 import com.metacontent.cobblenav.util.BorderBox;
@@ -51,6 +48,7 @@ public class StatsScreen extends AbstractPokenavItemScreen {
     private TextWidget startDateWidget;
     private PartyWidget favoritePokemonWidget;
     private TextWidget favoritePokemonUsageWidget;
+    private BadgeDisplayWidget badgeDisplay;
     private IconButton backButton;
 
     protected StatsScreen() {
@@ -70,6 +68,7 @@ public class StatsScreen extends AbstractPokenavItemScreen {
         favoritePokemonWidget = new PartyWidget(getBorderX() + BORDER_DEPTH + 50, getBorderY() + BORDER_HEIGHT - BORDER_DEPTH - 105,
                 getBorderX(), getBorderY(), 1.6f, List.of());
         favoritePokemonUsageWidget = new TextWidget(0, 0, 50, 10, Text.empty(), textRenderer).alignLeft();
+        badgeDisplay = new BadgeDisplayWidget(getBorderX() + BORDER_DEPTH + 3, getBorderY() + BORDER_DEPTH + 23);
         backButton = new IconButton(getBorderX() + BORDER_DEPTH + 3, getBorderY() + BORDER_HEIGHT - BORDER_DEPTH - 12,
                 11, 11, 73, 0, 0,
                 () -> {
@@ -129,6 +128,8 @@ public class StatsScreen extends AbstractPokenavItemScreen {
 
         });
 
+        badgeDisplay.setBadges(badges, stats.gymBadges());
+
         this.stats = stats;
     }
 
@@ -156,6 +157,8 @@ public class StatsScreen extends AbstractPokenavItemScreen {
             matrixStack.pop();
 
             favoritePokemonWidget.render(drawContext, i, j, f);
+
+            badgeDisplay.render(drawContext, i, j, f);
         }
 
         backButton.render(drawContext, i, j, f);
