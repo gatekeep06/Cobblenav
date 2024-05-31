@@ -36,11 +36,11 @@ public class StatsScreen extends AbstractPokenavItemScreen {
     private static final int STAT_NAME_WIDTH = 52;
     private static final int STAT_VALUE_WIDTH = 18;
     private final List<AbstractTextWidget> LINE_WIDGETS = new ArrayList<>(List.of(
-            new CrawlingLineWidget(Text.literal("Total PvP:"), 0, 0, STAT_NAME_WIDTH, 10, 0.6f, new BorderBox(2), true),
-            new CrawlingLineWidget(Text.literal("PvP Winnings:"), 0, 0, STAT_NAME_WIDTH, 10, 0.6f, new BorderBox(2), true),
-            new CrawlingLineWidget(Text.literal("Captures:"), 0, 0, STAT_NAME_WIDTH, 10, 0.6f, new BorderBox(2), true),
-            new CrawlingLineWidget(Text.literal("Shiny Captures:"), 0, 0, STAT_NAME_WIDTH, 10, 0.6f, new BorderBox(2), true),
-            new CrawlingLineWidget(Text.literal("Evolutions:"), 0, 0, STAT_NAME_WIDTH, 10, 0.6f, new BorderBox(2), true)));
+            new CrawlingLineWidget(Text.translatable("gui.cobblenav.pokenav_item.total_pvp"), 0, 0, STAT_NAME_WIDTH, 10, 0.6f, new BorderBox(2), true),
+            new CrawlingLineWidget(Text.translatable("gui.cobblenav.pokenav_item.pvp_winnings"), 0, 0, STAT_NAME_WIDTH, 10, 0.6f, new BorderBox(2), true),
+            new CrawlingLineWidget(Text.translatable("gui.cobblenav.pokenav_item.captures"), 0, 0, STAT_NAME_WIDTH, 10, 0.6f, new BorderBox(2), true),
+            new CrawlingLineWidget(Text.translatable("gui.cobblenav.pokenav_item.shiny_captures"), 0, 0, STAT_NAME_WIDTH, 10, 0.6f, new BorderBox(2), true),
+            new CrawlingLineWidget(Text.translatable("gui.cobblenav.pokenav_item.evolutions"), 0, 0, STAT_NAME_WIDTH, 10, 0.6f, new BorderBox(2), true)));
 
     private PlayerStats stats;
     private PieChartWidget pieChart;
@@ -99,7 +99,7 @@ public class StatsScreen extends AbstractPokenavItemScreen {
         statsTable.calcRows(textWidgets.size());
         statsTable.setWidgets(textWidgets);
 
-        startDateWidget.setMessage(Text.literal("Start Date: " + stats.startDate().toInstant().atZone(ZoneId.systemDefault()).format(DateTimeFormatter.ISO_LOCAL_DATE)));
+        startDateWidget.setMessage(Text.translatable("gui.cobblenav.pokenav_item.start_date", stats.startDate().toInstant().atZone(ZoneId.systemDefault()).format(DateTimeFormatter.ISO_LOCAL_DATE)));
 
         stats.pokemonUsage().entrySet().stream().max(Map.Entry.comparingByValue()).ifPresent(entry -> {
             int favoritePokemonUsage = entry.getValue();

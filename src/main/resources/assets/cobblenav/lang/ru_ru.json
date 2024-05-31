@@ -47,5 +47,15 @@
   "item.cobblenav.pokenav_item.type.purple": "Фиолетовый",
   "item.cobblenav.pokenav_item.type.magenta": "Пурпурный",
   "item.cobblenav.pokenav_item.type.pink": "Розовый",
-  "item.cobblenav.pokenav_item.type.gholdengo": "Gholdengo"
+  "item.cobblenav.pokenav_item.type.gholdengo": "Gholdengo",
+  "item.cobblenav.pokenav_item.type.invisible_gholdengo": "Gholdengo 1.5.1",
+  "gui.cobblenav.pokenav_item.stats_button": "СТАТИСТИКА",
+  "gui.cobblenav.pokenav_item.total_pvp": "Всего PvP:",
+  "gui.cobblenav.pokenav_item.pvp_winnings": "Победы в PvP:",
+  "gui.cobblenav.pokenav_item.captures": "Поймано:",
+  "gui.cobblenav.pokenav_item.shiny_captures": "Поймано шайни:",
+  "gui.cobblenav.pokenav_item.evolutions": "Эволюции:",
+  "gui.cobblenav.pokenav_item.start_date": "Дата начала: %s",
+  "message.cobblenav.has_no_permission": "У вас нет разрешения награждать этим значком",
+  "message.cobblenav.no_badge": "Такого значка не зарегистрировано"
 }

@@ -47,5 +47,15 @@
 "item.cobblenav.pokenav_item.type.purple": "Purple",
 "item.cobblenav.pokenav_item.type.magenta": "Magenta",
 "item.cobblenav.pokenav_item.type.pink": "Pink",
-"item.cobblenav.pokenav_item.type.gholdengo": "Gholdengo"
+"item.cobblenav.pokenav_item.type.gholdengo": "Gholdengo",
+"item.cobblenav.pokenav_item.type.invisible_gholdengo": "Gholdengo 1.5.1",
+"gui.cobblenav.pokenav_item.stats_button": "STATS",
+"gui.cobblenav.pokenav_item.total_pvp": "Total PvP:",
+"gui.cobblenav.pokenav_item.pvp_winnings": "PvP Winnings:",
+"gui.cobblenav.pokenav_item.captures": "Captures:",
+"gui.cobblenav.pokenav_item.shiny_captures": "Shiny Captures:",
+"gui.cobblenav.pokenav_item.evolutions": "Evolutions:",
+"gui.cobblenav.pokenav_item.start_date": "Start Date: %s",
+"message.cobblenav.has_no_permission": "You have no permission to grant this badge",
+"message.cobblenav.no_badge": "There is no such badge registered"
 }
