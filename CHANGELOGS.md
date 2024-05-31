@@ -1,3 +1,13 @@
+# Update 1.3.0
+
+- Added Cobblemon Counter Integration.
+- Added player stats screen.
+- Revamped contact saving and the contact screen.
+- Added feature to scale pokenav screens by using a value in the client config.
+- Added Gholdengo-themed pokenav.
+- Added a super secret pokenav model that can be obtained under super secret conditions.
+- Added tooltips to pokenav items to indicate color and model.
+
 # Hotfix 1.2.5
 
 - Fixed an early initialization of the config that caused some other mods' mixins to be unable to be applied.
