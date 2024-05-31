@@ -177,7 +177,7 @@ public class FinderScreen extends AbstractPokenavItemScreen {
             int textureHeight = 512;
             int value = streak.component2();
 
-            if (streak.component1().equals(pokemon.getSpecies().showdownId()) && value >= config.levelOneStreak) {
+            if (streak.component1().equals(pokemon.getSpecies().getName().toLowerCase()) && value >= config.levelOneStreak) {
                 if (value < config.levelTwoStreak) {
                     offsetY = 116;
                 } else if (value < config.levelThreeStreak) {
@@ -206,7 +206,7 @@ public class FinderScreen extends AbstractPokenavItemScreen {
     private void renderCounter(DrawContext drawContext, int i, int j) {
         if (streak != null) {
             int value = streak.component2();
-            if (streak.component1().equals(pokemon.getSpecies().showdownId())) {
+            if (streak.component1().equals(pokemon.getSpecies().getName().toLowerCase())) {
                 blitk(drawContext.getMatrices(), COUNTER_INTEGRATION_ASSETS,
                         borderX + AbstractPokenavItemScreen.BORDER_DEPTH, borderY + AbstractPokenavItemScreen.BORDER_HEIGHT / 2,
                         14, 41, 0, 465, 256, 512,
