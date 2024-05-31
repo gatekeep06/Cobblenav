@@ -9,17 +9,22 @@ import com.cobblemon.mod.common.api.events.battles.BattleVictoryEvent;
 import com.cobblemon.mod.common.api.events.pokemon.TradeCompletedEvent;
 import com.cobblemon.mod.common.api.events.starter.StarterChosenEvent;
 import com.cobblemon.mod.common.api.events.storage.ReleasePokemonEvent;
+import com.cobblemon.mod.common.entity.pokemon.PokemonEntity;
 import com.metacontent.cobblenav.Cobblenav;
+import com.metacontent.cobblenav.item.CobblenavItems;
 import com.metacontent.cobblenav.mixin.TrainerBattleListenerAccessor;
 import com.metacontent.cobblenav.store.AdditionalStatsData;
 import com.metacontent.cobblenav.store.ContactData;
 import com.selfdot.cobblemontrainers.trainer.Trainer;
 import com.selfdot.cobblemontrainers.trainer.TrainerBattleListener;
 import kotlin.Unit;
+import net.fabricmc.fabric.api.event.player.AttackEntityCallback;
 import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.item.ItemStack;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
+import net.minecraft.util.ActionResult;
 
 import java.util.*;
 
@@ -120,6 +125,18 @@ public class CobblenavEvents {
         CobblemonEvents.STARTER_CHOSEN.subscribe(Priority.NORMAL, CobblenavEvents::setStartDate);
         CobblemonEvents.POKEMON_RELEASED_EVENT_POST.subscribe(Priority.NORMAL, CobblenavEvents::removePokemonUsage);
         CobblemonEvents.TRADE_COMPLETED.subscribe(Priority.NORMAL, CobblenavEvents::removePokemonUsage);
+        AttackEntityCallback.EVENT.register((player, world, hand, entity, hitResult) -> {
+            ItemStack stack = player.getStackInHand(hand);
+            if (stack.isOf(CobblenavItems.POKENAV_ITEM_GHOLDENGO) && entity instanceof PokemonEntity pokemonEntity) {
+                if (pokemonEntity.getPokemon().getSpecies().showdownId().equals("gholdengo")) {
+                    int randomInt = world.getRandom().nextBetween(1, 10);
+                    if (randomInt >= 9) {
+                        player.setStackInHand(hand, CobblenavItems.POKENAV_ITEM_INVISIBLE_GHOLDENGO.getDefaultStack());
+                    }
+                }
+            }
+            return ActionResult.PASS;
+        });
         if (FabricLoader.getInstance().isModLoaded("cobblemontrainers") && Cobblenav.CONFIG.useCobblemonTrainersIntegration) {
             Cobblenav.LOGGER.info("CobblemonTrainers Integration is enabled");
             CobblemonEvents.BATTLE_VICTORY.subscribe(Priority.NORMAL, CobblenavEvents::addTrainerToContacts);
