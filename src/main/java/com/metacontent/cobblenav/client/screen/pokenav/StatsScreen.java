@@ -58,7 +58,6 @@ public class StatsScreen extends AbstractPokenavItemScreen {
     @Override
     protected void init() {
         super.init();
-        ClientPlayNetworking.send(CobblenavPackets.PLAYER_STATS_REQUEST_PACKET, PacketByteBufs.create());
         int x = getBorderX() + BORDER_WIDTH - BORDER_DEPTH - 12;
         int y = getBorderY() + BORDER_DEPTH + 24;
         pieChart = new PieChartWidget(x, y, 25, ANIM_DURATION, GREEN, RED);
@@ -76,6 +75,7 @@ public class StatsScreen extends AbstractPokenavItemScreen {
                     MinecraftClient.getInstance().setScreen(new MainScreen());
                 }
         );
+        ClientPlayNetworking.send(CobblenavPackets.PLAYER_STATS_REQUEST_PACKET, PacketByteBufs.create());
     }
 
     public void createStatsDisplay(PlayerStats stats, Set<String> badges) {
@@ -84,7 +84,7 @@ public class StatsScreen extends AbstractPokenavItemScreen {
             pieChart.setRatio(winRatio);
         }
 
-        //Extremely hardcode, it's worth coming up with something else
+        //Extremely hardcoded, it's worth coming up with something else
         List<AbstractTextWidget> textWidgets = new ArrayList<>(10);
         textWidgets.add(LINE_WIDGETS.get(0));
         textWidgets.add(new CrawlingLineWidget(Text.literal(String.valueOf(stats.totalPvp())), 0, 0, STAT_VALUE_WIDTH, 10, 0.6f, new BorderBox(0, 2), true));

@@ -8,6 +8,9 @@ public record Badge(
         String permissionToGrant
 ) {
     public boolean hasPermissionToGrant(ServerPlayerEntity player) {
+        if (permissionToGrant == null || permissionToGrant.isEmpty()) {
+            return player.hasPermissionLevel(2);
+        }
         return Permissions.check(player, permissionToGrant);
     }
 }

@@ -47,6 +47,8 @@
   "message.cobblenav.not_found_message": "<Pokenav> No luck finding anything",
   "message.cobblenav.no_saved_pokemon": "<Pokenav> You have no saved pokemon",
   "message.cobblenav.pokenav_is_not_in_hand": "For this action, the pokenav must be in your hand",
+  "message.cobblenav.has_no_permission": "You have no permission to grant this badge",
+  "message.cobblenav.no_badge": "There is no such badge registered",
   "gui.cobblenav.pokenav_item.last_found": "Last found:",
   "gui.cobblenav.pokenav_item.last_found.tooltip": "Right-click to reset"
 }
