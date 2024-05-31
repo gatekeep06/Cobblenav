@@ -6,6 +6,8 @@ import com.cobblemon.mod.common.api.storage.player.PlayerDataExtension;
 import com.cobblemon.mod.common.api.storage.player.PlayerDataExtensionRegistry;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.metacontent.cobblenav.Cobblenav;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import org.jetbrains.annotations.NotNull;
 
@@ -76,6 +78,16 @@ public class AdditionalStatsData implements PlayerDataExtension {
         AdditionalStatsData statsData = getFromData(data);
         action.accept(statsData);
         Cobblemon.playerData.saveSingle(data);
+    }
+
+    public static void executeForDataOf(UUID playerUuid, Consumer<AdditionalStatsData> action) {
+        MinecraftServer server = Cobblemon.implementation.server();
+        if (server != null) {
+            ServerPlayerEntity player = server.getPlayerManager().getPlayer(playerUuid);
+            if (player != null) {
+                executeForDataOf(player, action);
+            }
+        }
     }
 
     @NotNull
