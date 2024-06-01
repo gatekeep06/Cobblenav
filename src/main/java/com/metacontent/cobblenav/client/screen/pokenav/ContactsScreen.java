@@ -127,12 +127,16 @@ public class ContactsScreen extends AbstractPokenavItemScreen implements Contact
 
     @Override
     public void onMouseDragged(double d, double e, int i, double f, double g) {
-        scrollableView.mouseDragged(d, e, i, f, g);
+        if (scrollableView != null) {
+            scrollableView.mouseDragged(d, e, i, f, g);
+        }
     }
 
     @Override
     public void onMouseScrolled(double d, double e, double f) {
-        scrollableView.mouseScrolled(d, e, f);
+        if (scrollableView != null) {
+            scrollableView.mouseScrolled(d, e, f);
+        }
     }
 
     @Override
