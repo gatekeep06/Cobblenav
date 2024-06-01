@@ -33,6 +33,7 @@ public class CobblenavItems {
     public static final Item POKENAV_ITEM_MAGENTA = registerPokenavItem("magenta");
     public static final Item POKENAV_ITEM_PINK = registerPokenavItem("pink");
     public static final Item POKENAV_ITEM_GHOLDENGO = registerPokenavItem("gholdengo");
+    public static final Item POKENAV_ITEM_NETHERITE = registerPokenavItem("netherite");
     public static final Item POKENAV_ITEM_INVISIBLE_GHOLDENGO = registerPokenavItem("invisible_gholdengo");
 
     public static final Item POKEFINDER_ITEM_BLACK = registerPokefinderItem("black");
@@ -67,6 +68,7 @@ public class CobblenavItems {
                         entries.add(POKENAV_ITEM_MAGENTA);
                         entries.add(POKENAV_ITEM_PINK);
                         entries.add(POKENAV_ITEM_GHOLDENGO);
+                        entries.add(POKENAV_ITEM_NETHERITE);
 
                         entries.add(POKEFINDER_ITEM_BLACK);
                         entries.add(POKEFINDER_ITEM_BLUE);
