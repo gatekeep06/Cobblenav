@@ -256,7 +256,9 @@ public class FinderScreen extends AbstractPokenavItemScreen {
     @Override
     public void onMouseClicked(double d, double e, int i) {
         backButton.mouseClicked(d, e, i);
-        trackButton.mouseClicked(d, e, i);
+        if (!isLoading) {
+            trackButton.mouseClicked(d, e, i);
+        }
     }
 
     @Override
