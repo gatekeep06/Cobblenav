@@ -1,3 +1,10 @@
+# Update 1.3.1
+
+- Added netherite pokenav (I'll probably redraw this later).
+- Added feature to restore the secret pokenav back to its original appearance.
+- Fixed crash when opening the contacts screen.
+- Removed possibility to click on the "Let's catch" button before the client receives the data from the server.
+
 # Update 1.3.0
 
 - Added Cobblemon Counter Integration.
