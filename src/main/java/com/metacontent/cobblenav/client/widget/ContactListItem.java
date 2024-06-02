@@ -19,7 +19,7 @@ import static com.cobblemon.mod.common.api.gui.GuiUtilsKt.blitk;
 import static com.cobblemon.mod.common.client.render.RenderHelperKt.drawScaledText;
 
 public class ContactListItem extends ClickableWidget {
-    private static final Identifier TEXTURE = new Identifier(Cobblenav.ID, "textures/gui/pokenav_item_gui_buttons.png");
+    private static final Identifier TEXTURE = new Identifier(Cobblenav.ID, "textures/gui/contact_screen_widgets.png");
     private static final Identifier TRAINER_SKIN = new Identifier(Cobblenav.ID, "textures/gui/pseudo_trainer_skin.png");
     private final PokenavContact contact;
     private final Identifier skinId;
@@ -38,8 +38,8 @@ public class ContactListItem extends ClickableWidget {
         this.action = onSelect;
         this.maxRenderY = maxRenderY;
         this.minRenderY = minRenderY;
-        this.nameLine = new CrawlingLineWidget(getX() + 18, getY(), 44, getHeight(), 0.6f, new BorderBox(2, 4));
-        this.titleLine = new CrawlingLineWidget(getX() + 66, getY(), 52, getHeight(), 0.6f, new BorderBox(2, 4));
+        this.nameLine = new CrawlingLineWidget(getX() + 17, getY(), 44, getHeight(), 0.6f, new BorderBox(2, 4));
+        this.titleLine = new CrawlingLineWidget(getX() + 65, getY(), 52, getHeight(), 0.6f, new BorderBox(2, 4));
 
         if (!contact.isTrainer()) {
             PlayerSkinProvider skinProvider = MinecraftClient.getInstance().getSkinProvider();
@@ -63,24 +63,21 @@ public class ContactListItem extends ClickableWidget {
     @Override
     protected void renderButton(DrawContext drawContext, int i, int j, float f) {
         if (isVisible()) {
-            Style style = Style.EMPTY.withBold(isSelected);
-
             if (isSelected) {
-                blitk(drawContext.getMatrices(), TEXTURE, getX(), getY() + 1, 7, 4, 0, 72, 256,
+                blitk(drawContext.getMatrices(), TEXTURE, getX(), getY() - 2, 13, 120, 129, 0, 256,
                         256, 0, 1, 1, 1, 1, false, 1);
             }
-
 //            drawScaledText(drawContext, FONT, Text.literal(contact.getProfile().getName()).setStyle(style),
 //                    getX() + 18, getY(), 1, 1,
 //                    MAX_WIDTH, isHovered() ? 0xD3D3D3 : 0xFFFFFF, false, isHovered(), i, j);
 //            drawScaledText(drawContext, FONT, Text.literal(contact.getTitle()).setStyle(style),
 //                    getX() + MAX_WIDTH + 20, getY(), 1, 1,
 //                    MAX_WIDTH, isHovered() ? 0xD3D3D3 : 0xFFFFFF, false, isHovered(), i, j);
-            nameLine.renderDynamic(drawContext, Text.literal(contact.getProfile().getName()).setStyle(style), isHovered(), f);
-            titleLine.renderDynamic(drawContext, Text.literal(contact.getTitle()).setStyle(style), isHovered(), f);
+            nameLine.renderDynamic(drawContext, Text.literal(contact.getProfile().getName()), isHovered(), f);
+            titleLine.renderDynamic(drawContext, Text.literal(contact.getTitle()), isHovered(), f);
 
             if (skinId != null) {
-                blitk(drawContext.getMatrices(), skinId, getX() + 6, getY(), 8, 8, 8, 8, 64, 64,
+                blitk(drawContext.getMatrices(), skinId, getX() + 5, getY(), 8, 8, 8, 8, 64, 64,
                         0, 1, 1, 1, 1, false, 1);
             }
         }

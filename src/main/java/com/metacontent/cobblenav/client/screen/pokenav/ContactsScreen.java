@@ -51,7 +51,7 @@ public class ContactsScreen extends AbstractPokenavItemScreen implements Contact
 
     public void createContactList(List<PokenavContact> contacts) {
         this.contacts = contacts;
-        contactListWidget = new ContactListWidget(borderX - BORDER_DEPTH + BORDER_WIDTH - 123,
+        contactListWidget = new ContactListWidget(borderX - BORDER_DEPTH + BORDER_WIDTH - 124,
                 borderY + BORDER_DEPTH + 28, contacts, this);
         scrollableView = new ScrollableViewWidget<>(contactListWidget, 118, 99, CobblenavClient.CONFIG.scrollSize);
         contactInfoWidget = new ContactInfoWidget(borderX + BORDER_DEPTH, borderY + BORDER_DEPTH + 27);
