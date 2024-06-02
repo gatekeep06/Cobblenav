@@ -60,6 +60,9 @@ public class SpawnMapPacketServerReceiver {
                                     boolean isHidden = Cobblenav.CONFIG.hiddenPokemon.stream().anyMatch(
                                             string -> renderablePokemon.getForm().showdownId().equals(string)
                                     );
+
+                                    //TODO: only seen pokemon mode
+
                                     if (!isIgnored && !isHidden) {
                                         spawnMap.put(renderablePokemon, value);
                                     }

@@ -1,3 +1,30 @@
+# Update 1.3.1
+
+- Added netherite pokenav (I'll probably redraw this later).
+- Added feature to restore the secret pokenav back to its original appearance.
+- Fixed crash when opening the contacts screen.
+- Removed possibility to click on the "Let's catch" button before the client receives the data from the server.
+
+# Update 1.3.0
+
+- Added Cobblemon Counter Integration.
+
+Now you don't need to install a separate mod to use the integration. It is enough to change the corresponding value in the config to true.
+
+- Added player stats screen.
+
+This screen will display your stats for PvP battles, pokemon captures, pokemon evolutions, the start date of your adventure, and your most frequently used pokemon.
+
+- Revamped contact saving and the contact screen.
+
+Your contacts will no longer be lost after death, as they are now stored in cobblemonplayerdata instead of in the player's nbt. In addition, the contacts screen has received some nice interface changes.
+
+- Added feature to scale pokenav screens by using a value in the client config.
+- Added Gholdengo-themed pokenav.
+- Added a super secret pokenav model that can be obtained under super secret conditions.
+- Added tooltips to pokenav items to indicate color and model.
+- Fixed streak display for pokemon with special characters in their name (e.g. Farfetch'd).
+
 # Hotfix 1.2.5
 
 - Fixed an early initialization of the config that caused some other mods' mixins to be unable to be applied.

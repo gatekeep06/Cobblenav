@@ -1,12 +1,14 @@
 package com.metacontent.cobblenav.client.screen.pokenav;
 
 import com.cobblemon.mod.common.CobblemonSounds;
+import com.metacontent.cobblenav.Cobblenav;
+import com.metacontent.cobblenav.client.CobblenavClient;
 import com.metacontent.cobblenav.client.screen.AbstractPokenavItemScreen;
 import com.metacontent.cobblenav.client.widget.ContactInfoWidget;
 import com.metacontent.cobblenav.client.widget.ContactListWidget;
 import com.metacontent.cobblenav.client.widget.IconButton;
+import com.metacontent.cobblenav.client.widget.ScrollableViewWidget;
 import com.metacontent.cobblenav.networking.CobblenavPackets;
-import com.metacontent.cobblenav.util.CobblenavNbtHelper;
 import com.metacontent.cobblenav.util.ContactSelector;
 import com.metacontent.cobblenav.util.PokenavContact;
 import net.fabricmc.api.EnvType;
@@ -16,8 +18,8 @@ import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.nbt.NbtCompound;
 import net.minecraft.text.Text;
+import net.minecraft.util.Identifier;
 
 import java.util.*;
 
@@ -25,6 +27,7 @@ import static com.cobblemon.mod.common.api.gui.GuiUtilsKt.blitk;
 
 @Environment(EnvType.CLIENT)
 public class ContactsScreen extends AbstractPokenavItemScreen implements ContactSelector {
+    public static final Identifier TEXTURE = new Identifier(Cobblenav.ID, "textures/gui/contact_screen_widgets.png");
     private int borderX;
     private int borderY;
     private List<PokenavContact> contacts;
@@ -32,6 +35,7 @@ public class ContactsScreen extends AbstractPokenavItemScreen implements Contact
 
     private IconButton backButton;
     private IconButton deleteButton;
+    private ScrollableViewWidget<ContactListWidget> scrollableView;
     private ContactListWidget contactListWidget;
     private ContactInfoWidget contactInfoWidget;
 
@@ -45,17 +49,11 @@ public class ContactsScreen extends AbstractPokenavItemScreen implements Contact
         ClientPlayNetworking.send(CobblenavPackets.CONTACT_DATA_PACKET_SERVER, PacketByteBufs.create());
     }
 
-    public void createContactList(NbtCompound nbt) {
-        Set<String> keys = nbt.getKeys();
-        keys.forEach(key -> {
-            if (!Objects.equals(key, "title")) {
-                NbtCompound contactData = nbt.getCompound(key);
-                PokenavContact pokenavContact = CobblenavNbtHelper.toPokenavContact(contactData, key);
-                contacts.add(pokenavContact);
-            }
-        });
-        contactListWidget = new ContactListWidget(borderX - BORDER_DEPTH + BORDER_WIDTH - ContactListWidget.WIDTH,
-                borderY + BORDER_DEPTH + 24, contacts, this);
+    public void createContactList(List<PokenavContact> contacts) {
+        this.contacts = contacts;
+        contactListWidget = new ContactListWidget(borderX - BORDER_DEPTH + BORDER_WIDTH - 123,
+                borderY + BORDER_DEPTH + 28, contacts, this);
+        scrollableView = new ScrollableViewWidget<>(contactListWidget, 118, 99, CobblenavClient.CONFIG.scrollSize);
         contactInfoWidget = new ContactInfoWidget(borderX + BORDER_DEPTH, borderY + BORDER_DEPTH + 27);
     }
 
@@ -82,46 +80,63 @@ public class ContactsScreen extends AbstractPokenavItemScreen implements Contact
                     selectedContactIndex = -1;
                     contactListWidget.deleteContact(contactInfoWidget.getContact());
                     contactInfoWidget.deleteContact();
+                    scrollableView.resetScrollY();
                 }
         );
     }
 
     @Override
-    public void render(DrawContext drawContext, int i, int j, float f) {
-        renderBackground(drawContext);
-
+    public void renderScreen(DrawContext drawContext, int i, int j, float f) {
         MatrixStack matrixStack = drawContext.getMatrices();
 
         blitk(matrixStack, BACKGROUND,
                 borderX + BORDER_DEPTH, borderY + BORDER_DEPTH + 20, BORDER_HEIGHT - 2 * BORDER_DEPTH - 32, BORDER_WIDTH - 2 * BORDER_DEPTH, 0, 131, 256,
                 256, 0, 1, 1, 1, 1, false, 1);
 
+        blitk(drawContext.getMatrices(), TEXTURE, borderX - BORDER_DEPTH + BORDER_WIDTH - 128, borderY + BORDER_DEPTH + 24,
+                108, 128, 0, 0, 256, 256,
+                0, 1, 1, 1, 1, false, 1);
+
         blitk(matrixStack, BORDERS,
                 borderX, borderY + BORDER_HEIGHT - BORDER_DEPTH - 14, 14, BORDER_WIDTH, 0, BORDER_HEIGHT + 1, 256,
                 256, 0, 1,1,1,1,false,1);
 
         backButton.render(drawContext, i, j, f);
-        if (contactListWidget != null) {
-            contactListWidget.render(drawContext, i, j, f);
+        if (scrollableView != null) {
+            scrollableView.render(drawContext, i, j, f);
             if (selectedContactIndex != -1) {
                 contactInfoWidget.render(drawContext, i, j, f);
                 deleteButton.render(drawContext, i, j, f);
             }
         }
-
-        super.render(drawContext, i, j, f);
     }
 
     @Override
-    public boolean mouseClicked(double d, double e, int i) {
+    public void onMouseClicked(double d, double e, int i) {
         backButton.mouseClicked(d, e, i);
-        if (contactListWidget != null) {
-            contactListWidget.mouseClicked(d, e, i);
+        if (scrollableView != null) {
+            boolean viewClicked = scrollableView.mouseClicked(d, e, i);
             if (selectedContactIndex != -1) {
                 deleteButton.mouseClicked(d, e, i);
             }
+            if (!viewClicked) {
+                setContactIndex(-1);
+            }
         }
-        return super.mouseClicked(d, e, i);
+    }
+
+    @Override
+    public void onMouseDragged(double d, double e, int i, double f, double g) {
+        if (scrollableView != null) {
+            scrollableView.mouseDragged(d, e, i, f, g);
+        }
+    }
+
+    @Override
+    public void onMouseScrolled(double d, double e, double f) {
+        if (scrollableView != null) {
+            scrollableView.mouseScrolled(d, e, f);
+        }
     }
 
     @Override

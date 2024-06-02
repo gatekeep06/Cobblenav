@@ -2,23 +2,31 @@ package com.metacontent.cobblenav.event;
 
 import com.cobblemon.mod.common.api.Priority;
 import com.cobblemon.mod.common.api.battles.model.PokemonBattle;
+import com.cobblemon.mod.common.api.battles.model.actor.BattleActor;
 import com.cobblemon.mod.common.api.events.CobblemonEvents;
+import com.cobblemon.mod.common.api.events.battles.BattleStartedPostEvent;
 import com.cobblemon.mod.common.api.events.battles.BattleVictoryEvent;
-import com.cobblemon.mod.common.battles.pokemon.BattlePokemon;
+import com.cobblemon.mod.common.api.events.pokemon.TradeCompletedEvent;
+import com.cobblemon.mod.common.api.events.starter.StarterChosenEvent;
+import com.cobblemon.mod.common.api.events.storage.ReleasePokemonEvent;
+import com.cobblemon.mod.common.entity.pokemon.PokemonEntity;
 import com.metacontent.cobblenav.Cobblenav;
+import com.metacontent.cobblenav.item.CobblenavItems;
 import com.metacontent.cobblenav.mixin.TrainerBattleListenerAccessor;
-import com.metacontent.cobblenav.util.CobblenavNbtHelper;
+import com.metacontent.cobblenav.store.AdditionalStatsData;
+import com.metacontent.cobblenav.store.ContactData;
 import com.selfdot.cobblemontrainers.trainer.Trainer;
 import com.selfdot.cobblemontrainers.trainer.TrainerBattleListener;
 import kotlin.Unit;
+import net.fabricmc.fabric.api.event.player.AttackEntityCallback;
 import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.item.ItemStack;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
+import net.minecraft.util.ActionResult;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 public class CobblenavEvents {
     private static Unit addPlayersToContacts(BattleVictoryEvent event) {
@@ -30,7 +38,7 @@ public class CobblenavEvents {
                         continue;
                     }
                     boolean isWinner = event.getWinners().contains(event.getBattle().getActor(player));
-                    boolean isAlly = false;
+                    boolean isAlly;
                     if (event.getWinners().size() > 1 && isWinner) {
                         isAlly = event.getWinners().contains(event.getBattle().getActor(player)) &&
                                 event.getWinners().contains(event.getBattle().getActor(p));
@@ -39,7 +47,10 @@ public class CobblenavEvents {
                         isAlly = event.getLosers().contains(event.getBattle().getActor(player)) &&
                                 event.getLosers().contains(event.getBattle().getActor(p));
                     }
-                    CobblenavNbtHelper.updateContact(player, p, event.getBattle(), isWinner, isAlly);
+                    else {
+                        isAlly = false;
+                    }
+                    ContactData.executeForDataOf(player, contactData -> contactData.updateContact(p, event.getBattle(), isWinner, isAlly));
                 }
                 player.sendMessage(Text.translatable("message.cobblenav.updating_contacts")
                         .setStyle(Style.EMPTY.withItalic(true).withColor(0xff9a38)));
@@ -54,12 +65,8 @@ public class CobblenavEvents {
         if (trainerBattles.containsKey(battle)) {
             Trainer trainer = trainerBattles.get(battle);
             battle.getPlayers().forEach(player -> {
-                if (event.getWinners().contains(battle.getActor(player))) {
-                    CobblenavNbtHelper.updateContact(player, trainer, true);
-                }
-                else if (event.getLosers().contains(battle.getActor(player))) {
-                    CobblenavNbtHelper.updateContact(player, trainer, false);
-                }
+                boolean isWinner = event.getWinners().contains(battle.getActor(player));
+                ContactData.executeForDataOf(player, contactData -> contactData.updateContact(trainer, isWinner));
                 player.sendMessage(Text.translatable("message.cobblenav.updating_contacts")
                         .setStyle(Style.EMPTY.withItalic(true).withColor(0xff9a38)));
             });
@@ -67,8 +74,69 @@ public class CobblenavEvents {
         return Unit.INSTANCE;
     }
 
+    private static Unit updateTotalPvpCount(BattleStartedPostEvent event) {
+        PokemonBattle battle = event.getBattle();
+        if (battle.isPvP()) {
+            battle.getPlayers().forEach(player -> AdditionalStatsData.executeForDataOf(player, AdditionalStatsData::updateTotalPvpCount));
+        }
+        return Unit.INSTANCE;
+    }
+
+    private static Unit updatePokemonUsage(BattleStartedPostEvent event) {
+        PokemonBattle battle = event.getBattle();
+        battle.getPlayers().forEach(player -> {
+            BattleActor actor = battle.getActor(player);
+            if (actor != null) {
+                AdditionalStatsData.executeForDataOf(player, statsData -> actor.getPokemonList().forEach(battlePokemon -> statsData.updatePokemonUsage(battlePokemon.getOriginalPokemon().getUuid())));
+            }
+        });
+        return Unit.INSTANCE;
+    }
+
+    private static Unit setStartDate(StarterChosenEvent event) {
+        ServerPlayerEntity player = event.getPlayer();
+        AdditionalStatsData.executeForDataOf(player, statsData -> statsData.setStartDate(new Date()));
+        return Unit.INSTANCE;
+    }
+
+    private static Unit removePokemonUsage(ReleasePokemonEvent event) {
+        UUID pokemonUuid = event.getPokemon().getUuid();
+        ServerPlayerEntity player = event.getPlayer();
+        AdditionalStatsData.executeForDataOf(player, statsData -> statsData.removePokemonUsage(pokemonUuid));
+        return Unit.INSTANCE;
+    }
+
+    private static Unit removePokemonUsage(TradeCompletedEvent event) {
+        UUID firstPlayerUuid = event.getTradeParticipant1().getUuid();
+        UUID firstPokemonUuid = event.getTradeParticipant2Pokemon().getUuid();
+        AdditionalStatsData.executeForDataOf(firstPlayerUuid, statsData -> statsData.removePokemonUsage(firstPokemonUuid));
+
+        UUID secondPlayerUuid = event.getTradeParticipant2().getUuid();
+        UUID secondPokemonUuid = event.getTradeParticipant1Pokemon().getUuid();
+        AdditionalStatsData.executeForDataOf(secondPlayerUuid, statsData -> statsData.removePokemonUsage(secondPokemonUuid));
+
+        return Unit.INSTANCE;
+    }
+
     public static void subscribeEvents() {
         CobblemonEvents.BATTLE_VICTORY.subscribe(Priority.NORMAL, CobblenavEvents::addPlayersToContacts);
+        CobblemonEvents.BATTLE_STARTED_POST.subscribe(Priority.NORMAL, CobblenavEvents::updateTotalPvpCount);
+        CobblemonEvents.BATTLE_STARTED_POST.subscribe(Priority.NORMAL, CobblenavEvents::updatePokemonUsage);
+        CobblemonEvents.STARTER_CHOSEN.subscribe(Priority.NORMAL, CobblenavEvents::setStartDate);
+        CobblemonEvents.POKEMON_RELEASED_EVENT_POST.subscribe(Priority.NORMAL, CobblenavEvents::removePokemonUsage);
+        CobblemonEvents.TRADE_COMPLETED.subscribe(Priority.NORMAL, CobblenavEvents::removePokemonUsage);
+        AttackEntityCallback.EVENT.register((player, world, hand, entity, hitResult) -> {
+            ItemStack stack = player.getStackInHand(hand);
+            if (stack.isOf(CobblenavItems.POKENAV_ITEM_GHOLDENGO) && entity instanceof PokemonEntity pokemonEntity) {
+                if (pokemonEntity.getPokemon().getSpecies().showdownId().equals("gholdengo")) {
+                    int randomInt = world.getRandom().nextBetween(1, 10);
+                    if (randomInt >= 9) {
+                        player.setStackInHand(hand, CobblenavItems.POKENAV_ITEM_INVISIBLE_GHOLDENGO.getDefaultStack());
+                    }
+                }
+            }
+            return ActionResult.PASS;
+        });
         if (FabricLoader.getInstance().isModLoaded("cobblemontrainers") && Cobblenav.CONFIG.useCobblemonTrainersIntegration) {
             Cobblenav.LOGGER.info("CobblemonTrainers Integration is enabled");
             CobblemonEvents.BATTLE_VICTORY.subscribe(Priority.NORMAL, CobblenavEvents::addTrainerToContacts);

@@ -1,7 +1,6 @@
 package com.metacontent.cobblenav.client.widget;
 
 import com.cobblemon.mod.common.CobblemonSounds;
-import com.cobblemon.mod.common.client.gui.summary.widgets.ModelWidget;
 import com.cobblemon.mod.common.pokemon.RenderablePokemon;
 import com.metacontent.cobblenav.Cobblenav;
 import com.metacontent.cobblenav.client.screen.pokenav.FinderScreen;
@@ -10,7 +9,6 @@ import com.metacontent.cobblenav.networking.CobblenavPackets;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
 import net.minecraft.client.gui.widget.ClickableWidget;
@@ -33,7 +31,7 @@ public class FinderShortcutWidget extends ClickableWidget {
 
     public FinderShortcutWidget(int x, int y, RenderablePokemon pokemon, MainScreen parent) {
         super(x, y, 25, 25, pokemon.getSpecies().getTranslatedName());
-        this.pokemonModel = new ModelWidget(getX(), getY(), getWidth(), getHeight(), pokemon, 0.5f, 340, 0);
+        this.pokemonModel = new ModelWidget(getX(), getY(), getWidth(), pokemon, 0.5f, 340, 0);
         player = MinecraftClient.getInstance().player;
         this.parent = parent;
     }

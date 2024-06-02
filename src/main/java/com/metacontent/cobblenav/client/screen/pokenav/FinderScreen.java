@@ -1,15 +1,17 @@
 package com.metacontent.cobblenav.client.screen.pokenav;
 
 import com.cobblemon.mod.common.CobblemonSounds;
-import com.cobblemon.mod.common.client.gui.summary.widgets.ModelWidget;
 import com.cobblemon.mod.common.pokemon.RenderablePokemon;
 import com.metacontent.cobblenav.Cobblenav;
 import com.metacontent.cobblenav.client.CobblenavClient;
 import com.metacontent.cobblenav.client.screen.AbstractPokenavItemScreen;
 import com.metacontent.cobblenav.client.widget.IconButton;
+import com.metacontent.cobblenav.client.widget.ModelWidget;
 import com.metacontent.cobblenav.client.widget.TextButton;
+import com.metacontent.cobblenav.config.CobblenavConfig;
 import com.metacontent.cobblenav.networking.CobblenavPackets;
 import com.metacontent.cobblenav.util.FoundPokemon;
+import kotlin.Pair;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
@@ -31,6 +33,7 @@ import static com.cobblemon.mod.common.client.render.RenderHelperKt.drawScaledTe
 @Environment(EnvType.CLIENT)
 public class FinderScreen extends AbstractPokenavItemScreen {
     private static final Identifier FINDER_ASSETS = new Identifier(Cobblenav.ID, "textures/gui/pokenav_item_gui_finder_assets.png");
+    private static final Identifier COUNTER_INTEGRATION_ASSETS = new Identifier(Cobblenav.ID, "textures/gui/counter_integration_assets.png");
     private static final int HEIGHT = 80;
     private static final int WIDTH = 80;
     private static final int ANIM_DURATION = 40;
@@ -42,6 +45,8 @@ public class FinderScreen extends AbstractPokenavItemScreen {
     private int ticker = 0;
     private boolean isLoading = true;
     private FoundPokemon foundPokemon;
+    private final CobblenavConfig.CounterIntegrationConfig config = Cobblenav.CONFIG.counterIntegrationConfig;
+    private Pair<String, Integer> streak;
 
     private ModelWidget pokemonModel;
     private IconButton backButton;
@@ -67,6 +72,10 @@ public class FinderScreen extends AbstractPokenavItemScreen {
         isLoading = loading;
     }
 
+    public void setStreak(Pair<String, Integer> streak) {
+        this.streak = streak;
+    }
+
     private void requestBestPokemon() {
         PacketByteBuf buf = PacketByteBufs.create();
         buf.writeString(pokemon.getForm().showdownId());
@@ -86,11 +95,13 @@ public class FinderScreen extends AbstractPokenavItemScreen {
         requestBestPokemon();
         saveLastFoundPokemon();
 
+        ClientPlayNetworking.send(CobblenavPackets.STREAK_PACKET_SERVER, PacketByteBufs.create());
+
         borderX = (width - BORDER_WIDTH) / 2;
         borderY = (height - BORDER_HEIGHT) / 2 - 10;
 
         pokemonModel = new ModelWidget(borderX + BORDER_WIDTH / 2 - WIDTH / 2, borderY + BORDER_HEIGHT / 2 + 20 - HEIGHT / 2,
-                WIDTH, HEIGHT, pokemon, 1.5f, 340, 0);
+                WIDTH, pokemon, 1.5f, 340, 0);
 
         backButton = new IconButton(borderX + BORDER_DEPTH + 3, borderY + BORDER_HEIGHT - BORDER_DEPTH - 12, 11, 11, 73, 0, 0,
                 () -> {
@@ -109,9 +120,7 @@ public class FinderScreen extends AbstractPokenavItemScreen {
     }
 
     @Override
-    public void render(DrawContext drawContext, int i, int j, float f) {
-        renderBackground(drawContext);
-
+    public void renderScreen(DrawContext drawContext, int i, int j, float f) {
         MatrixStack matrixStack = drawContext.getMatrices();
 
         blitk(matrixStack, BORDERS,
@@ -129,6 +138,8 @@ public class FinderScreen extends AbstractPokenavItemScreen {
                 blitk(matrixStack, FINDER_ASSETS,
                         borderX + BORDER_DEPTH, borderY + BORDER_DEPTH + 20, 116, 210, 0, 0, 256,
                         256, 0, 1, 1, 1, 1, false, 1);
+
+                renderCounter(drawContext, i, j);
 
                 pokemonModel.render(drawContext, i, j, f);
 
@@ -154,17 +165,57 @@ public class FinderScreen extends AbstractPokenavItemScreen {
             }
             else {
                 drawScaledText(drawContext, FONT, Text.translatable("gui.cobblenav.pokenav_item.not_found_message"),
-                        borderX + BORDER_WIDTH / 2, borderY + BORDER_HEIGHT / 2, 1, 1, BORDER_WIDTH, 0xFFFFFF, true, true, i, j);
+                        borderX + BORDER_WIDTH / 2 + 2, borderY + BORDER_HEIGHT / 2, 1, 1, 100, 0xFFFFFF, true, true, i, j);
             }
         }
-
-        super.render(drawContext, i, j, f);
     }
 
     private void renderBackgroundImage(MatrixStack matrixStack) {
-        blitk(matrixStack, FINDER_ASSETS,
-                borderX + BORDER_DEPTH, borderY + BORDER_DEPTH + 20, 116, 210, 0, 116, 256,
-                256, 0, 1, 1, 1, 1, false, 1);
+        if (streak != null) {
+            Identifier texture = COUNTER_INTEGRATION_ASSETS;
+            int offsetY = 0;
+            int textureHeight = 512;
+            int value = streak.component2();
+
+            if (streak.component1().equals(pokemon.getSpecies().getName().toLowerCase()) && value >= config.levelOneStreak) {
+                if (value < config.levelTwoStreak) {
+                    offsetY = 116;
+                } else if (value < config.levelThreeStreak) {
+                    offsetY = 232;
+                } else if (value < config.levelFourStreak) {
+                    offsetY = 348;
+                } else {
+                    texture = FINDER_ASSETS;
+                    offsetY = 116;
+                    textureHeight = 256;
+                }
+            }
+
+            blitk(matrixStack, texture,
+                    borderX + AbstractPokenavItemScreen.BORDER_DEPTH, borderY + AbstractPokenavItemScreen.BORDER_DEPTH + 20,
+                    116, 210, 0, offsetY, 256, textureHeight,
+                    0, 1, 1, 1, 1, false, 1);
+        }
+        else {
+            blitk(matrixStack, FINDER_ASSETS, borderX + BORDER_DEPTH, borderY + BORDER_DEPTH + 20,
+                    116, 210, 0, 116, 256, 256, 0,
+                    1, 1, 1, 1, false, 1);
+        }
+    }
+
+    private void renderCounter(DrawContext drawContext, int i, int j) {
+        if (streak != null) {
+            int value = streak.component2();
+            if (streak.component1().equals(pokemon.getSpecies().getName().toLowerCase())) {
+                blitk(drawContext.getMatrices(), COUNTER_INTEGRATION_ASSETS,
+                        borderX + AbstractPokenavItemScreen.BORDER_DEPTH, borderY + AbstractPokenavItemScreen.BORDER_HEIGHT / 2,
+                        14, 41, 0, 465, 256, 512,
+                        0, 1, 1, 1, 1, false, 1);
+                drawScaledText(drawContext, AbstractPokenavItemScreen.FONT, Text.literal("CS: " + value),
+                        borderX + AbstractPokenavItemScreen.BORDER_DEPTH + 8, borderY + AbstractPokenavItemScreen.BORDER_HEIGHT / 2 + 2,
+                        1, 1, 30, 0xFFFFFF, false, true, i, j);
+            }
+        }
     }
 
     private void renderAbilityName(DrawContext drawContext, int i, int j) {
@@ -203,9 +254,20 @@ public class FinderScreen extends AbstractPokenavItemScreen {
     }
 
     @Override
-    public boolean mouseClicked(double d, double e, int i) {
+    public void onMouseClicked(double d, double e, int i) {
         backButton.mouseClicked(d, e, i);
-        trackButton.mouseClicked(d, e, i);
-        return super.mouseClicked(d, e, i);
+        if (!isLoading) {
+            trackButton.mouseClicked(d, e, i);
+        }
+    }
+
+    @Override
+    public void onMouseDragged(double d, double e, int i, double f, double g) {
+
+    }
+
+    @Override
+    public void onMouseScrolled(double d, double e, double f) {
+
     }
 }

@@ -1,7 +1,6 @@
 package com.metacontent.cobblenav.client.widget;
 
 import com.cobblemon.mod.common.CobblemonSounds;
-import com.cobblemon.mod.common.client.gui.summary.widgets.ModelWidget;
 import com.cobblemon.mod.common.pokemon.RenderablePokemon;
 import com.metacontent.cobblenav.Cobblenav;
 import com.metacontent.cobblenav.client.CobblenavClient;
@@ -41,7 +40,7 @@ public class PokemonSpawnInfoWidget extends ClickableWidget {
 
     public PokemonSpawnInfoWidget(int i, int j, RenderablePokemon pokemon, float probability, LocationScreen parent, int minRenderY, int maxRenderY) {
         super(i, j, 20, 30, pokemon.getSpecies().getTranslatedName());
-        this.pokemonModel = new ModelWidget(getX(), getY(), getWidth(), getHeight() - getHeight() / 3, pokemon, 0.5F, 340F, 0F);
+        this.pokemonModel = new ModelWidget(getX(), getY(), getWidth(), pokemon, 0.5f, 340f, 0);
 
         this.probability = probability;
         boolean bucketWise = CobblenavClient.CONFIG.bucketWisePercentageCalculation;

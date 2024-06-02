@@ -32,6 +32,10 @@ public class CobblenavItems {
     public static final Item POKENAV_ITEM_PURPLE = registerPokenavItem("purple");
     public static final Item POKENAV_ITEM_MAGENTA = registerPokenavItem("magenta");
     public static final Item POKENAV_ITEM_PINK = registerPokenavItem("pink");
+    public static final Item POKENAV_ITEM_GHOLDENGO = registerPokenavItem("gholdengo");
+    public static final Item POKENAV_ITEM_NETHERITE = registerPokenavItem("netherite");
+    public static final Item POKENAV_ITEM_INVISIBLE_GHOLDENGO = registerPokenavItem("invisible_gholdengo");
+
     public static final Item POKEFINDER_ITEM_BLACK = registerPokefinderItem("black");
     public static final Item POKEFINDER_ITEM_BLUE = registerPokefinderItem("blue");
     public static final Item POKEFINDER_ITEM_GREEN = registerPokefinderItem("green");
@@ -63,6 +67,9 @@ public class CobblenavItems {
                         entries.add(POKENAV_ITEM_PURPLE);
                         entries.add(POKENAV_ITEM_MAGENTA);
                         entries.add(POKENAV_ITEM_PINK);
+                        entries.add(POKENAV_ITEM_GHOLDENGO);
+                        entries.add(POKENAV_ITEM_NETHERITE);
+
                         entries.add(POKEFINDER_ITEM_BLACK);
                         entries.add(POKEFINDER_ITEM_BLUE);
                         entries.add(POKEFINDER_ITEM_GREEN);
@@ -73,9 +80,9 @@ public class CobblenavItems {
                     }))
                     .build());
 
-    private static Item registerPokenavItem(@Nullable String color) {
-        return registerItem("pokenav_item" + (color != null ? "_" + color : ""),
-                new PokenavItem(new FabricItemSettings().maxCount(1)));
+    private static Item registerPokenavItem(@Nullable String type) {
+        return registerItem("pokenav_item" + (type != null ? "_" + type : ""),
+                new PokenavItem(type, new FabricItemSettings().maxCount(1)));
     }
 
     private static Item registerPokefinderItem(@NotNull String color) {
