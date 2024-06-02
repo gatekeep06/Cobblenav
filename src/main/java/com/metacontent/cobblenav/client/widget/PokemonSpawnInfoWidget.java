@@ -2,7 +2,6 @@ package com.metacontent.cobblenav.client.widget;
 
 import com.cobblemon.mod.common.CobblemonSounds;
 import com.cobblemon.mod.common.pokemon.RenderablePokemon;
-import com.metacontent.cobblenav.Cobblenav;
 import com.metacontent.cobblenav.client.CobblenavClient;
 import com.metacontent.cobblenav.client.screen.pokenav.FinderScreen;
 import com.metacontent.cobblenav.client.screen.pokenav.LocationScreen;
@@ -24,7 +23,6 @@ import static com.cobblemon.mod.common.client.render.RenderHelperKt.drawScaledTe
 
 public class PokemonSpawnInfoWidget extends ClickableWidget {
     private static final Identifier FONT = new Identifier("uniform");
-    private static final Identifier BUTTONS = new Identifier(Cobblenav.ID, "textures/gui/pokenav_item_gui_buttons.png");
     private final ModelWidget pokemonModel;
     private final PlayerEntity player;
     private float probability;
