@@ -63,8 +63,8 @@ public class PokemonSpawnInfoWidget extends ClickableWidget {
 
         this.areaExpansion = CobblenavClient.CONFIG.actionButtonAreaExpansion;
 
-        shareButton = new IconButton(getX() + getWidth() / 2 + 1, getY() + getHeight() - 12, 11, 11, 73, 12,
-                0,
+        shareButton = new IconButton(getX() + getWidth() / 2 + 1, getY() + getHeight() - 12,
+                11, 11, 73, 12, null,
                 () -> {
                     player.playSound(CobblemonSounds.PC_CLICK, 0.1f, 1.25f);
                     String form = pokemonModel.getPokemon().getForm().getName();
@@ -79,8 +79,8 @@ public class PokemonSpawnInfoWidget extends ClickableWidget {
                                     .withClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, text.getString()))));
                 }
         );
-        findButton = new IconButton(getX() + getWidth() / 2 - 12, getY() + getHeight() - 12, 11, 11, 85, 12,
-                0,
+        findButton = new IconButton(getX() + getWidth() / 2 - 12, getY() + getHeight() - 12,
+                11, 11, 85, 12, null,
                 () -> {
                     parent.savePreferences();
                     player.playSound(CobblemonSounds.PC_CLICK, 0.1f, 1.25f);

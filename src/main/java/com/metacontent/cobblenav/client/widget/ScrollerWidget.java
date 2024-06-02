@@ -4,7 +4,7 @@ public class ScrollerWidget extends IconButton {
     private final OnScrollerDrag onDrag;
 
     public ScrollerWidget(int x, int y, int width, int height, int offsetX, int offsetY, OnScrollerDrag onDrag) {
-        super(x, y, width, height, offsetX, offsetY, 0, () -> {});
+        super(x, y, width, height, offsetX, offsetY, null, () -> {});
         this.onDrag = onDrag;
     }
 

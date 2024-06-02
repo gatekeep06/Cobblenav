@@ -26,7 +26,7 @@ public class ContactListWidget extends ClickableWidget {
         items = new ArrayList<>();
         for (int i = 0; i < contactList.size(); i++) {
             int index = i;
-            ContactListItem item = new ContactListItem(getX(), getY() + index * 12, contactList.get(i), index,
+            ContactListItem item = new ContactListItem(getX(), getY() + 2 + index * 12, contactList.get(i), index,
                     () -> {
                         player.playSound(CobblemonSounds.PC_GRAB, 0.05f, 1.25f);
                         selector.setContactIndex(index);

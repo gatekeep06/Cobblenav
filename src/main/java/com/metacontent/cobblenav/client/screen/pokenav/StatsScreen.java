@@ -69,7 +69,7 @@ public class StatsScreen extends AbstractPokenavItemScreen {
         favoritePokemonUsageWidget = new TextWidget(0, 0, 50, 10, Text.empty(), textRenderer).alignLeft();
         badgeDisplay = new BadgeDisplayWidget(getBorderX() + BORDER_DEPTH + 3, getBorderY() + BORDER_DEPTH + 23);
         backButton = new IconButton(getBorderX() + BORDER_DEPTH + 3, getBorderY() + BORDER_HEIGHT - BORDER_DEPTH - 12,
-                11, 11, 73, 0, 0,
+                11, 11, 73, 0, Text.translatable("gui.cobblenav.pokenav_item.button_tooltip.back"),
                 () -> {
                     player.playSound(CobblemonSounds.PC_CLICK, 0.1f, 1.25f);
                     MinecraftClient.getInstance().setScreen(new MainScreen());
