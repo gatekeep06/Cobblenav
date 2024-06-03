@@ -1,4 +1,4 @@
-package com.metacontent.cobblenav.networking;
+package com.metacontent.cobblenav.networking.client;
 
 import com.metacontent.cobblenav.client.CobblenavClient;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;

@@ -1,7 +1,8 @@
-package com.metacontent.cobblenav.networking;
+package com.metacontent.cobblenav.networking.server;
 
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity;
 import com.cobblemon.mod.common.pokemon.RenderablePokemon;
+import com.metacontent.cobblenav.networking.CobblenavPackets;
 import com.metacontent.cobblenav.util.BestPokemonFinder;
 import com.metacontent.cobblenav.util.CobblenavNbtHelper;
 import com.metacontent.cobblenav.util.FoundPokemon;

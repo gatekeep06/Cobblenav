@@ -1,5 +1,6 @@
-package com.metacontent.cobblenav.networking;
+package com.metacontent.cobblenav.networking.server;
 
+import com.metacontent.cobblenav.networking.CobblenavPackets;
 import com.metacontent.cobblenav.util.PreferencesSaverEntity;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;

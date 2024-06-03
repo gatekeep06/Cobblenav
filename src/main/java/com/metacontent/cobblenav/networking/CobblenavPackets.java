@@ -1,6 +1,8 @@
 package com.metacontent.cobblenav.networking;
 
 import com.metacontent.cobblenav.Cobblenav;
+import com.metacontent.cobblenav.networking.client.*;
+import com.metacontent.cobblenav.networking.server.*;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.util.Identifier;

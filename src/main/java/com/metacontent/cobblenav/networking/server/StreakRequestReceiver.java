@@ -1,6 +1,7 @@
-package com.metacontent.cobblenav.networking;
+package com.metacontent.cobblenav.networking.server;
 
 import com.metacontent.cobblenav.Cobblenav;
+import com.metacontent.cobblenav.networking.CobblenavPackets;
 import kotlin.Pair;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;

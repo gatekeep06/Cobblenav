@@ -1,4 +1,4 @@
-package com.metacontent.cobblenav.networking;
+package com.metacontent.cobblenav.networking.server;
 
 import com.cobblemon.mod.common.Cobblemon;
 import com.cobblemon.mod.common.api.spawning.CobblemonWorldSpawnerManager;

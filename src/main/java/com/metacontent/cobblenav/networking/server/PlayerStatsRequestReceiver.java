@@ -1,8 +1,9 @@
-package com.metacontent.cobblenav.networking;
+package com.metacontent.cobblenav.networking.server;
 
 import com.cobblemon.mod.common.Cobblemon;
 import com.cobblemon.mod.common.api.storage.player.PlayerData;
 import com.metacontent.cobblenav.Cobblenav;
+import com.metacontent.cobblenav.networking.CobblenavPackets;
 import com.metacontent.cobblenav.util.PlayerStats;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
