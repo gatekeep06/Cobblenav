@@ -11,7 +11,7 @@ import net.minecraft.server.network.ServerPlayNetworkHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
 import us.timinc.mc.cobblemon.counter.api.CaptureApi;
 
-public class StreakPacketServerReceiver {
+public class StreakRequestReceiver {
     public static void receive(MinecraftServer server, ServerPlayerEntity player, ServerPlayNetworkHandler handler, PacketByteBuf buf, PacketSender responseSender) {
         server.execute(() -> {
             PacketByteBuf responseBuf = PacketByteBufs.create();
@@ -24,7 +24,7 @@ public class StreakPacketServerReceiver {
             else {
                 responseBuf.writeBoolean(false);
             }
-            responseSender.sendPacket(CobblenavPackets.STREAK_PACKET_CLIENT, responseBuf);
+            responseSender.sendPacket(CobblenavPackets.STREAK_PACKET, responseBuf);
         });
     }
 }

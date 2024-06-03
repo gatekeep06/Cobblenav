@@ -60,7 +60,7 @@ public class LocationScreen extends AbstractPokenavItemScreen {
     private void requestSavedPreferences() {
         spawnMap.clear();
         isLoading = true;
-        ClientPlayNetworking.send(CobblenavPackets.SAVED_PREFERENCES_PACKET_SERVER, PacketByteBufs.create());
+        ClientPlayNetworking.send(CobblenavPackets.SAVED_PREFERENCES_REQUEST_PACKET, PacketByteBufs.create());
     }
 
     public void setPreferences(int bucketIndex, int sortingMark) {
@@ -73,7 +73,7 @@ public class LocationScreen extends AbstractPokenavItemScreen {
         isLoading = true;
         PacketByteBuf buf = PacketByteBufs.create();
         buf.writeString(buckets.get(bucketIndex).getName());
-        ClientPlayNetworking.send(CobblenavPackets.SPAWN_MAP_PACKET_SERVER, buf);
+        ClientPlayNetworking.send(CobblenavPackets.SPAWN_MAP_REQUEST_PACKET, buf);
     }
 
     public void setLoading(boolean loading) {

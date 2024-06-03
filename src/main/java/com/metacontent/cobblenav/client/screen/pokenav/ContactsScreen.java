@@ -46,7 +46,7 @@ public class ContactsScreen extends AbstractPokenavItemScreen implements Contact
     private void requestContactData() {
         selectedContactIndex = -1;
         contacts = new ArrayList<>();
-        ClientPlayNetworking.send(CobblenavPackets.CONTACT_DATA_PACKET_SERVER, PacketByteBufs.create());
+        ClientPlayNetworking.send(CobblenavPackets.CONTACT_DATA_REQUEST_PACKET, PacketByteBufs.create());
     }
 
     public void createContactList(List<PokenavContact> contacts) {

@@ -18,7 +18,7 @@ import net.minecraft.text.Text;
 import java.util.List;
 import java.util.Map;
 
-public class TrackedEntityIdPacketServerReceiver {
+public class TrackedEntityIdRequestReceiver {
     public static void receive(MinecraftServer server, ServerPlayerEntity player, ServerPlayNetworkHandler handler, PacketByteBuf buf, PacketSender responseSender) {
         server.execute(() -> {
             if (player instanceof LastFoundPokemonSaverEntity lastFoundPokemonSaver) {
@@ -36,7 +36,7 @@ public class TrackedEntityIdPacketServerReceiver {
                     else {
                         responseBuf.writeInt(-1);
                     }
-                    responseSender.sendPacket(CobblenavPackets.TRACKED_ENTITY_ID_PACKET_CLIENT, responseBuf);
+                    responseSender.sendPacket(CobblenavPackets.TRACKED_ENTITY_ID_PACKET, responseBuf);
                 }
                 else {
                     player.sendMessage(Text.translatable("message.cobblenav.no_saved_pokemon")

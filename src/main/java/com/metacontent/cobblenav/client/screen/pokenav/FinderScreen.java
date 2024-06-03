@@ -79,7 +79,7 @@ public class FinderScreen extends AbstractPokenavItemScreen {
     private void requestBestPokemon() {
         PacketByteBuf buf = PacketByteBufs.create();
         buf.writeString(pokemon.getForm().showdownId());
-        ClientPlayNetworking.send(CobblenavPackets.BEST_POKEMON_PACKET_SERVER, buf);
+        ClientPlayNetworking.send(CobblenavPackets.BEST_POKEMON_REQUEST_PACKET, buf);
     }
 
     private void saveLastFoundPokemon() {
@@ -95,7 +95,7 @@ public class FinderScreen extends AbstractPokenavItemScreen {
         requestBestPokemon();
         saveLastFoundPokemon();
 
-        ClientPlayNetworking.send(CobblenavPackets.STREAK_PACKET_SERVER, PacketByteBufs.create());
+        ClientPlayNetworking.send(CobblenavPackets.STREAK_REQUEST_PACKET, PacketByteBufs.create());
 
         borderX = (width - BORDER_WIDTH) / 2;
         borderY = (height - BORDER_HEIGHT) / 2 - 10;

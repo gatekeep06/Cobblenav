@@ -9,7 +9,7 @@ import net.minecraft.network.PacketByteBuf;
 
 import java.util.*;
 
-public class SpawnMapPacketClientReceiver {
+public class SpawnMapReceiver {
     public static void receive(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender responseSender) {
         if (client.currentScreen instanceof LocationScreen locationScreen) {
             if (!locationScreen.getCurrentBucket().getName().equals(buf.readString())) {

@@ -13,7 +13,7 @@ import net.minecraft.server.world.ServerWorld;
 
 import java.util.*;
 
-public class BestPokemonPacketServerReceiver {
+public class BestPokemonRequestReceiver {
     public static void receive(MinecraftServer server, ServerPlayerEntity player, ServerPlayNetworkHandler handler, PacketByteBuf buf, PacketSender responseSender) {
         PacketByteBuf responseBuf = PacketByteBufs.create();
         String name = buf.readString();
@@ -37,6 +37,6 @@ public class BestPokemonPacketServerReceiver {
         else {
             responseBuf.writeBoolean(false);
         }
-        responseSender.sendPacket(CobblenavPackets.BEST_POKEMON_PACKET_CLIENT, responseBuf);
+        responseSender.sendPacket(CobblenavPackets.BEST_POKEMON_PACKET, responseBuf);
     }
 }
