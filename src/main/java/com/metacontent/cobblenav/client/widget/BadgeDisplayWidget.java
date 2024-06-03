@@ -6,6 +6,8 @@ import com.cobblemon.mod.common.client.gui.summary.widgets.type.SingleTypeWidget
 import com.cobblemon.mod.common.client.gui.summary.widgets.type.TypeWidget;
 import com.metacontent.cobblenav.Cobblenav;
 import com.metacontent.cobblenav.util.BorderBox;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.Drawable;
 import net.minecraft.client.util.math.MatrixStack;
@@ -49,11 +51,13 @@ public class BadgeDisplayWidget implements Drawable {
         private static final Identifier COVERAGE = new Identifier(Cobblenav.ID, "textures/gui/type_widget_coverage.png");
         private final ElementalType type;
         private final boolean granted;
+        private final TextRenderer textRenderer;
 
         public BadgeWidget(int pX, int pY, int pWidth, int pHeight, ElementalType type, boolean granted) {
             super(pX, pY, pWidth, pHeight, Text.literal("BadgeWidget"));
             this.type = type;
             this.granted = granted;
+            this.textRenderer = MinecraftClient.getInstance().textRenderer;
         }
 
         @Override
@@ -65,6 +69,12 @@ public class BadgeDisplayWidget implements Drawable {
                 float scale = 0.25f;
                 blitk(matrixStack, COVERAGE, (getX() + 0.5) / scale, getY() / scale, 36, 36, 0, 0,
                         36, 36, 0, 1, 1, 1, 0.7, true, scale);
+            }
+            if (hovered) {
+                matrixStack.push();
+                matrixStack.translate(0f, 0f, 1f);
+                drawContext.drawTooltip(textRenderer, type.getDisplayName(), i, j);
+                matrixStack.pop();
             }
             matrixStack.pop();
         }
