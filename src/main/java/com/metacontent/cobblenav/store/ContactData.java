@@ -12,6 +12,7 @@ import com.metacontent.cobblenav.util.ContactTeamMember;
 import com.metacontent.cobblenav.util.PokenavContact;
 import com.mojang.authlib.GameProfile;
 import com.selfdot.cobblemontrainers.trainer.Trainer;
+import net.minecraft.block.entity.SkullBlockEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -37,6 +38,17 @@ public class ContactData implements PlayerDataExtension {
         }
         action.accept(contactData);
         Cobblemon.playerData.saveSingle(data);
+    }
+
+    public void updateContact(GameProfile gameProfile) {
+        if (gameProfile.getId() == null) {
+            SkullBlockEntity.loadProperties(gameProfile, gameProfilex -> {
+                String id = gameProfilex.getId().toString();
+                PokenavContact pokenavContact = contacts.getOrDefault(id, new PokenavContact(id, gameProfilex, false));
+                pokenavContact.setProfile(gameProfilex);
+                contacts.put(id, pokenavContact);
+            });
+        }
     }
 
     public void updateContact(ServerPlayerEntity contact, @Nullable PokemonBattle battle, boolean isWinner, boolean isAlly) {
