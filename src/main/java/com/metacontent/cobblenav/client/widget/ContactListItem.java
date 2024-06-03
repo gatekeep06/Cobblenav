@@ -4,6 +4,7 @@ import com.metacontent.cobblenav.Cobblenav;
 import com.metacontent.cobblenav.util.BorderBox;
 import com.metacontent.cobblenav.util.PokenavContact;
 import com.mojang.authlib.minecraft.MinecraftProfileTexture;
+import net.minecraft.block.entity.SkullBlockEntity;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
@@ -22,7 +23,7 @@ public class ContactListItem extends ClickableWidget {
     private static final Identifier TEXTURE = new Identifier(Cobblenav.ID, "textures/gui/contact_screen_widgets.png");
     private static final Identifier TRAINER_SKIN = new Identifier(Cobblenav.ID, "textures/gui/pseudo_trainer_skin.png");
     private final PokenavContact contact;
-    private final Identifier skinId;
+    private Identifier skinId;
     private final int index;
     private boolean isSelected;
     private final OnSelect action;
@@ -42,16 +43,27 @@ public class ContactListItem extends ClickableWidget {
         this.titleLine = new CrawlingLineWidget(getX() + 65, getY(), 52, getHeight(), 0.6f, new BorderBox(2, 4));
 
         if (!contact.isTrainer()) {
+            skinId = DefaultSkinHelper.getTexture(Uuids.getUuidFromProfile(contact.getProfile()));
             PlayerSkinProvider skinProvider = MinecraftClient.getInstance().getSkinProvider();
-            MinecraftProfileTexture texture = skinProvider.getTextures(contact.getProfile()).get(MinecraftProfileTexture.Type.SKIN);
-            if (texture != null) {
-                skinId = skinProvider.loadSkin(texture, MinecraftProfileTexture.Type.SKIN);
-            } else {
-                skinId = DefaultSkinHelper.getTexture(Uuids.getUuidFromProfile(contact.getProfile()));
+            if (!skinProvider.getTextures(contact.getProfile()).containsKey(MinecraftProfileTexture.Type.SKIN)) {
+                SkullBlockEntity.loadProperties(contact.getProfile(), gameProfile -> {
+                    contact.setProfile(gameProfile);
+                    checkSkin(skinProvider);
+                });
+            }
+            else {
+                checkSkin(skinProvider);
             }
         }
         else {
             skinId = TRAINER_SKIN;
+        }
+    }
+
+    private void checkSkin(PlayerSkinProvider skinProvider) {
+        MinecraftProfileTexture texture = skinProvider.getTextures(contact.getProfile()).get(MinecraftProfileTexture.Type.SKIN);
+        if (texture != null) {
+            skinId = skinProvider.loadSkin(texture, MinecraftProfileTexture.Type.SKIN);
         }
     }
 
