@@ -1,7 +1,10 @@
 package com.metacontent.cobblenav.command;
 
+import com.metacontent.cobblenav.Cobblenav;
 import com.metacontent.cobblenav.store.ContactData;
+import com.mojang.authlib.GameProfile;
 import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.command.CommandRegistryAccess;
@@ -18,11 +21,14 @@ public class AddContactCommand {
         dispatcher.register(CommandManager.literal("pokenav")
                 .then(CommandManager.argument("player", EntityArgumentType.players()).requires(source -> source.hasPermissionLevel(2))
                         .then(CommandManager.literal("addContact")
+                                .then(CommandManager.literal("byName")
+                                        .then(CommandManager.argument("contact", StringArgumentType.string())
+                                                .executes(AddContactCommand::runUsingName)))
                                 .then(CommandManager.argument("contact", EntityArgumentType.player())
-                                        .executes(AddContactCommand::run)))));
+                                        .executes(AddContactCommand::runUsingPlayer)))));
     }
 
-    private static int run(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
+    private static int runUsingPlayer(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
         ServerPlayerEntity contact = context.getArgument("contact", EntitySelector.class).getPlayer(context.getSource());
         if (contact != null) {
             List<ServerPlayerEntity> players = context.getArgument("player", EntitySelector.class).getPlayers(context.getSource());
@@ -33,6 +39,23 @@ public class AddContactCommand {
                 return 1;
             }
             return -1;
+        }
+        return -1;
+    }
+
+    private static int runUsingName(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
+        try {
+            String contact = context.getArgument("contact", String.class);
+            List<ServerPlayerEntity> players = context.getArgument("player", EntitySelector.class).getPlayers(context.getSource());
+            if (!players.isEmpty()) {
+                players.forEach(p -> {
+                    ContactData.executeForDataOf(p, contactData -> contactData.updateContact(new GameProfile(null, contact)));
+                });
+                return 1;
+            }
+        }
+        catch (Exception e) {
+            Cobblenav.LOGGER.error(e.getMessage(), e);
         }
         return -1;
     }
