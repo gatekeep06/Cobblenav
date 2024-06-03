@@ -57,5 +57,12 @@
   "gui.cobblenav.pokenav_item.evolutions": "Эволюции:",
   "gui.cobblenav.pokenav_item.start_date": "Дата начала: %s",
   "message.cobblenav.has_no_permission": "У вас нет разрешения награждать этим значком",
-  "message.cobblenav.no_badge": "Такого значка не зарегистрировано"
+  "message.cobblenav.no_badge": "Такого значка не зарегистрировано",
+  "gui.cobblenav.pokenav_item.button_tooltip.back": "Назад",
+  "gui.cobblenav.pokenav_item.button_tooltip.delete": "Удалить контакт",
+  "gui.cobblenav.pokenav_item.button_tooltip.refresh": "Обновить",
+  "gui.cobblenav.pokenav_item.button_tooltip.reverse": "Инвертировать",
+  "gui.cobblenav.pokenav_item.button_tooltip.share": "Поделиться",
+  "gui.cobblenav.pokenav_item.button_tooltip.find": "Найти",
+  "item.cobblenav.pokenav_item.type.netherite": "Незеритовый"
 }
