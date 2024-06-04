@@ -1,5 +1,7 @@
 package com.metacontent.cobblenav.command;
 
+import com.cobblemon.mod.common.Cobblemon;
+import com.cobblemon.mod.common.api.storage.player.PlayerData;
 import com.metacontent.cobblenav.Cobblenav;
 import com.metacontent.cobblenav.store.ContactData;
 import com.mojang.authlib.GameProfile;
@@ -49,7 +51,9 @@ public class AddContactCommand {
             List<ServerPlayerEntity> players = context.getArgument("player", EntitySelector.class).getPlayers(context.getSource());
             if (!players.isEmpty()) {
                 players.forEach(p -> {
-                    ContactData.executeForDataOf(p, contactData -> contactData.updateContact(new GameProfile(null, contact)));
+                    PlayerData playerData = Cobblemon.playerData.get(p);
+                    ContactData contactData = ContactData.getFromData(playerData);
+                    contactData.updateContact(new GameProfile(null, contact), playerData);
                 });
                 return 1;
             }

@@ -51,7 +51,7 @@ public class ContactInfoWidget implements Drawable, Widget {
         blitk(drawContext.getMatrices(), TEXTURE, x, y + NAME_BOX_HEIGHT + 3, TEAM_BOX_HEIGHT,1, 0, 109, 256,
                 256, 0, 1, 1, 1, 1, false, 1);
 
-        drawScaledText(drawContext, FONT, Text.literal(contact.getTitleOrElseName()).setStyle(Style.EMPTY.withBold(true)),
+        drawScaledText(drawContext, FONT, Text.literal(contact.getTitleOrName()).setStyle(Style.EMPTY.withBold(true)),
                 animX + NAME_BOX_WIDTH / 2, y + NAME_BOX_HEIGHT / 2 - 4, 1f, 1, NAME_BOX_WIDTH - 6,
                 0xFFFFFF, true, false, i, j);
 
