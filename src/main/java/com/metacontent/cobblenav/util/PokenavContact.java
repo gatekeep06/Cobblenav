@@ -100,10 +100,12 @@ public class PokenavContact {
     public void saveToBuf(PacketByteBuf buf) {
         buf.writeString(key);
         buf.writeBoolean(trainer);
-        if (!trainer) {
+        if (trainer) {
+            buf.writeString(name);
+        }
+        else {
             buf.writeGameProfile(profile);
         }
-        buf.writeString(name);
         buf.writeString(title);
         buf.writeInt(winnings);
         buf.writeInt(losses);
@@ -114,7 +116,7 @@ public class PokenavContact {
         String key = buf.readString();
         boolean trainer = buf.readBoolean();
         GameProfile profile = trainer ? null : buf.readGameProfile();
-        String name = buf.readString();
+        String name = trainer ? buf.readString() : profile.getName();
         String title = buf.readString();
         int winnings = buf.readInt();
         int losses = buf.readInt();
