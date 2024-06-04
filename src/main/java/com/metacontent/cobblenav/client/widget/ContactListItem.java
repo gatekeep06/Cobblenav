@@ -11,13 +11,11 @@ import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
 import net.minecraft.client.gui.widget.ClickableWidget;
 import net.minecraft.client.texture.PlayerSkinProvider;
 import net.minecraft.client.util.DefaultSkinHelper;
-import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Uuids;
 
 import static com.cobblemon.mod.common.api.gui.GuiUtilsKt.blitk;
-import static com.cobblemon.mod.common.client.render.RenderHelperKt.drawScaledText;
 
 public class ContactListItem extends ClickableWidget {
     private static final Identifier TEXTURE = new Identifier(Cobblenav.ID, "textures/gui/contact_screen_widgets.png");
@@ -42,7 +40,7 @@ public class ContactListItem extends ClickableWidget {
         this.nameLine = new CrawlingLineWidget(getX() + 17, getY(), 44, getHeight(), 0.6f, new BorderBox(2, 4));
         this.titleLine = new CrawlingLineWidget(getX() + 65, getY(), 52, getHeight(), 0.6f, new BorderBox(2, 4));
 
-        if (!contact.isTrainer()) {
+        if (!contact.isTrainer() && contact.getProfile() != null) {
             skinId = DefaultSkinHelper.getTexture(Uuids.getUuidFromProfile(contact.getProfile()));
             PlayerSkinProvider skinProvider = MinecraftClient.getInstance().getSkinProvider();
             if (!skinProvider.getTextures(contact.getProfile()).containsKey(MinecraftProfileTexture.Type.SKIN)) {
@@ -85,7 +83,7 @@ public class ContactListItem extends ClickableWidget {
 //            drawScaledText(drawContext, FONT, Text.literal(contact.getTitle()).setStyle(style),
 //                    getX() + MAX_WIDTH + 20, getY(), 1, 1,
 //                    MAX_WIDTH, isHovered() ? 0xD3D3D3 : 0xFFFFFF, false, isHovered(), i, j);
-            nameLine.renderDynamic(drawContext, Text.literal(contact.getProfile().getName()), isHovered(), f);
+            nameLine.renderDynamic(drawContext, Text.literal(contact.getName()), isHovered(), f);
             titleLine.renderDynamic(drawContext, Text.literal(contact.getTitle()), isHovered(), f);
 
             if (skinId != null) {
