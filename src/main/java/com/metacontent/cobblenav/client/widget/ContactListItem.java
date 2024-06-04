@@ -83,7 +83,7 @@ public class ContactListItem extends ClickableWidget {
 //            drawScaledText(drawContext, FONT, Text.literal(contact.getTitle()).setStyle(style),
 //                    getX() + MAX_WIDTH + 20, getY(), 1, 1,
 //                    MAX_WIDTH, isHovered() ? 0xD3D3D3 : 0xFFFFFF, false, isHovered(), i, j);
-            nameLine.renderDynamic(drawContext, Text.literal(contact.getName()), isHovered(), f);
+            nameLine.renderDynamic(drawContext, Text.literal(contact.getNameOrProfileName()), isHovered(), f);
             titleLine.renderDynamic(drawContext, Text.literal(contact.getTitle()), isHovered(), f);
 
             if (skinId != null) {

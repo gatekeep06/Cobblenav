@@ -14,7 +14,6 @@ public class PokenavContact {
     @Nullable
     @JsonAdapter(GameProfile.Serializer.class)
     private GameProfile profile;
-    @NotNull
     private String name;
     private String title;
     private int winnings;
@@ -41,12 +40,16 @@ public class PokenavContact {
         this(key, null, name, "", 0, 0, new ArrayList<>(), trainer);
     }
 
-    public String getTitleOrElseName() {
-        return title.isEmpty() ? getName() : title;
+    public String getTitleOrName() {
+        return title.isEmpty() ? getNameOrProfileName() : title;
+    }
+
+    public String getNameOrProfileName() {
+        return isTrainer() || profile == null ? name : profile.getName();
     }
 
     public String getName() {
-        return isTrainer() || profile == null ? name : profile.getName();
+        return name;
     }
 
     public void setName(@NotNull String name) {
