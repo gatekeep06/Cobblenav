@@ -3,23 +3,28 @@ package com.metacontent.cobblenav.util;
 import com.google.gson.annotations.JsonAdapter;
 import com.mojang.authlib.GameProfile;
 import net.minecraft.network.PacketByteBuf;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class PokenavContact {
     private final String key;
+    @Nullable
     @JsonAdapter(GameProfile.Serializer.class)
     private GameProfile profile;
+    private String name;
     private String title;
     private int winnings;
     private int losses;
     private final List<ContactTeamMember> team;
     private final boolean trainer;
 
-    public PokenavContact(String key, GameProfile profile, String title, int winnings, int losses, List<ContactTeamMember> team, boolean trainer) {
+    public PokenavContact(String key, @Nullable GameProfile profile, @NotNull String name, String title, int winnings, int losses, List<ContactTeamMember> team, boolean trainer) {
         this.key = key;
         this.profile = profile;
+        this.name = name;
         this.title = title;
         this.winnings = winnings;
         this.losses = losses;
@@ -28,22 +33,38 @@ public class PokenavContact {
     }
 
     public PokenavContact(String key, GameProfile profile, boolean trainer) {
-        this(key, profile, "", 0, 0, new ArrayList<>(), trainer);
+        this(key, profile, profile.getName(), "", 0, 0, new ArrayList<>(), trainer);
     }
 
-    public String getTitleOrElseName() {
-        return title.isEmpty() ? profile.getName() : title;
+    public PokenavContact(String key, String name, boolean trainer) {
+        this(key, null, name, "", 0, 0, new ArrayList<>(), trainer);
+    }
+
+    public String getTitleOrName() {
+        return title.isEmpty() ? getNameOrProfileName() : title;
+    }
+
+    public String getNameOrProfileName() {
+        return isTrainer() || profile == null ? name : profile.getName();
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(@NotNull String name) {
+        this.name = name;
     }
 
     public String getKey() {
         return key;
     }
 
-    public GameProfile getProfile() {
+    public @Nullable GameProfile getProfile() {
         return profile;
     }
 
-    public void setProfile(GameProfile profile) {
+    public void setProfile(@Nullable GameProfile profile) {
         this.profile = profile;
     }
 
@@ -81,23 +102,27 @@ public class PokenavContact {
 
     public void saveToBuf(PacketByteBuf buf) {
         buf.writeString(key);
-        buf.writeGameProfile(profile);
+        buf.writeBoolean(trainer);
+        if (!trainer) {
+            buf.writeGameProfile(profile);
+        }
+        buf.writeString(name);
         buf.writeString(title);
         buf.writeInt(winnings);
         buf.writeInt(losses);
         buf.writeCollection(team, (buf1, member) -> member.saveToBuf(buf1));
-        buf.writeBoolean(trainer);
     }
 
     public static PokenavContact fromBuf(PacketByteBuf buf) {
         String key = buf.readString();
-        GameProfile profile = buf.readGameProfile();
+        boolean trainer = buf.readBoolean();
+        GameProfile profile = trainer ? null : buf.readGameProfile();
+        String name = buf.readString();
         String title = buf.readString();
         int winnings = buf.readInt();
         int losses = buf.readInt();
         List<ContactTeamMember> team = buf.readList(ContactTeamMember::fromBuf);
-        boolean trainer = buf.readBoolean();
-        return new PokenavContact(key, profile, title, winnings, losses, team, trainer);
+        return new PokenavContact(key, profile, name, title, winnings, losses, team, trainer);
     }
 
     @Override
@@ -105,6 +130,7 @@ public class PokenavContact {
         return "PokenavContact{" +
                 "key='" + key + '\'' +
                 ", profile=" + profile +
+                ", name='" + name + '\'' +
                 ", title='" + title + '\'' +
                 ", winnings=" + winnings +
                 ", losses=" + losses +

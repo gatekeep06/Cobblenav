@@ -3,8 +3,8 @@ package com.metacontent.cobblenav.config;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.metacontent.cobblenav.Cobblenav;
-import com.metacontent.cobblenav.config.util.Badge;
 import com.metacontent.cobblenav.config.util.Badges;
+import com.metacontent.cobblenav.config.util.TrainerContactInfo;
 import com.metacontent.cobblenav.util.PokemonFeatureWeights;
 import net.fabricmc.loader.api.FabricLoader;
 
@@ -12,6 +12,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.PrintWriter;
 import java.util.List;
+import java.util.Map;
 
 public class CobblenavConfig {
     public final boolean useCounterIntegration;
@@ -25,6 +26,7 @@ public class CobblenavConfig {
     public final List<String> ignoredLabels;
     public final List<String> hiddenPokemon;
     public final int titleCommandsPermissionLevel;
+    public final Map<String, TrainerContactInfo> trainerContactInfo;
     public final List<Integer> customPokenavPredicates;
     public final CounterIntegrationConfig counterIntegrationConfig;
     public final boolean enableDebugMode;
@@ -41,7 +43,7 @@ public class CobblenavConfig {
             List<String> ignoredLabels,
             List<String> hiddenPokemon,
             int titleCommandsPermissionLevel,
-            List<Integer> customPokenavPredicates,
+            Map<String, TrainerContactInfo> trainerContactInfo, List<Integer> customPokenavPredicates,
             CounterIntegrationConfig counterIntegrationConfig,
             boolean enableDebugMode
     ) {
@@ -56,13 +58,14 @@ public class CobblenavConfig {
         this.ignoredLabels = ignoredLabels;
         this.hiddenPokemon = hiddenPokemon;
         this.titleCommandsPermissionLevel = titleCommandsPermissionLevel;
+        this.trainerContactInfo = trainerContactInfo;
         this.customPokenavPredicates = customPokenavPredicates;
         this.counterIntegrationConfig = counterIntegrationConfig;
         this.enableDebugMode = enableDebugMode;
     }
 
     private CobblenavConfig() {
-        this(false, false, new Badges(), -1, -1, 100, 100, PokemonFeatureWeights.BASE_WEIGHTS, List.of("not_modeled"), List.of(), 2, List.of(0), new CounterIntegrationConfig(), false);
+        this(false, false, new Badges(), -1, -1, 100, 100, PokemonFeatureWeights.BASE_WEIGHTS, List.of("not_modeled"), List.of(), 2, Map.of(), List.of(0), new CounterIntegrationConfig(), false);
     }
 
     public static CobblenavConfig init() {
