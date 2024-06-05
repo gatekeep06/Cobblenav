@@ -6,6 +6,7 @@
 - Fixed display of skins in the contact list. Now they are displayed correctly even if players are not on the server (unless, of course, you are a pirate).
 - Updated highlighting of contacts in the list. Also by this fixed a rare bug with crawling line, which caused its immobilization.
 - Added tooltips with type names to displayed badges.
+- Now if your mouse buttons are swapped, in the pokenav they will be swapped as well.
 - Added a setting to the client config to enable button tooltips.
 - Added a setting to the client config that allows to increase the size of the area, when the cursor is in which the action buttons of the pokemon spawn widget are displayed.
 - Fixed missing translation for the netherite pokenav.
