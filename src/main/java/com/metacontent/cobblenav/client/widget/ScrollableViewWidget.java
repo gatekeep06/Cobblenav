@@ -6,7 +6,7 @@ import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
 import net.minecraft.client.gui.widget.ClickableWidget;
 import net.minecraft.text.Text;
 
-public class ScrollableViewWidget<T extends ClickableWidget> extends ClickableWidget {
+public class ScrollableViewWidget<T extends ClickableWidget> extends ClickableWidget implements Clickable {
     private final T widget;
     private final float scrollSize;
     private double scrollY = 0;
@@ -35,7 +35,7 @@ public class ScrollableViewWidget<T extends ClickableWidget> extends ClickableWi
     @Override
     public boolean mouseClicked(double d, double e, int i) {
         if (this.active && this.visible) {
-            if (this.isValidClickButton(i)) {
+            if (this.isMainClickButton(i)) {
                 boolean bl = this.clicked(d, e);
                 if (bl) {
                     widget.mouseClicked(d, e, i);

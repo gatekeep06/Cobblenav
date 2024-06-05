@@ -15,7 +15,7 @@ public class ScrollerWidget extends IconButton {
 
     @Override
     public boolean mouseDragged(double d, double e, int i, double f, double g) {
-        if (this.isValidClickButton(i) && this.clicked(d, e) && g != 0) {
+        if (this.isMainClickButton(i) && this.clicked(d, e) && g != 0) {
             this.onDrag(d, e, f, g);
             return true;
         }
