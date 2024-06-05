@@ -13,7 +13,7 @@ import net.minecraft.text.Text;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ContactListWidget extends ClickableWidget {
+public class ContactListWidget extends ClickableWidget implements Clickable {
     public static final int WIDTH = 128;
     public static final int HEIGHT = 99;
 
@@ -68,7 +68,7 @@ public class ContactListWidget extends ClickableWidget {
     @Override
     public boolean mouseClicked(double d, double e, int i) {
         if (this.active && this.visible) {
-            if (this.isValidClickButton(i)) {
+            if (this.isMainClickButton(i)) {
                 boolean bl = this.clicked(d, e);
                 if (bl) {
                     selector.setContactIndex(-1);

@@ -21,7 +21,7 @@ import java.text.DecimalFormat;
 
 import static com.cobblemon.mod.common.client.render.RenderHelperKt.drawScaledText;
 
-public class PokemonSpawnInfoWidget extends ClickableWidget {
+public class PokemonSpawnInfoWidget extends ClickableWidget implements Clickable {
     private static final Identifier FONT = new Identifier("uniform");
     private final ModelWidget pokemonModel;
     private final PlayerEntity player;
@@ -115,7 +115,7 @@ public class PokemonSpawnInfoWidget extends ClickableWidget {
     @Override
     public boolean mouseClicked(double d, double e, int i) {
         if (this.active && this.visible) {
-            if (this.isValidClickButton(i)) {
+            if (this.isMainClickButton(i)) {
                 boolean bl = this.clicked(d, e);
                 if (bl) {
                     if (showActionButtons) {

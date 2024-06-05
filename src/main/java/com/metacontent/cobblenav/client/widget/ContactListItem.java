@@ -17,7 +17,7 @@ import net.minecraft.util.Uuids;
 
 import static com.cobblemon.mod.common.api.gui.GuiUtilsKt.blitk;
 
-public class ContactListItem extends ClickableWidget {
+public class ContactListItem extends ClickableWidget implements Clickable {
     private static final Identifier TEXTURE = new Identifier(Cobblenav.ID, "textures/gui/contact_screen_widgets.png");
     private static final Identifier TRAINER_SKIN = new Identifier(Cobblenav.ID, "textures/gui/pseudo_trainer_skin.png");
     private final PokenavContact contact;
@@ -105,7 +105,7 @@ public class ContactListItem extends ClickableWidget {
     @Override
     public boolean mouseClicked(double d, double e, int i) {
         if (this.active && this.visible) {
-            if (this.isValidClickButton(i)) {
+            if (this.isMainClickButton(i)) {
                 boolean bl = this.clicked(d, e);
                 if (bl) {
                     this.onClick(d, e);

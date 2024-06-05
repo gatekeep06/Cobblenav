@@ -8,7 +8,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
-public abstract class AbstractPokenavButton extends ClickableWidget {
+public abstract class AbstractPokenavButton extends ClickableWidget implements Clickable {
     public static final Identifier FONT = new Identifier("uniform");
     protected static final Identifier TEXTURE = new Identifier(Cobblenav.ID, "textures/gui/pokenav_item_gui_buttons.png");
     protected static final Identifier HOVERED_TEXTURE = new Identifier(Cobblenav.ID, "textures/gui/pokenav_item_gui_buttons_hovered.png");
@@ -31,7 +31,7 @@ public abstract class AbstractPokenavButton extends ClickableWidget {
     @Override
     public boolean mouseClicked(double d, double e, int i) {
         if (this.active && this.visible) {
-            if (this.isValidClickButton(i)) {
+            if (this.isMainClickButton(i)) {
                 boolean bl = this.clicked(d, e);
                 if (bl) {
                     this.onClick(d, e);
