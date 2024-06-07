@@ -45,4 +45,8 @@ public abstract class AbstractPokenavButton extends ClickableWidget implements C
     public interface OnPressed {
         void onPressed();
     }
+
+    public void setHeight(int height) {
+        this.height = height;
+    }
 }
