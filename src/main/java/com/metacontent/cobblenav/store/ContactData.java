@@ -8,17 +8,19 @@ import com.cobblemon.mod.common.api.storage.player.PlayerDataExtension;
 import com.cobblemon.mod.common.api.storage.player.PlayerDataExtensionRegistry;
 import com.cobblemon.mod.common.battles.pokemon.BattlePokemon;
 import com.google.gson.*;
+import com.metacontent.cobblenav.Cobblenav;
+import com.metacontent.cobblenav.config.util.TrainerContactInfo;
 import com.metacontent.cobblenav.util.ContactTeamMember;
 import com.metacontent.cobblenav.util.PokenavContact;
 import com.mojang.authlib.GameProfile;
 import com.selfdot.cobblemontrainers.trainer.Trainer;
+import net.minecraft.block.entity.SkullBlockEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 import java.util.function.Consumer;
 
 public class ContactData implements PlayerDataExtension {
@@ -28,15 +30,33 @@ public class ContactData implements PlayerDataExtension {
     private String title = "";
     private final Map<String, PokenavContact> contacts = new HashMap<>();
 
-    public static void executeForDataOf(ServerPlayerEntity player, Consumer<ContactData> action) {
-        PlayerData data = Cobblemon.playerData.get(player);
+    public static ContactData getFromData(PlayerData data) {
         ContactData contactData = (ContactData) data.getExtraData().get(ContactData.NAME);
         if (contactData == null) {
             contactData = new ContactData();
             data.getExtraData().put(ContactData.NAME, contactData);
+            Cobblemon.playerData.saveSingle(data);
         }
+        return contactData;
+    }
+
+    public static void executeForDataOf(ServerPlayerEntity player, Consumer<ContactData> action) {
+        PlayerData data = Cobblemon.playerData.get(player);
+        ContactData contactData = ContactData.getFromData(data);
         action.accept(contactData);
         Cobblemon.playerData.saveSingle(data);
+    }
+
+    public void updateContact(GameProfile gameProfile, PlayerData data) {
+        if (gameProfile.getId() == null) {
+            SkullBlockEntity.loadProperties(gameProfile, gameProfilex -> {
+                String id = gameProfilex.getId().toString();
+                PokenavContact pokenavContact = contacts.getOrDefault(id, new PokenavContact(id, gameProfilex, false));
+                pokenavContact.setProfile(gameProfilex);
+                contacts.put(id, pokenavContact);
+                Cobblemon.playerData.saveSingle(data);
+            });
+        }
     }
 
     public void updateContact(ServerPlayerEntity contact, @Nullable PokemonBattle battle, boolean isWinner, boolean isAlly) {
@@ -73,10 +93,21 @@ public class ContactData implements PlayerDataExtension {
 
     public void updateContact(Trainer contact, boolean isWinner) {
         String contactKey = contact.getGroup().toLowerCase() + "-" + contact.getName().toLowerCase();
-        GameProfile pseudoTrainerProfile = new GameProfile(UUID.randomUUID(), contact.getName());
-        PokenavContact pokenavContact = contacts.getOrDefault(contactKey, new PokenavContact(contactKey, pseudoTrainerProfile, true));
+        PokenavContact pokenavContact = contacts.getOrDefault(contactKey, new PokenavContact(contactKey, contact.getName(), true));
 
-        pokenavContact.setTitle("Trainer");
+        TrainerContactInfo contactInfo = Cobblenav.CONFIG.trainerContactInfo.get(contactKey);
+        String name;
+        String title;
+        if (contactInfo != null) {
+            name = contactInfo.name() != null ? contactInfo.name() : contact.getName();
+            title = contactInfo.title() != null ? contactInfo.title() : "Trainer";
+        }
+        else {
+            name = contact.getName();
+            title = "Trainer";
+        }
+        pokenavContact.setName(name);
+        pokenavContact.setTitle(title);
 
         pokenavContact.getTeam().clear();
         for (BattlePokemon pokemon : contact.getBattleTeam()) {
@@ -106,7 +137,12 @@ public class ContactData implements PlayerDataExtension {
         if (!jsonArray.isJsonNull()) {
             for (JsonElement jsonElement: jsonArray) {
                 PokenavContact contact = GSON.fromJson(jsonElement, PokenavContact.class);
-                contacts.put(contact.getKey(), contact);
+                if (contact.getName() != null) {
+                    contacts.put(contact.getKey(), contact);
+                }
+                else {
+                    Cobblenav.LOGGER.warn("Outdated contact '" + contact.getKey() + "' is ignored");
+                }
             }
         }
 

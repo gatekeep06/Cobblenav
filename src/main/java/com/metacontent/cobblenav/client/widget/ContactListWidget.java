@@ -1,7 +1,6 @@
 package com.metacontent.cobblenav.client.widget;
 
 import com.cobblemon.mod.common.CobblemonSounds;
-import com.metacontent.cobblenav.Cobblenav;
 import com.metacontent.cobblenav.util.ContactSelector;
 import com.metacontent.cobblenav.util.PokenavContact;
 import net.minecraft.client.MinecraftClient;
@@ -10,16 +9,11 @@ import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
 import net.minecraft.client.gui.widget.ClickableWidget;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.cobblemon.mod.common.api.gui.GuiUtilsKt.blitk;
-
-public class ContactListWidget extends ClickableWidget {
-    public static final Identifier BUTTONS = new Identifier(Cobblenav.ID, "textures/gui/pokenav_item_gui_buttons.png");
-    public static final Identifier BUTTONS_HOVERED = new Identifier(Cobblenav.ID, "textures/gui/pokenav_item_gui_buttons_hovered.png");
+public class ContactListWidget extends ClickableWidget implements Clickable {
     public static final int WIDTH = 128;
     public static final int HEIGHT = 99;
 
@@ -32,7 +26,7 @@ public class ContactListWidget extends ClickableWidget {
         items = new ArrayList<>();
         for (int i = 0; i < contactList.size(); i++) {
             int index = i;
-            ContactListItem item = new ContactListItem(getX(), getY() + index * 12, contactList.get(i), index,
+            ContactListItem item = new ContactListItem(getX(), getY() + 2 + index * 12, contactList.get(i), index,
                     () -> {
                         player.playSound(CobblemonSounds.PC_GRAB, 0.05f, 1.25f);
                         selector.setContactIndex(index);
@@ -74,7 +68,7 @@ public class ContactListWidget extends ClickableWidget {
     @Override
     public boolean mouseClicked(double d, double e, int i) {
         if (this.active && this.visible) {
-            if (this.isValidClickButton(i)) {
+            if (this.isMainClickButton(i)) {
                 boolean bl = this.clicked(d, e);
                 if (bl) {
                     selector.setContactIndex(-1);

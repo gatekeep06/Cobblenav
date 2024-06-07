@@ -22,6 +22,7 @@
   "item.cobblenav.pokenav_item.type.pink": "Pink",
   "item.cobblenav.pokenav_item.type.gholdengo": "Gholdengo",
   "item.cobblenav.pokenav_item.type.invisible_gholdengo": "Gholdengo 1.5.1",
+  "item.cobblenav.pokenav_item.type.netherite": "Netherite",
   "gui.cobblenav.pokenav_item.title": "POKEMON NAVIGATOR",
   "gui.cobblenav.pokenav_item.close_button": "SWITCH OFF",
   "gui.cobblenav.pokenav_item.contact_button": "CONTACTS",
@@ -57,5 +58,11 @@
   "message.cobblenav.has_no_permission": "You have no permission to grant this badge",
   "message.cobblenav.no_badge": "There is no such badge registered",
   "gui.cobblenav.pokenav_item.last_found": "Last found:",
-  "gui.cobblenav.pokenav_item.last_found.tooltip": "Right-click to reset"
+  "gui.cobblenav.pokenav_item.last_found.tooltip": "Right-click to reset",
+  "gui.cobblenav.pokenav_item.button_tooltip.back": "Back",
+  "gui.cobblenav.pokenav_item.button_tooltip.delete": "Delete Contact",
+  "gui.cobblenav.pokenav_item.button_tooltip.refresh": "Refresh",
+  "gui.cobblenav.pokenav_item.button_tooltip.reverse": "Reverse Sorting",
+  "gui.cobblenav.pokenav_item.button_tooltip.share": "Share",
+  "gui.cobblenav.pokenav_item.button_tooltip.find": "Find"
 }

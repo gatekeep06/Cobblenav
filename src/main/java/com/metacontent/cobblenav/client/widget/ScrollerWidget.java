@@ -4,7 +4,7 @@ public class ScrollerWidget extends IconButton {
     private final OnScrollerDrag onDrag;
 
     public ScrollerWidget(int x, int y, int width, int height, int offsetX, int offsetY, OnScrollerDrag onDrag) {
-        super(x, y, width, height, offsetX, offsetY, 0, () -> {});
+        super(x, y, width, height, offsetX, offsetY, null, () -> {});
         this.onDrag = onDrag;
     }
 
@@ -15,7 +15,7 @@ public class ScrollerWidget extends IconButton {
 
     @Override
     public boolean mouseDragged(double d, double e, int i, double f, double g) {
-        if (this.isValidClickButton(i) && this.clicked(d, e) && g != 0) {
+        if (this.isMainClickButton(i) && this.clicked(d, e) && g != 0) {
             this.onDrag(d, e, f, g);
             return true;
         }

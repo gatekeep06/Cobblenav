@@ -20,7 +20,7 @@ import net.minecraft.util.Identifier;
 import static com.cobblemon.mod.common.api.gui.GuiUtilsKt.blitk;
 import static com.cobblemon.mod.common.client.render.RenderHelperKt.drawScaledText;
 
-public class FinderShortcutWidget extends ClickableWidget {
+public class FinderShortcutWidget extends ClickableWidget implements Clickable {
     private static final Identifier BACKGROUND = new Identifier(Cobblenav.ID, "textures/gui/pokenav_item_gui_buttons.png");
     private static final Identifier BACKGROUND_HOVERED = new Identifier(Cobblenav.ID, "textures/gui/pokenav_item_gui_buttons_hovered.png");
     private static final Identifier FONT = new Identifier("uniform");
@@ -82,11 +82,11 @@ public class FinderShortcutWidget extends ClickableWidget {
         if (this.active && this.visible) {
             boolean bl = this.clicked(d, e);
             if (bl) {
-                if (this.isValidClickButton(i)) {
+                if (this.isMainClickButton(i)) {
                     this.onClick(d, e);
                     return true;
                 }
-                else if (i == 1) {
+                else if (this.isSecondaryClickButton(i)) {
                     ClientPlayNetworking.send(CobblenavPackets.REMOVE_LAST_FOUND_POKEMON_PACKET, PacketByteBufs.create());
                     parent.removeFinderShortcutWidget();
                 }

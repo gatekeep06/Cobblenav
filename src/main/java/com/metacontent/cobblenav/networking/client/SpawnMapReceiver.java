@@ -1,4 +1,4 @@
-package com.metacontent.cobblenav.networking;
+package com.metacontent.cobblenav.networking.client;
 
 import com.cobblemon.mod.common.pokemon.RenderablePokemon;
 import com.metacontent.cobblenav.client.screen.pokenav.LocationScreen;
@@ -9,7 +9,7 @@ import net.minecraft.network.PacketByteBuf;
 
 import java.util.*;
 
-public class SpawnMapPacketClientReceiver {
+public class SpawnMapReceiver {
     public static void receive(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender responseSender) {
         if (client.currentScreen instanceof LocationScreen locationScreen) {
             if (!locationScreen.getCurrentBucket().getName().equals(buf.readString())) {

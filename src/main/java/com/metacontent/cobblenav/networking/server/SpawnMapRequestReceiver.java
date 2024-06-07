@@ -1,4 +1,4 @@
-package com.metacontent.cobblenav.networking;
+package com.metacontent.cobblenav.networking.server;
 
 import com.cobblemon.mod.common.Cobblemon;
 import com.cobblemon.mod.common.api.spawning.CobblemonWorldSpawnerManager;
@@ -23,9 +23,9 @@ import net.minecraft.server.world.ServerWorld;
 
 import java.util.*;
 
-import static com.metacontent.cobblenav.networking.CobblenavPackets.SPAWN_MAP_PACKET_CLIENT;
+import static com.metacontent.cobblenav.networking.CobblenavPackets.SPAWN_MAP_PACKET;
 
-public class SpawnMapPacketServerReceiver {
+public class SpawnMapRequestReceiver {
     public static void receive(MinecraftServer server, ServerPlayerEntity player, ServerPlayNetworkHandler handler, PacketByteBuf buf, PacketSender responseSender) {
         CobblemonConfig config = Cobblemon.config;
         String bucketName = buf.readString();
@@ -87,7 +87,7 @@ public class SpawnMapPacketServerReceiver {
                 PacketByteBuf.PacketWriter<Float> floatPacketWriter = PacketByteBuf::writeFloat;
                 responseBuf.writeMap(spawnMap, renderablePokemonPacketWriter, floatPacketWriter);
 
-                responseSender.sendPacket(SPAWN_MAP_PACKET_CLIENT, responseBuf);
+                responseSender.sendPacket(SPAWN_MAP_PACKET, responseBuf);
             }
         });
     }

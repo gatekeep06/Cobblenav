@@ -69,7 +69,7 @@ public class StatsScreen extends AbstractPokenavItemScreen {
         favoritePokemonUsageWidget = new TextWidget(0, 0, 50, 10, Text.empty(), textRenderer).alignLeft();
         badgeDisplay = new BadgeDisplayWidget(getBorderX() + BORDER_DEPTH + 3, getBorderY() + BORDER_DEPTH + 23);
         backButton = new IconButton(getBorderX() + BORDER_DEPTH + 3, getBorderY() + BORDER_HEIGHT - BORDER_DEPTH - 12,
-                11, 11, 73, 0, 0,
+                11, 11, 73, 0, Text.translatable("gui.cobblenav.pokenav_item.button_tooltip.back"),
                 () -> {
                     player.playSound(CobblemonSounds.PC_CLICK, 0.1f, 1.25f);
                     MinecraftClient.getInstance().setScreen(new MainScreen());
@@ -142,23 +142,23 @@ public class StatsScreen extends AbstractPokenavItemScreen {
                 256, 0, 1, 1, 1, 1, false, 1);
 
         if (stats != null) {
+            favoritePokemonWidget.render(drawContext, i, j, f);
+
             matrixStack.push();
-            matrixStack.translate(0f, 0f, 2500f);
+            matrixStack.translate(0f, 0f, 3000f);
             drawContext.fill(getBorderX() + BORDER_WIDTH - BORDER_DEPTH - 72, getBorderY() + BORDER_DEPTH + 20,
                     getBorderX() + BORDER_WIDTH - BORDER_DEPTH, getBorderY() + BORDER_HEIGHT - BORDER_DEPTH,
                     ColorHelper.Argb.getArgb(100, 0, 0, 0));
             pieChart.render(drawContext, i, j, f);
             statsTable.render(drawContext, i, j, f);
 
+            badgeDisplay.render(drawContext, i, j, f);
+
             matrixStack.push();
             matrixStack.scale(0.5f, 0.5f, 1f);
             startDateWidget.render(drawContext, i, j, f);
             matrixStack.pop();
             matrixStack.pop();
-
-            favoritePokemonWidget.render(drawContext, i, j, f);
-
-            badgeDisplay.render(drawContext, i, j, f);
         }
 
         backButton.render(drawContext, i, j, f);

@@ -1,4 +1,4 @@
-package com.metacontent.cobblenav.event;
+package com.metacontent.cobblenav.event.handler;
 
 import com.cobblemon.mod.common.api.Priority;
 import com.cobblemon.mod.common.api.events.CobblemonEvents;
@@ -19,9 +19,8 @@ import us.timinc.mc.cobblemon.counter.api.CaptureApi;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EggMoveGiver {
-
-    private static Unit possiblyGiveEggMove(SpawnEvent<PokemonEntity> event) {
+public class EggMoveHandler {
+    public static Unit possiblyGiveEggMove(SpawnEvent<PokemonEntity> event) {
         Entity entity = event.getCtx().getCause().getEntity();
         Pokemon pokemon = event.getEntity().getPokemon();
         String pokemonName = pokemon.getSpecies().showdownId();
@@ -65,9 +64,5 @@ public class EggMoveGiver {
             }
         }
         return chance;
-    }
-
-    public static void subscribe() {
-        CobblemonEvents.POKEMON_ENTITY_SPAWN.subscribe(Priority.NORMAL, EggMoveGiver::possiblyGiveEggMove);
     }
 }

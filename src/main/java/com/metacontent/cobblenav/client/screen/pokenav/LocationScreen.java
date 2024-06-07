@@ -60,7 +60,7 @@ public class LocationScreen extends AbstractPokenavItemScreen {
     private void requestSavedPreferences() {
         spawnMap.clear();
         isLoading = true;
-        ClientPlayNetworking.send(CobblenavPackets.SAVED_PREFERENCES_PACKET_SERVER, PacketByteBufs.create());
+        ClientPlayNetworking.send(CobblenavPackets.SAVED_PREFERENCES_REQUEST_PACKET, PacketByteBufs.create());
     }
 
     public void setPreferences(int bucketIndex, int sortingMark) {
@@ -73,7 +73,7 @@ public class LocationScreen extends AbstractPokenavItemScreen {
         isLoading = true;
         PacketByteBuf buf = PacketByteBufs.create();
         buf.writeString(buckets.get(bucketIndex).getName());
-        ClientPlayNetworking.send(CobblenavPackets.SPAWN_MAP_PACKET_SERVER, buf);
+        ClientPlayNetworking.send(CobblenavPackets.SPAWN_MAP_REQUEST_PACKET, buf);
     }
 
     public void setLoading(boolean loading) {
@@ -119,20 +119,22 @@ public class LocationScreen extends AbstractPokenavItemScreen {
             checkSpawns();
         }
 
-        backButton = new IconButton(borderX + BORDER_DEPTH + 3, borderY + BORDER_HEIGHT - BORDER_DEPTH - 12, 11, 11, 73, 0, 0,
+        backButton = new IconButton(borderX + BORDER_DEPTH + 3, borderY + BORDER_HEIGHT - BORDER_DEPTH - 12,
+                11, 11, 73, 0, Text.translatable("gui.cobblenav.pokenav_item.button_tooltip.back"),
                 () -> {
                     player.playSound(CobblemonSounds.PC_CLICK, 0.1f, 1.25f);
                     savePreferences();
                     MinecraftClient.getInstance().setScreen(new MainScreen());
                 }
         );
-        refreshButton = new IconButton(borderX + BORDER_DEPTH + 18, borderY + BORDER_HEIGHT - BORDER_DEPTH - 12, 11, 11, 85, 0, 400,
+        refreshButton = new IconButton(borderX + BORDER_DEPTH + 18, borderY + BORDER_HEIGHT - BORDER_DEPTH - 12,
+                11, 11, 85, 0, 400, Text.translatable("gui.cobblenav.pokenav_item.button_tooltip.refresh"),
                 () -> {
                     player.playSound(CobblemonSounds.PC_CLICK, 0.1f, 1.25f);
                     checkSpawns();
                 }
         );
-        decreaseBucketIndexButton = new IconButton(width / 2 - 25, borderY + BORDER_DEPTH + 22, 5, 7, 97, 0, 0,
+        decreaseBucketIndexButton = new IconButton(width / 2 - 25, borderY + BORDER_DEPTH + 22, 5, 7, 97, 0, null,
                 () -> {
                     player.playSound(CobblemonSounds.PC_CLICK, 0.05f, 1.25f);
                     if (bucketIndex - 1 >= 0) {
@@ -141,7 +143,7 @@ public class LocationScreen extends AbstractPokenavItemScreen {
                     }
                 }
         );
-        increaseBucketIndexButton = new IconButton(width / 2 + 25, borderY + BORDER_DEPTH + 22, 5, 7, 102, 0, 0,
+        increaseBucketIndexButton = new IconButton(width / 2 + 25, borderY + BORDER_DEPTH + 22, 5, 7, 102, 0, null,
                 () -> {
                     player.playSound(CobblemonSounds.PC_CLICK, 0.05f, 1.25f);
                     if (bucketIndex + 1 < buckets.size()) {
@@ -150,7 +152,8 @@ public class LocationScreen extends AbstractPokenavItemScreen {
                     }
                 }
         );
-        reverseSortingButton = new IconButton(borderX + BORDER_WIDTH - BORDER_DEPTH - 14, borderY + BORDER_HEIGHT - BORDER_DEPTH - 12, 11, 11, 97, 12, CobblenavClient.CONFIG.reverseSortingButtonCooldown,
+        reverseSortingButton = new IconButton(borderX + BORDER_WIDTH - BORDER_DEPTH - 14, borderY + BORDER_HEIGHT - BORDER_DEPTH - 12,
+                11, 11, 97, 12, CobblenavClient.CONFIG.reverseSortingButtonCooldown, Text.translatable("gui.cobblenav.pokenav_item.button_tooltip.reverse"),
                 () -> {
                     player.playSound(CobblemonSounds.PC_CLICK, 0.05f, 1.25f);
                     if (!spawnMap.isEmpty()) {

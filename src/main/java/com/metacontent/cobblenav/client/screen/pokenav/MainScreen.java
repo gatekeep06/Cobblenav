@@ -46,7 +46,7 @@ public class MainScreen extends AbstractPokenavItemScreen {
     }
 
     private void requestLastFoundPokemon() {
-        ClientPlayNetworking.send(CobblenavPackets.RENDERABLE_POKEMON_PACKET_SERVER, PacketByteBufs.create());
+        ClientPlayNetworking.send(CobblenavPackets.RENDERABLE_POKEMON_REQUEST_PACKET, PacketByteBufs.create());
     }
 
     public void createFinderShortcutWidget(RenderablePokemon pokemon) {

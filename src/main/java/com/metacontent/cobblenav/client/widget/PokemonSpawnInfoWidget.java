@@ -2,7 +2,6 @@ package com.metacontent.cobblenav.client.widget;
 
 import com.cobblemon.mod.common.CobblemonSounds;
 import com.cobblemon.mod.common.pokemon.RenderablePokemon;
-import com.metacontent.cobblenav.Cobblenav;
 import com.metacontent.cobblenav.client.CobblenavClient;
 import com.metacontent.cobblenav.client.screen.pokenav.FinderScreen;
 import com.metacontent.cobblenav.client.screen.pokenav.LocationScreen;
@@ -22,11 +21,11 @@ import java.text.DecimalFormat;
 
 import static com.cobblemon.mod.common.client.render.RenderHelperKt.drawScaledText;
 
-public class PokemonSpawnInfoWidget extends ClickableWidget {
+public class PokemonSpawnInfoWidget extends ClickableWidget implements Clickable {
     private static final Identifier FONT = new Identifier("uniform");
-    private static final Identifier BUTTONS = new Identifier(Cobblenav.ID, "textures/gui/pokenav_item_gui_buttons.png");
     private final ModelWidget pokemonModel;
     private final PlayerEntity player;
+    private final int areaExpansion;
     private float probability;
     private static final DecimalFormat df = new DecimalFormat("#.##");
     private String sign = "%";
@@ -62,8 +61,10 @@ public class PokemonSpawnInfoWidget extends ClickableWidget {
         this.minRenderY = minRenderY;
         this.maxRenderY = maxRenderY;
 
-        shareButton = new IconButton(getX() + getWidth() / 2 + 1, getY() + getHeight() - 12, 11, 11, 73, 12,
-                0,
+        this.areaExpansion = CobblenavClient.CONFIG.actionButtonAreaExpansion;
+
+        shareButton = new IconButton(getX() + getWidth() / 2 + 1, getY() + getHeight() - 12,
+                11, 11, 73, 12, null,
                 () -> {
                     player.playSound(CobblemonSounds.PC_CLICK, 0.1f, 1.25f);
                     String form = pokemonModel.getPokemon().getForm().getName();
@@ -78,8 +79,8 @@ public class PokemonSpawnInfoWidget extends ClickableWidget {
                                     .withClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, text.getString()))));
                 }
         );
-        findButton = new IconButton(getX() + getWidth() / 2 - 12, getY() + getHeight() - 12, 11, 11, 85, 12,
-                0,
+        findButton = new IconButton(getX() + getWidth() / 2 - 12, getY() + getHeight() - 12,
+                11, 11, 85, 12, null,
                 () -> {
                     parent.savePreferences();
                     player.playSound(CobblemonSounds.PC_CLICK, 0.1f, 1.25f);
@@ -99,17 +100,22 @@ public class PokemonSpawnInfoWidget extends ClickableWidget {
             drawScaledText(drawContext, FONT, Text.literal(df.format(probability) + sign).setStyle(Style.EMPTY.withBold(true)),
                     getX() + getWidth() / 2, getY() + getHeight() - 10, 1, 1, 2 * getWidth(), color, true, false, i, j);
             if (showActionButtons) {
-                showActionButtons = hovered;
+                showActionButtons = isHovered(i, j);
                 shareButton.render(drawContext, i, j, f);
                 findButton.render(drawContext, i, j, f);
             }
         }
     }
 
+    public boolean isHovered(int i, int j) {
+        return i >= this.getX() - areaExpansion && j >= this.getY() - areaExpansion
+                && i < this.getX() + this.width + areaExpansion && j < this.getY() + this.height + areaExpansion;
+    }
+
     @Override
     public boolean mouseClicked(double d, double e, int i) {
         if (this.active && this.visible) {
-            if (this.isValidClickButton(i)) {
+            if (this.isMainClickButton(i)) {
                 boolean bl = this.clicked(d, e);
                 if (bl) {
                     if (showActionButtons) {

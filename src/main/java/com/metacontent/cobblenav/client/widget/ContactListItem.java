@@ -4,25 +4,24 @@ import com.metacontent.cobblenav.Cobblenav;
 import com.metacontent.cobblenav.util.BorderBox;
 import com.metacontent.cobblenav.util.PokenavContact;
 import com.mojang.authlib.minecraft.MinecraftProfileTexture;
+import net.minecraft.block.entity.SkullBlockEntity;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
 import net.minecraft.client.gui.widget.ClickableWidget;
 import net.minecraft.client.texture.PlayerSkinProvider;
 import net.minecraft.client.util.DefaultSkinHelper;
-import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Uuids;
 
 import static com.cobblemon.mod.common.api.gui.GuiUtilsKt.blitk;
-import static com.cobblemon.mod.common.client.render.RenderHelperKt.drawScaledText;
 
-public class ContactListItem extends ClickableWidget {
-    private static final Identifier TEXTURE = new Identifier(Cobblenav.ID, "textures/gui/pokenav_item_gui_buttons.png");
+public class ContactListItem extends ClickableWidget implements Clickable {
+    private static final Identifier TEXTURE = new Identifier(Cobblenav.ID, "textures/gui/contact_screen_widgets.png");
     private static final Identifier TRAINER_SKIN = new Identifier(Cobblenav.ID, "textures/gui/pseudo_trainer_skin.png");
     private final PokenavContact contact;
-    private final Identifier skinId;
+    private Identifier skinId;
     private final int index;
     private boolean isSelected;
     private final OnSelect action;
@@ -38,20 +37,31 @@ public class ContactListItem extends ClickableWidget {
         this.action = onSelect;
         this.maxRenderY = maxRenderY;
         this.minRenderY = minRenderY;
-        this.nameLine = new CrawlingLineWidget(getX() + 18, getY(), 44, getHeight(), 0.6f, new BorderBox(2, 4));
-        this.titleLine = new CrawlingLineWidget(getX() + 66, getY(), 52, getHeight(), 0.6f, new BorderBox(2, 4));
+        this.nameLine = new CrawlingLineWidget(getX() + 17, getY(), 44, getHeight(), 0.6f, new BorderBox(2, 4));
+        this.titleLine = new CrawlingLineWidget(getX() + 65, getY(), 52, getHeight(), 0.6f, new BorderBox(2, 4));
 
-        if (!contact.isTrainer()) {
+        if (!contact.isTrainer() && contact.getProfile() != null) {
+            skinId = DefaultSkinHelper.getTexture(Uuids.getUuidFromProfile(contact.getProfile()));
             PlayerSkinProvider skinProvider = MinecraftClient.getInstance().getSkinProvider();
-            MinecraftProfileTexture texture = skinProvider.getTextures(contact.getProfile()).get(MinecraftProfileTexture.Type.SKIN);
-            if (texture != null) {
-                skinId = skinProvider.loadSkin(texture, MinecraftProfileTexture.Type.SKIN);
-            } else {
-                skinId = DefaultSkinHelper.getTexture(Uuids.getUuidFromProfile(contact.getProfile()));
+            if (!skinProvider.getTextures(contact.getProfile()).containsKey(MinecraftProfileTexture.Type.SKIN)) {
+                SkullBlockEntity.loadProperties(contact.getProfile(), gameProfile -> {
+                    contact.setProfile(gameProfile);
+                    checkSkin(skinProvider);
+                });
+            }
+            else {
+                checkSkin(skinProvider);
             }
         }
         else {
             skinId = TRAINER_SKIN;
+        }
+    }
+
+    private void checkSkin(PlayerSkinProvider skinProvider) {
+        MinecraftProfileTexture texture = skinProvider.getTextures(contact.getProfile()).get(MinecraftProfileTexture.Type.SKIN);
+        if (texture != null) {
+            skinId = skinProvider.loadSkin(texture, MinecraftProfileTexture.Type.SKIN);
         }
     }
 
@@ -63,24 +73,21 @@ public class ContactListItem extends ClickableWidget {
     @Override
     protected void renderButton(DrawContext drawContext, int i, int j, float f) {
         if (isVisible()) {
-            Style style = Style.EMPTY.withBold(isSelected);
-
             if (isSelected) {
-                blitk(drawContext.getMatrices(), TEXTURE, getX(), getY() + 1, 7, 4, 0, 72, 256,
+                blitk(drawContext.getMatrices(), TEXTURE, getX(), getY() - 2, 13, 120, 129, 0, 256,
                         256, 0, 1, 1, 1, 1, false, 1);
             }
-
 //            drawScaledText(drawContext, FONT, Text.literal(contact.getProfile().getName()).setStyle(style),
 //                    getX() + 18, getY(), 1, 1,
 //                    MAX_WIDTH, isHovered() ? 0xD3D3D3 : 0xFFFFFF, false, isHovered(), i, j);
 //            drawScaledText(drawContext, FONT, Text.literal(contact.getTitle()).setStyle(style),
 //                    getX() + MAX_WIDTH + 20, getY(), 1, 1,
 //                    MAX_WIDTH, isHovered() ? 0xD3D3D3 : 0xFFFFFF, false, isHovered(), i, j);
-            nameLine.renderDynamic(drawContext, Text.literal(contact.getProfile().getName()).setStyle(style), isHovered(), f);
-            titleLine.renderDynamic(drawContext, Text.literal(contact.getTitle()).setStyle(style), isHovered(), f);
+            nameLine.renderDynamic(drawContext, Text.literal(contact.getNameOrProfileName()), isHovered(), f);
+            titleLine.renderDynamic(drawContext, Text.literal(contact.getTitle()), isHovered(), f);
 
             if (skinId != null) {
-                blitk(drawContext.getMatrices(), skinId, getX() + 6, getY(), 8, 8, 8, 8, 64, 64,
+                blitk(drawContext.getMatrices(), skinId, getX() + 5, getY(), 8, 8, 8, 8, 64, 64,
                         0, 1, 1, 1, 1, false, 1);
             }
         }
@@ -98,7 +105,7 @@ public class ContactListItem extends ClickableWidget {
     @Override
     public boolean mouseClicked(double d, double e, int i) {
         if (this.active && this.visible) {
-            if (this.isValidClickButton(i)) {
+            if (this.isMainClickButton(i)) {
                 boolean bl = this.clicked(d, e);
                 if (bl) {
                     this.onClick(d, e);

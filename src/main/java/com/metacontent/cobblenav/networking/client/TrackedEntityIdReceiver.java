@@ -1,4 +1,4 @@
-package com.metacontent.cobblenav.networking;
+package com.metacontent.cobblenav.networking.client;
 
 import com.metacontent.cobblenav.client.CobblenavClient;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
@@ -8,7 +8,7 @@ import net.minecraft.network.PacketByteBuf;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 
-public class TrackedEntityIdPacketClientReceiver {
+public class TrackedEntityIdReceiver {
     public static void receive(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender responseSender) {
         int id = buf.readInt();
         if (id == -1) {

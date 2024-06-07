@@ -1,6 +1,7 @@
-package com.metacontent.cobblenav.networking;
+package com.metacontent.cobblenav.networking.server;
 
 import com.metacontent.cobblenav.Cobblenav;
+import com.metacontent.cobblenav.networking.CobblenavPackets;
 import kotlin.Pair;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
@@ -11,7 +12,7 @@ import net.minecraft.server.network.ServerPlayNetworkHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
 import us.timinc.mc.cobblemon.counter.api.CaptureApi;
 
-public class StreakPacketServerReceiver {
+public class StreakRequestReceiver {
     public static void receive(MinecraftServer server, ServerPlayerEntity player, ServerPlayNetworkHandler handler, PacketByteBuf buf, PacketSender responseSender) {
         server.execute(() -> {
             PacketByteBuf responseBuf = PacketByteBufs.create();
@@ -24,7 +25,7 @@ public class StreakPacketServerReceiver {
             else {
                 responseBuf.writeBoolean(false);
             }
-            responseSender.sendPacket(CobblenavPackets.STREAK_PACKET_CLIENT, responseBuf);
+            responseSender.sendPacket(CobblenavPackets.STREAK_PACKET, responseBuf);
         });
     }
 }

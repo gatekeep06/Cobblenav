@@ -1,4 +1,4 @@
-package com.metacontent.cobblenav.networking;
+package com.metacontent.cobblenav.networking.server;
 
 import com.metacontent.cobblenav.util.CobblenavNbtHelper;
 import com.metacontent.cobblenav.util.LastFoundPokemonSaverEntity;
@@ -9,7 +9,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayNetworkHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
 
-public class RemoveLastFoundPokemonPacketReceiver {
+public class RemoveLastFoundPokemonReceiver {
     public static void receive(MinecraftServer server, ServerPlayerEntity player, ServerPlayNetworkHandler handler, PacketByteBuf buf, PacketSender responseSender) {
         server.executeSync(() -> {
             if (player instanceof LastFoundPokemonSaverEntity lastFoundPokemonSaver) {

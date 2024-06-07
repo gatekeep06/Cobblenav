@@ -1,4 +1,4 @@
-package com.metacontent.cobblenav.networking;
+package com.metacontent.cobblenav.networking.client;
 
 import com.cobblemon.mod.common.client.CobblemonClient;
 import com.metacontent.cobblenav.client.screen.pokenav.StatsScreen;

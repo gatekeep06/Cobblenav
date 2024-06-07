@@ -46,12 +46,12 @@ public class ContactsScreen extends AbstractPokenavItemScreen implements Contact
     private void requestContactData() {
         selectedContactIndex = -1;
         contacts = new ArrayList<>();
-        ClientPlayNetworking.send(CobblenavPackets.CONTACT_DATA_PACKET_SERVER, PacketByteBufs.create());
+        ClientPlayNetworking.send(CobblenavPackets.CONTACT_DATA_REQUEST_PACKET, PacketByteBufs.create());
     }
 
     public void createContactList(List<PokenavContact> contacts) {
         this.contacts = contacts;
-        contactListWidget = new ContactListWidget(borderX - BORDER_DEPTH + BORDER_WIDTH - 123,
+        contactListWidget = new ContactListWidget(borderX - BORDER_DEPTH + BORDER_WIDTH - 124,
                 borderY + BORDER_DEPTH + 28, contacts, this);
         scrollableView = new ScrollableViewWidget<>(contactListWidget, 118, 99, CobblenavClient.CONFIG.scrollSize);
         contactInfoWidget = new ContactInfoWidget(borderX + BORDER_DEPTH, borderY + BORDER_DEPTH + 27);
@@ -67,14 +67,14 @@ public class ContactsScreen extends AbstractPokenavItemScreen implements Contact
         borderY = (height - BORDER_HEIGHT) / 2 - 10;
 
         backButton = new IconButton(borderX + BORDER_DEPTH + 3, borderY + BORDER_HEIGHT - BORDER_DEPTH - 12,
-                11, 11, 73, 0, 0,
+                11, 11, 73, 0, Text.translatable("gui.cobblenav.pokenav_item.button_tooltip.back"),
                 () -> {
                     player.playSound(CobblemonSounds.PC_CLICK, 0.1f, 1.25f);
                     MinecraftClient.getInstance().setScreen(new MainScreen());
                 }
         );
         deleteButton = new IconButton(borderX + BORDER_WIDTH - BORDER_DEPTH - 14, borderY + BORDER_HEIGHT - BORDER_DEPTH - 12,
-                11, 11, 109, 12, 0,
+                11, 11, 109, 12, Text.translatable("gui.cobblenav.pokenav_item.button_tooltip.delete"),
                 () -> {
                     player.playSound(CobblemonSounds.PC_RELEASE, 0.1f, 1.25f);
                     selectedContactIndex = -1;
@@ -101,7 +101,6 @@ public class ContactsScreen extends AbstractPokenavItemScreen implements Contact
                 borderX, borderY + BORDER_HEIGHT - BORDER_DEPTH - 14, 14, BORDER_WIDTH, 0, BORDER_HEIGHT + 1, 256,
                 256, 0, 1,1,1,1,false,1);
 
-        backButton.render(drawContext, i, j, f);
         if (scrollableView != null) {
             scrollableView.render(drawContext, i, j, f);
             if (selectedContactIndex != -1) {
@@ -109,6 +108,8 @@ public class ContactsScreen extends AbstractPokenavItemScreen implements Contact
                 deleteButton.render(drawContext, i, j, f);
             }
         }
+
+        backButton.render(drawContext, i, j, f);
     }
 
     @Override

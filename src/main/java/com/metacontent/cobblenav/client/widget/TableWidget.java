@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class TableWidget<T extends ClickableWidget> extends ClickableWidget {
+public class TableWidget<T extends ClickableWidget> extends ClickableWidget implements Clickable {
     private final int columns;
     private int rows;
     private List<T> widgets;
@@ -77,7 +77,7 @@ public class TableWidget<T extends ClickableWidget> extends ClickableWidget {
     @Override
     public boolean mouseClicked(double d, double e, int i) {
         if (this.active && this.visible) {
-            if (this.isValidClickButton(i)) {
+            if (this.isMainClickButton(i)) {
                 boolean bl = this.clicked(d, e);
                 if (bl) {
                     for (T widget : widgets) {

@@ -57,5 +57,12 @@
 "gui.cobblenav.pokenav_item.evolutions": "Evolutions:",
 "gui.cobblenav.pokenav_item.start_date": "Start Date: %s",
 "message.cobblenav.has_no_permission": "You have no permission to grant this badge",
-"message.cobblenav.no_badge": "There is no such badge registered"
+"message.cobblenav.no_badge": "There is no such badge registered",
+"gui.cobblenav.pokenav_item.button_tooltip.back": "Back",
+"gui.cobblenav.pokenav_item.button_tooltip.delete": "Delete Contact",
+"gui.cobblenav.pokenav_item.button_tooltip.refresh": "Refresh",
+"gui.cobblenav.pokenav_item.button_tooltip.reverse": "Reverse Sorting",
+"gui.cobblenav.pokenav_item.button_tooltip.share": "Share",
+"gui.cobblenav.pokenav_item.button_tooltip.find": "Find",
+"item.cobblenav.pokenav_item.type.netherite": "Netherite"
 }

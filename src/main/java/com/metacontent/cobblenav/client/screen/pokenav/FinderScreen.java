@@ -79,7 +79,7 @@ public class FinderScreen extends AbstractPokenavItemScreen {
     private void requestBestPokemon() {
         PacketByteBuf buf = PacketByteBufs.create();
         buf.writeString(pokemon.getForm().showdownId());
-        ClientPlayNetworking.send(CobblenavPackets.BEST_POKEMON_PACKET_SERVER, buf);
+        ClientPlayNetworking.send(CobblenavPackets.BEST_POKEMON_REQUEST_PACKET, buf);
     }
 
     private void saveLastFoundPokemon() {
@@ -95,7 +95,7 @@ public class FinderScreen extends AbstractPokenavItemScreen {
         requestBestPokemon();
         saveLastFoundPokemon();
 
-        ClientPlayNetworking.send(CobblenavPackets.STREAK_PACKET_SERVER, PacketByteBufs.create());
+        ClientPlayNetworking.send(CobblenavPackets.STREAK_REQUEST_PACKET, PacketByteBufs.create());
 
         borderX = (width - BORDER_WIDTH) / 2;
         borderY = (height - BORDER_HEIGHT) / 2 - 10;
@@ -103,7 +103,8 @@ public class FinderScreen extends AbstractPokenavItemScreen {
         pokemonModel = new ModelWidget(borderX + BORDER_WIDTH / 2 - WIDTH / 2, borderY + BORDER_HEIGHT / 2 + 20 - HEIGHT / 2,
                 WIDTH, pokemon, 1.5f, 340, 0);
 
-        backButton = new IconButton(borderX + BORDER_DEPTH + 3, borderY + BORDER_HEIGHT - BORDER_DEPTH - 12, 11, 11, 73, 0, 0,
+        backButton = new IconButton(borderX + BORDER_DEPTH + 3, borderY + BORDER_HEIGHT - BORDER_DEPTH - 12,
+                11, 11, 73, 0, Text.translatable("gui.cobblenav.pokenav_item.button_tooltip.back"),
                 () -> {
                     player.playSound(CobblemonSounds.PC_CLICK, 0.1f, 1.25f);
                     MinecraftClient.getInstance().setScreen(parent);
