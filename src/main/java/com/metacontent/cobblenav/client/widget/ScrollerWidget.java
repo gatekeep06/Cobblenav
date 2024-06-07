@@ -4,8 +4,8 @@ import net.minecraft.client.gui.DrawContext;
 import net.minecraft.util.math.ColorHelper;
 
 public class ScrollerWidget extends AbstractPokenavButton {
-    private static final int COLOR = ColorHelper.Argb.getArgb(255, 200, 200, 200);
-    private static final int HOVERED_COLOR = ColorHelper.Argb.getArgb(255, 255, 255, 255);
+    private static final int COLOR = ColorHelper.Argb.getArgb(255, 97, 97, 102);
+    private static final int HOVERED_COLOR = ColorHelper.Argb.getArgb(255, 121, 121, 126);
     private final OnScrollerDrag onDrag;
 
     public ScrollerWidget(int x, int y, int height, OnScrollerDrag onDrag) {

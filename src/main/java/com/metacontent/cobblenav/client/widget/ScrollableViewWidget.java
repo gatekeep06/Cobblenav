@@ -9,6 +9,7 @@ import net.minecraft.text.Text;
 import net.minecraft.util.math.ColorHelper;
 
 public class ScrollableViewWidget<T extends ClickableWidget> extends ClickableWidget implements Clickable {
+    private static final int SHADOW = ColorHelper.Argb.getArgb(40, 0, 0, 0);
     private final T widget;
     private final float scrollSize;
     private double scrollY = 0;
@@ -33,7 +34,7 @@ public class ScrollableViewWidget<T extends ClickableWidget> extends ClickableWi
             widget.render(drawContext, i, j, f);
             drawContext.disableScissor();
             if (isWidgetBigger) {
-                drawContext.fill(getX() + getWidth() + 3, getY() + 1, getX() + getWidth() + 5, getY() + getHeight() - 1, ColorHelper.Argb.getArgb(60, 0, 0, 0));
+                drawContext.fill(getX() + getWidth() + 3, getY() + 1, getX() + getWidth() + 5, getY() + getHeight() - 1, SHADOW);
                 scrollerWidget.render(drawContext, i, j, f);
             }
         }
