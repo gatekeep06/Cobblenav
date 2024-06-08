@@ -21,24 +21,27 @@ public class FoundPokemonRequestReceiver {
         PacketByteBuf responseBuf = PacketByteBufs.create();
         PokemonFinderType finderType = buf.readEnumConstant(PokemonFinderType.class);
         String name = buf.readString();
-        ServerWorld world = player.getServerWorld();
 
-        PokemonFinder finder = PokemonFinder.get(finderType, player, world);
-        List<PokemonEntity> pokemonEntities = finder.find(name);
+        server.execute(() -> {
+            ServerWorld world = player.getServerWorld();
 
-        if (!pokemonEntities.isEmpty()) {
-            FoundPokemon pokemon = finder.select(pokemonEntities);
-            if (pokemon != null) {
-                responseBuf.writeBoolean(true);
-                pokemon.saveToBuf(responseBuf);
+            PokemonFinder finder = PokemonFinder.get(finderType, player, world);
+            List<PokemonEntity> pokemonEntities = finder.find(name);
+
+            if (!pokemonEntities.isEmpty()) {
+                FoundPokemon pokemon = finder.select(pokemonEntities);
+                if (pokemon != null) {
+                    responseBuf.writeBoolean(true);
+                    pokemon.saveToBuf(responseBuf);
+                }
+                else {
+                    responseBuf.writeBoolean(false);
+                }
             }
             else {
                 responseBuf.writeBoolean(false);
             }
-        }
-        else {
-            responseBuf.writeBoolean(false);
-        }
-        responseSender.sendPacket(CobblenavPackets.FOUND_POKEMON_PACKET, responseBuf);
+            responseSender.sendPacket(CobblenavPackets.FOUND_POKEMON_PACKET, responseBuf);
+        });
     }
 }
