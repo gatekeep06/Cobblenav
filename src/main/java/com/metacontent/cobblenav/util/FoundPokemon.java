@@ -1,7 +1,12 @@
 package com.metacontent.cobblenav.util;
 
+import com.cobblemon.mod.common.entity.pokemon.PokemonEntity;
+import com.cobblemon.mod.common.pokemon.Pokemon;
+import com.metacontent.cobblenav.util.finder.PokemonFeatureHelper;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.math.BlockPos;
+
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class FoundPokemon {
     private final int entityId;
@@ -22,6 +27,16 @@ public class FoundPokemon {
         this.abilityName = abilityName;
         this.eggMoveName = eggMoveName;
         this.isAbilityHidden = isAbilityHidden;
+    }
+
+    public static FoundPokemon createOf(PokemonEntity pokemonEntity) {
+        Pokemon pokemon = pokemonEntity.getPokemon();
+        int potentialStarsAmount = PokemonFeatureHelper.getPerfectIvsAmount(pokemon);
+        String abilityName = pokemon.getAbility().getName();
+        String eggMoveName = PokemonFeatureHelper.getEggMoveName(pokemon);
+        boolean hasHiddenAbility = PokemonFeatureHelper.hasHiddenAbility(pokemon);
+        return new FoundPokemon(pokemonEntity.getId(), pokemonEntity.getBlockPos(), pokemon.getShiny(), pokemon.getLevel(),
+                potentialStarsAmount, abilityName, eggMoveName, hasHiddenAbility);
     }
 
     public int getEntityId() {
