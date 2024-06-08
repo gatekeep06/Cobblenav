@@ -3,10 +3,11 @@ package com.metacontent.cobblenav.networking.server;
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity;
 import com.cobblemon.mod.common.pokemon.RenderablePokemon;
 import com.metacontent.cobblenav.networking.CobblenavPackets;
-import com.metacontent.cobblenav.util.BestPokemonFinder;
+import com.metacontent.cobblenav.util.finder.BestPokemonFinder;
 import com.metacontent.cobblenav.util.CobblenavNbtHelper;
 import com.metacontent.cobblenav.util.FoundPokemon;
 import com.metacontent.cobblenav.util.LastFoundPokemonSaverEntity;
+import com.metacontent.cobblenav.util.finder.PokemonFinder;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.minecraft.network.PacketByteBuf;
@@ -25,14 +26,13 @@ public class TrackedEntityIdRequestReceiver {
             if (player instanceof LastFoundPokemonSaverEntity lastFoundPokemonSaver) {
                 RenderablePokemon renderablePokemon = CobblenavNbtHelper.getRenderablePokemonByNbtData(lastFoundPokemonSaver.cobblenav$getLastFoundPokemonData());
                 if (renderablePokemon != null) {
-                    BestPokemonFinder finder = new BestPokemonFinder(player, player.getServerWorld());
+                    PokemonFinder finder = new BestPokemonFinder(player, player.getServerWorld());
                     String name = renderablePokemon.getForm().showdownId();
                     List<PokemonEntity> entities = finder.find(name);
-                    Map.Entry<FoundPokemon, Float> entry = BestPokemonFinder.selectBest(entities);
+                    FoundPokemon pokemon = finder.select(entities);
                     PacketByteBuf responseBuf = PacketByteBufs.create();
-                    if (entry != null) {
-                        FoundPokemon foundPokemon = entry.getKey();
-                        responseBuf.writeInt(foundPokemon.getEntityId());
+                    if (pokemon != null) {
+                        responseBuf.writeInt(pokemon.getEntityId());
                     }
                     else {
                         responseBuf.writeInt(-1);

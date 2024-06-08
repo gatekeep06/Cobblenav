@@ -2,8 +2,9 @@ package com.metacontent.cobblenav.networking.server;
 
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity;
 import com.metacontent.cobblenav.networking.CobblenavPackets;
-import com.metacontent.cobblenav.util.BestPokemonFinder;
+import com.metacontent.cobblenav.util.finder.BestPokemonFinder;
 import com.metacontent.cobblenav.util.FoundPokemon;
+import com.metacontent.cobblenav.util.finder.PokemonFinder;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.minecraft.network.PacketByteBuf;
@@ -20,16 +21,14 @@ public class BestPokemonRequestReceiver {
         String name = buf.readString();
         ServerWorld world = player.getServerWorld();
 
-        BestPokemonFinder finder = new BestPokemonFinder(player, world);
+        PokemonFinder finder = new BestPokemonFinder(player, world);
         List<PokemonEntity> pokemonEntities = finder.find(name);
 
         if (!pokemonEntities.isEmpty()) {
-            Map.Entry<FoundPokemon, Float> entry = BestPokemonFinder.selectBest(pokemonEntities);
-
-            if (entry != null) {
+            FoundPokemon pokemon = finder.select(pokemonEntities);
+            if (pokemon != null) {
                 responseBuf.writeBoolean(true);
-                FoundPokemon bestFoundPokemon = entry.getKey();
-                bestFoundPokemon.saveToBuf(responseBuf);
+                pokemon.saveToBuf(responseBuf);
             }
             else {
                 responseBuf.writeBoolean(false);
