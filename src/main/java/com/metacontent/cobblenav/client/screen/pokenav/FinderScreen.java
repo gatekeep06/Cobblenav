@@ -76,7 +76,7 @@ public class FinderScreen extends AbstractPokenavItemScreen {
         this.streak = streak;
     }
 
-    private void requestBestPokemon() {
+    private void requestPokemon() {
         PacketByteBuf buf = PacketByteBufs.create();
         buf.writeString(pokemon.getForm().showdownId());
         ClientPlayNetworking.send(CobblenavPackets.BEST_POKEMON_REQUEST_PACKET, buf);
@@ -92,7 +92,7 @@ public class FinderScreen extends AbstractPokenavItemScreen {
     protected void init() {
         super.init();
 
-        requestBestPokemon();
+        requestPokemon();
         saveLastFoundPokemon();
 
         ClientPlayNetworking.send(CobblenavPackets.STREAK_REQUEST_PACKET, PacketByteBufs.create());
