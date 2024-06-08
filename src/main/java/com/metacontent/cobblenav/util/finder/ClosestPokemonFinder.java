@@ -20,9 +20,9 @@ public class ClosestPokemonFinder extends PokemonFinder {
     public FoundPokemon select(List<PokemonEntity> entities) {
         PokemonEntity closestEntity = world.getClosestEntity(
                 entities, TargetPredicate.DEFAULT, player,
-                Cobblenav.CONFIG.findingAreaWidth,
-                Cobblenav.CONFIG.findingAreaHeight,
-                Cobblenav.CONFIG.findingAreaWidth
+                player.getPos().x,
+                player.getPos().y,
+                player.getPos().z
         );
         if (closestEntity != null) {
             return FoundPokemon.createOf(closestEntity);
