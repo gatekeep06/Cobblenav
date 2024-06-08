@@ -193,17 +193,12 @@ public class LocationScreen extends AbstractPokenavItemScreen {
         else {
             renderBucketSelector(drawContext, i, j, f);
             if (!spawnInfoWidgets.isEmpty()) {
-                try {
-                    scrollableSpawnTable.render(drawContext, i, j, f);
-                    for (PokemonSpawnInfoWidget widget : spawnInfoWidgets) {
-                        if (widget.isVisible() && widget.isHovered() && scrollableSpawnTable.isHovered()) {
-                            drawContext.drawTooltip(textRenderer, List.of(widget.getPokemonModel().getPokemon().getSpecies().getTranslatedName(),
-                                    Text.literal(widget.getProbabilityString()).setStyle(Style.EMPTY.withColor(0x4D4D4D))), i, j);
-                        }
+                scrollableSpawnTable.render(drawContext, i, j, f);
+                for (PokemonSpawnInfoWidget widget : spawnInfoWidgets) {
+                    if (widget.isVisible() && widget.isHovered() && scrollableSpawnTable.isHovered()) {
+                        drawContext.drawTooltip(textRenderer, List.of(widget.getPokemonModel().getPokemon().getSpecies().getTranslatedName(),
+                                Text.literal(widget.getProbabilityString()).setStyle(Style.EMPTY.withColor(0x4D4D4D))), i, j);
                     }
-                }
-                catch (Throwable e) {
-                    Cobblenav.LOGGER.error(e.getMessage(), e);
                 }
             }
             else {
