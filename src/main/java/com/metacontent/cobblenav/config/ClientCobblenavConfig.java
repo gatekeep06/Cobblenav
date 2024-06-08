@@ -15,7 +15,8 @@ import java.util.Map;
 
 public class ClientCobblenavConfig {
     public final float screenScale;
-    public final PokemonFinderType pokemonFinderType;
+    public final PokemonFinderType pokenavFinderType;
+    public final PokemonFinderType pokefinderFinderType;
     public final MainScreenWidgetType mainScreenWidget;
     public final PercentageDisplayType percentageDisplayType;
     public final boolean bucketWisePercentageCalculation;
@@ -30,6 +31,7 @@ public class ClientCobblenavConfig {
     private ClientCobblenavConfig(
             float screenScale,
             PokemonFinderType pokemonFinderType,
+            PokemonFinderType pokefinderFinderType,
             MainScreenWidgetType mainScreenWidget,
             PercentageDisplayType percentageDisplayType,
             boolean bucketWisePercentageCalculation,
@@ -42,7 +44,8 @@ public class ClientCobblenavConfig {
             Map<String, Double> partyWidgetAdjustments
     ) {
         this.screenScale = screenScale;
-        this.pokemonFinderType = pokemonFinderType;
+        this.pokenavFinderType = pokemonFinderType;
+        this.pokefinderFinderType = pokefinderFinderType;
         this.mainScreenWidget = mainScreenWidget;
         this.percentageDisplayType = percentageDisplayType;
         this.bucketWisePercentageCalculation = bucketWisePercentageCalculation;
@@ -56,7 +59,7 @@ public class ClientCobblenavConfig {
     }
 
     private ClientCobblenavConfig() {
-        this(1f, PokemonFinderType.BEST, MainScreenWidgetType.PARTY, PercentageDisplayType.PERCENT_ONLY, false, 100, 20, 20, false, true, 70, Map.of());
+        this(1f, PokemonFinderType.BEST, PokemonFinderType.BEST, MainScreenWidgetType.PARTY, PercentageDisplayType.PERCENT_ONLY, false, 100, 20, 20, false, true, 70, Map.of());
     }
 
     public static ClientCobblenavConfig init() {

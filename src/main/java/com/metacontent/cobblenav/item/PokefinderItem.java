@@ -39,7 +39,7 @@ public class PokefinderItem extends Item {
             }
             else {
                 PacketByteBuf buf = PacketByteBufs.create();
-                buf.writeEnumConstant(CobblenavClient.CONFIG.pokemonFinderType);
+                buf.writeEnumConstant(CobblenavClient.CONFIG.pokefinderFinderType);
                 ClientPlayNetworking.send(CobblenavPackets.TRACKED_ENTITY_ID_REQUEST_PACKET, buf);
                 playerEntity.playSound(CobblemonSounds.PC_ON, 0.1f, 1.25f);
             }
