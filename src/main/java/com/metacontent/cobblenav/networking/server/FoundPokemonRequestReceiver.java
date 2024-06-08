@@ -15,7 +15,7 @@ import net.minecraft.server.world.ServerWorld;
 
 import java.util.*;
 
-public class BestPokemonRequestReceiver {
+public class FoundPokemonRequestReceiver {
     public static void receive(MinecraftServer server, ServerPlayerEntity player, ServerPlayNetworkHandler handler, PacketByteBuf buf, PacketSender responseSender) {
         PacketByteBuf responseBuf = PacketByteBufs.create();
         String name = buf.readString();
@@ -37,6 +37,6 @@ public class BestPokemonRequestReceiver {
         else {
             responseBuf.writeBoolean(false);
         }
-        responseSender.sendPacket(CobblenavPackets.BEST_POKEMON_PACKET, responseBuf);
+        responseSender.sendPacket(CobblenavPackets.FOUND_POKEMON_PACKET, responseBuf);
     }
 }

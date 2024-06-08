@@ -78,8 +78,9 @@ public class FinderScreen extends AbstractPokenavItemScreen {
 
     private void requestPokemon() {
         PacketByteBuf buf = PacketByteBufs.create();
+        buf.writeEnumConstant(CobblenavClient.CONFIG.pokemonFinderType);
         buf.writeString(pokemon.getForm().showdownId());
-        ClientPlayNetworking.send(CobblenavPackets.BEST_POKEMON_REQUEST_PACKET, buf);
+        ClientPlayNetworking.send(CobblenavPackets.FOUND_POKEMON_REQUEST_PACKET, buf);
     }
 
     private void saveLastFoundPokemon() {

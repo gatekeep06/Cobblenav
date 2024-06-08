@@ -12,8 +12,8 @@ public class CobblenavPackets {
     public static final Identifier SPAWN_MAP_PACKET = new Identifier(Cobblenav.ID, "spawn_map_packet");
     public static final Identifier CONTACT_DATA_REQUEST_PACKET = new Identifier(Cobblenav.ID, "contact_data_request_packet");
     public static final Identifier CONTACT_DATA_PACKET = new Identifier(Cobblenav.ID, "contact_data_packet");
-    public static final Identifier BEST_POKEMON_REQUEST_PACKET = new Identifier(Cobblenav.ID, "best_pokemon_request_packet");
-    public static final Identifier BEST_POKEMON_PACKET = new Identifier(Cobblenav.ID, "best_pokemon_packet");
+    public static final Identifier FOUND_POKEMON_REQUEST_PACKET = new Identifier(Cobblenav.ID, "found_pokemon_request_packet");
+    public static final Identifier FOUND_POKEMON_PACKET = new Identifier(Cobblenav.ID, "found_pokemon_packet");
     public static final Identifier SAVE_FOUND_POKEMON_PACKET = new Identifier(Cobblenav.ID, "save_found_pokemon_packet");
     public static final Identifier RENDERABLE_POKEMON_REQUEST_PACKET = new Identifier(Cobblenav.ID, "renderable_pokemon_request_packet");
     public static final Identifier RENDERABLE_POKEMON_PACKET = new Identifier(Cobblenav.ID, "renderable_pokemon_packet");
@@ -32,7 +32,7 @@ public class CobblenavPackets {
     public static void registerC2SPackets() {
         ServerPlayNetworking.registerGlobalReceiver(SPAWN_MAP_REQUEST_PACKET, SpawnMapRequestReceiver::receive);
         ServerPlayNetworking.registerGlobalReceiver(CONTACT_DATA_REQUEST_PACKET, ContactDataRequestReceiver::receive);
-        ServerPlayNetworking.registerGlobalReceiver(BEST_POKEMON_REQUEST_PACKET, BestPokemonRequestReceiver::receive);
+        ServerPlayNetworking.registerGlobalReceiver(FOUND_POKEMON_REQUEST_PACKET, FoundPokemonRequestReceiver::receive);
         ServerPlayNetworking.registerGlobalReceiver(SAVE_FOUND_POKEMON_PACKET, SaveFoundPokemonReceiver::receive);
         ServerPlayNetworking.registerGlobalReceiver(RENDERABLE_POKEMON_REQUEST_PACKET, RenderablePokemonRequestReceiver::receive);
         ServerPlayNetworking.registerGlobalReceiver(REMOVE_LAST_FOUND_POKEMON_PACKET, RemoveLastFoundPokemonReceiver::receive);
@@ -47,7 +47,7 @@ public class CobblenavPackets {
     public static void registerS2CPackets() {
         ClientPlayNetworking.registerGlobalReceiver(SPAWN_MAP_PACKET, SpawnMapReceiver::receive);
         ClientPlayNetworking.registerGlobalReceiver(CONTACT_DATA_PACKET, ContactDataReceiver::receive);
-        ClientPlayNetworking.registerGlobalReceiver(BEST_POKEMON_PACKET, BestPokemonReceiver::receive);
+        ClientPlayNetworking.registerGlobalReceiver(FOUND_POKEMON_PACKET, FoundPokemonReceiver::receive);
         ClientPlayNetworking.registerGlobalReceiver(RENDERABLE_POKEMON_PACKET, RenderablePokemonReceiver::receive);
         ClientPlayNetworking.registerGlobalReceiver(TRACKED_ENTITY_ID_PACKET, TrackedEntityIdReceiver::receive);
         ClientPlayNetworking.registerGlobalReceiver(SAVED_PREFERENCES_PACKET, SavedPreferencesReceiver::receive);
