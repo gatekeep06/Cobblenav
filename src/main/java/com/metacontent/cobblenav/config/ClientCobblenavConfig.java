@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 import com.metacontent.cobblenav.Cobblenav;
 import com.metacontent.cobblenav.config.util.MainScreenWidgetType;
 import com.metacontent.cobblenav.config.util.PercentageDisplayType;
+import com.metacontent.cobblenav.config.util.PokemonFinderType;
 import net.fabricmc.loader.api.FabricLoader;
 
 import java.io.File;
@@ -14,6 +15,7 @@ import java.util.Map;
 
 public class ClientCobblenavConfig {
     public final float screenScale;
+    public final PokemonFinderType pokemonFinderType;
     public final MainScreenWidgetType mainScreenWidget;
     public final PercentageDisplayType percentageDisplayType;
     public final boolean bucketWisePercentageCalculation;
@@ -27,16 +29,20 @@ public class ClientCobblenavConfig {
 
     private ClientCobblenavConfig(
             float screenScale,
+            PokemonFinderType pokemonFinderType,
             MainScreenWidgetType mainScreenWidget,
             PercentageDisplayType percentageDisplayType,
             boolean bucketWisePercentageCalculation,
             int reverseSortingButtonCooldown,
-            int actionButtonAreaExpansion, int scrollSize,
-            boolean showButtonTooltips, boolean notifyIfPokemonIsNotFound,
+            int actionButtonAreaExpansion,
+            int scrollSize,
+            boolean showButtonTooltips,
+            boolean notifyIfPokemonIsNotFound,
             int trackArrowVerticalOffset,
             Map<String, Double> partyWidgetAdjustments
     ) {
         this.screenScale = screenScale;
+        this.pokemonFinderType = pokemonFinderType;
         this.mainScreenWidget = mainScreenWidget;
         this.percentageDisplayType = percentageDisplayType;
         this.bucketWisePercentageCalculation = bucketWisePercentageCalculation;
@@ -50,7 +56,7 @@ public class ClientCobblenavConfig {
     }
 
     private ClientCobblenavConfig() {
-        this(1f, MainScreenWidgetType.PARTY, PercentageDisplayType.PERCENT_ONLY, false, 100, 20, 20, false, true, 70, Map.of());
+        this(1f, PokemonFinderType.BEST, MainScreenWidgetType.PARTY, PercentageDisplayType.PERCENT_ONLY, false, 100, 20, 20, false, true, 70, Map.of());
     }
 
     public static ClientCobblenavConfig init() {
