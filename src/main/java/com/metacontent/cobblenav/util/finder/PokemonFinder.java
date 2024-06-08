@@ -2,6 +2,7 @@ package com.metacontent.cobblenav.util.finder;
 
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity;
 import com.metacontent.cobblenav.Cobblenav;
+import com.metacontent.cobblenav.config.util.PokemonFinderType;
 import com.metacontent.cobblenav.util.FoundPokemon;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.world.ServerWorld;
@@ -16,6 +17,13 @@ public abstract class PokemonFinder {
     public PokemonFinder(PlayerEntity player, ServerWorld world) {
         this.player = player;
         this.world = world;
+    }
+
+    public static PokemonFinder get(PokemonFinderType type, PlayerEntity player, ServerWorld world) {
+        return switch (type) {
+            case BEST -> new BestPokemonFinder(player, world);
+            case CLOSEST -> new ClosestPokemonFinder(player, world);
+        };
     }
 
     public List<PokemonEntity> find(String name) {

@@ -1,6 +1,7 @@
 package com.metacontent.cobblenav.networking.server;
 
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity;
+import com.metacontent.cobblenav.config.util.PokemonFinderType;
 import com.metacontent.cobblenav.networking.CobblenavPackets;
 import com.metacontent.cobblenav.util.finder.BestPokemonFinder;
 import com.metacontent.cobblenav.util.FoundPokemon;
@@ -18,10 +19,11 @@ import java.util.*;
 public class FoundPokemonRequestReceiver {
     public static void receive(MinecraftServer server, ServerPlayerEntity player, ServerPlayNetworkHandler handler, PacketByteBuf buf, PacketSender responseSender) {
         PacketByteBuf responseBuf = PacketByteBufs.create();
+        PokemonFinderType finderType = buf.readEnumConstant(PokemonFinderType.class);
         String name = buf.readString();
         ServerWorld world = player.getServerWorld();
 
-        PokemonFinder finder = new BestPokemonFinder(player, world);
+        PokemonFinder finder = PokemonFinder.get(finderType, player, world);
         List<PokemonEntity> pokemonEntities = finder.find(name);
 
         if (!pokemonEntities.isEmpty()) {
