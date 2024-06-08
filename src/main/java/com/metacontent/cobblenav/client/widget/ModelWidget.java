@@ -3,9 +3,13 @@ package com.metacontent.cobblenav.client.widget;
 import com.cobblemon.mod.common.client.render.models.blockbench.pokemon.PokemonFloatingState;
 import com.cobblemon.mod.common.pokemon.RenderablePokemon;
 import com.cobblemon.mod.common.util.math.QuaternionUtilsKt;
+import com.metacontent.cobblenav.Cobblenav;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.Drawable;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.text.Text;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 
@@ -20,6 +24,7 @@ public class ModelWidget implements Drawable {
     private final float scale;
     private final Vector3f rotationVec;
     private final PokemonFloatingState state = new PokemonFloatingState();
+    private boolean visible = true;
 
     public ModelWidget(int x, int y, int width, RenderablePokemon pokemon, float scale, float rotationY, int offsetY) {
         this.x = x;
@@ -38,7 +43,18 @@ public class ModelWidget implements Drawable {
         matrixStack.translate(x + width / 2f, y + offsetY, 0f);
         matrixStack.scale(scale, scale, 1f);
         matrixStack.push();
-        drawProfilePokemon(pokemon, matrixStack, QuaternionUtilsKt.fromEulerXYZDegrees(new Quaternionf(), rotationVec), state, f, 20f);
+        if (visible) {
+            try {
+                drawProfilePokemon(pokemon, matrixStack, QuaternionUtilsKt.fromEulerXYZDegrees(new Quaternionf(), rotationVec), state, f, 20f);
+            } catch (Exception e) {
+                visible = false;
+                PlayerEntity player = MinecraftClient.getInstance().player;
+                if (player != null) {
+                    player.sendMessage(Text.literal("An exception occurred when attempting to render " + pokemon.getSpecies().getTranslatedName()));
+                }
+                Cobblenav.LOGGER.warn(e.getMessage(), e);
+            }
+        }
         matrixStack.pop();
         matrixStack.pop();
     }
