@@ -25,6 +25,9 @@ public class FoundPokemonRequestReceiver {
             ServerWorld world = player.getServerWorld();
 
             PokemonFinder finder = PokemonFinder.get(finderType, player, world);
+            if (finder == null) {
+                return;
+            }
             List<PokemonEntity> pokemonEntities = finder.find(name);
 
             if (!pokemonEntities.isEmpty()) {

@@ -23,6 +23,7 @@ public abstract class PokemonFinder {
         return switch (type) {
             case BEST -> new BestPokemonFinder(player, world);
             case CLOSEST -> new ClosestPokemonFinder(player, world);
+            default -> null;
         };
     }
 

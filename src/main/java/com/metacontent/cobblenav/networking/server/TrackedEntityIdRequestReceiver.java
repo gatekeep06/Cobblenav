@@ -29,6 +29,9 @@ public class TrackedEntityIdRequestReceiver {
                 RenderablePokemon renderablePokemon = CobblenavNbtHelper.getRenderablePokemonByNbtData(lastFoundPokemonSaver.cobblenav$getLastFoundPokemonData());
                 if (renderablePokemon != null) {
                     PokemonFinder finder = PokemonFinder.get(finderType, player, player.getServerWorld());
+                    if (finder == null) {
+                        return;
+                    }
                     String name = renderablePokemon.getForm().showdownId();
                     List<PokemonEntity> entities = finder.find(name);
                     FoundPokemon pokemon = finder.select(entities);
