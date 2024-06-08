@@ -3,7 +3,6 @@ package com.metacontent.cobblenav.networking.server;
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity;
 import com.metacontent.cobblenav.config.util.PokemonFinderType;
 import com.metacontent.cobblenav.networking.CobblenavPackets;
-import com.metacontent.cobblenav.util.finder.BestPokemonFinder;
 import com.metacontent.cobblenav.util.FoundPokemon;
 import com.metacontent.cobblenav.util.finder.PokemonFinder;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;

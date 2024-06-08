@@ -1,7 +1,6 @@
 package com.metacontent.cobblenav.util.finder;
 
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity;
-import com.metacontent.cobblenav.Cobblenav;
 import com.metacontent.cobblenav.util.FoundPokemon;
 import net.minecraft.entity.ai.TargetPredicate;
 import net.minecraft.entity.player.PlayerEntity;
