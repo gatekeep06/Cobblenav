@@ -10,6 +10,7 @@ import net.minecraft.client.gui.Drawable;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 
@@ -48,11 +49,13 @@ public class ModelWidget implements Drawable {
                 drawProfilePokemon(pokemon, matrixStack, QuaternionUtilsKt.fromEulerXYZDegrees(new Quaternionf(), rotationVec), state, f, 20f);
             } catch (Exception e) {
                 visible = false;
+                String msg = "An exception occurred when attempting to render " + pokemon.getSpecies().getTranslatedName().getString() + "!";
                 PlayerEntity player = MinecraftClient.getInstance().player;
                 if (player != null) {
-                    player.sendMessage(Text.literal("An exception occurred when attempting to render " + pokemon.getSpecies().getTranslatedName()));
+                    player.sendMessage(Text.literal(msg).formatted(Formatting.RED));
                 }
-                Cobblenav.LOGGER.warn(e.getMessage(), e);
+                Cobblenav.LOGGER.warn(e.getMessage());
+                Cobblenav.LOGGER.warn(msg + " Check your Cobblemon addons for updates");
             }
         }
         matrixStack.pop();
