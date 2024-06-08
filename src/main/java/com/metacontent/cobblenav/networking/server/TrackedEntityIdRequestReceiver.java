@@ -2,6 +2,7 @@ package com.metacontent.cobblenav.networking.server;
 
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity;
 import com.cobblemon.mod.common.pokemon.RenderablePokemon;
+import com.metacontent.cobblenav.config.util.PokemonFinderType;
 import com.metacontent.cobblenav.networking.CobblenavPackets;
 import com.metacontent.cobblenav.util.finder.BestPokemonFinder;
 import com.metacontent.cobblenav.util.CobblenavNbtHelper;
@@ -22,11 +23,12 @@ import java.util.Map;
 
 public class TrackedEntityIdRequestReceiver {
     public static void receive(MinecraftServer server, ServerPlayerEntity player, ServerPlayNetworkHandler handler, PacketByteBuf buf, PacketSender responseSender) {
+        PokemonFinderType finderType = buf.readEnumConstant(PokemonFinderType.class);
         server.execute(() -> {
             if (player instanceof LastFoundPokemonSaverEntity lastFoundPokemonSaver) {
                 RenderablePokemon renderablePokemon = CobblenavNbtHelper.getRenderablePokemonByNbtData(lastFoundPokemonSaver.cobblenav$getLastFoundPokemonData());
                 if (renderablePokemon != null) {
-                    PokemonFinder finder = new BestPokemonFinder(player, player.getServerWorld());
+                    PokemonFinder finder = PokemonFinder.get(finderType, player, player.getServerWorld());
                     String name = renderablePokemon.getForm().showdownId();
                     List<PokemonEntity> entities = finder.find(name);
                     FoundPokemon pokemon = finder.select(entities);
