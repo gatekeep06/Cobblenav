@@ -106,7 +106,7 @@ public class ScrollableViewWidget<T extends ClickableWidget> extends ClickableWi
     public void resetScrollY() {
         scrollY = 0;
         widget.setY(getY());
-        scrollerWidget.setY(getY());
+        scrollerWidget.setY(getY() + 1);
     }
 
     @Override
