@@ -20,6 +20,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayNetworkHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
+import us.timinc.mc.cobblemon.counter.api.EncounterApi;
 
 import java.util.*;
 
@@ -60,10 +61,12 @@ public class SpawnMapRequestReceiver {
                                     boolean isHidden = Cobblenav.CONFIG.hiddenPokemon.stream().anyMatch(
                                             string -> renderablePokemon.getForm().showdownId().equals(string)
                                     );
+                                    boolean isSeen = true;
+                                    if (Cobblenav.CONFIG.useCounterIntegration && Cobblenav.CONFIG.onlySeenPokemonMode) {
+                                        isSeen = EncounterApi.INSTANCE.check(player, renderablePokemon.getSpecies().getName().toLowerCase());
+                                    }
 
-                                    //TODO: only seen pokemon mode
-
-                                    if (!isIgnored && !isHidden) {
+                                    if (!isIgnored && !isHidden && isSeen) {
                                         spawnMap.put(renderablePokemon, value);
                                     }
                                 }
