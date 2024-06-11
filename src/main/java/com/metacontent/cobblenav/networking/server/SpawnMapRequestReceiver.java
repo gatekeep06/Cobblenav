@@ -38,44 +38,49 @@ public class SpawnMapRequestReceiver {
                     PlayerSpawner spawner = CobblemonWorldSpawnerManager.INSTANCE.getSpawnersForPlayers().get(player.getUuid());
                     SpawnBucket bucket = Cobblemon.INSTANCE.getBestSpawner().getConfig().getBuckets().stream()
                             .filter(b -> bucketName.equalsIgnoreCase(b.name)).findFirst().orElse(null);
-                    if (spawner != null && bucket != null) {
-                        SpawnCause cause = new SpawnCause(spawner, bucket, spawner.getCauseEntity());
-                        WorldSlice slice = spawner.getProspector().prospect(spawner, new SpawningArea(cause, (ServerWorld) player.getWorld(),
-                                (int) Math.ceil(player.getX() - config.getWorldSliceDiameter() / 2f),
-                                (int) Math.ceil(player.getY() - config.getWorldSliceHeight() / 2f),
-                                (int) Math.ceil(player.getZ() - config.getWorldSliceDiameter() / 2f),
-                                Cobblenav.CONFIG.checkSpawnWidth == -1 ? config.getWorldSliceDiameter() : Cobblenav.CONFIG.checkSpawnWidth,
-                                Cobblenav.CONFIG.checkSpawnHeight == -1 ? config.getWorldSliceHeight() : Cobblenav.CONFIG.checkSpawnHeight,
-                                Cobblenav.CONFIG.checkSpawnWidth == -1 ? config.getWorldSliceDiameter() : Cobblenav.CONFIG.checkSpawnWidth));
+                    if (spawner == null || bucket == null) {
+                        throw new NullPointerException("For some reason player spawner and/or bucket are null");
+                    }
 
-                        List<AreaSpawningContext> contexts = Cobblenav.RESOLVER.resolve(spawner, spawner.getContextCalculators(), slice);
-                        Map<SpawnDetail, Float> spawnProbabilities = spawner.getSpawningSelector().getProbabilities(spawner, contexts);
+                    SpawnCause cause = new SpawnCause(spawner, bucket, spawner.getCauseEntity());
+                    WorldSlice slice = spawner.getProspector().prospect(spawner, new SpawningArea(cause, (ServerWorld) player.getWorld(),
+                            (int) Math.ceil(player.getX() - config.getWorldSliceDiameter() / 2f),
+                            (int) Math.ceil(player.getY() - config.getWorldSliceHeight() / 2f),
+                            (int) Math.ceil(player.getZ() - config.getWorldSliceDiameter() / 2f),
+                            Cobblenav.CONFIG.checkSpawnWidth == -1 ? config.getWorldSliceDiameter() : Cobblenav.CONFIG.checkSpawnWidth,
+                            Cobblenav.CONFIG.checkSpawnHeight == -1 ? config.getWorldSliceHeight() : Cobblenav.CONFIG.checkSpawnHeight,
+                            Cobblenav.CONFIG.checkSpawnWidth == -1 ? config.getWorldSliceDiameter() : Cobblenav.CONFIG.checkSpawnWidth));
 
-                        spawnProbabilities.forEach((key, value) -> {
-                            try {
-                                if (key instanceof PokemonSpawnDetail pokemonSpawnDetail && pokemonSpawnDetail.isValid()) {
-                                    RenderablePokemon renderablePokemon = pokemonSpawnDetail.getPokemon().asRenderablePokemon();
-                                    boolean isIgnored = Cobblenav.CONFIG.ignoredLabels.stream().anyMatch(
-                                            string -> renderablePokemon.getSpecies().getLabels().contains(string)
-                                    );
-                                    boolean isHidden = Cobblenav.CONFIG.hiddenPokemon.stream().anyMatch(
-                                            string -> renderablePokemon.getForm().showdownId().equals(string)
-                                    );
-                                    boolean isSeen = true;
-                                    if (Cobblenav.CONFIG.useCounterIntegration && Cobblenav.CONFIG.onlySeenPokemonMode) {
-                                        isSeen = EncounterApi.INSTANCE.check(player, renderablePokemon.getSpecies().getName().toLowerCase());
-                                    }
+                    List<AreaSpawningContext> contexts = Cobblenav.RESOLVER.resolve(spawner, spawner.getContextCalculators(), slice);
+                    Map<SpawnDetail, Float> spawnProbabilities = spawner.getSpawningSelector().getProbabilities(spawner, contexts);
 
-                                    if (!isIgnored && !isHidden && isSeen) {
-                                        spawnMap.put(renderablePokemon, value);
-                                    }
+                    spawnProbabilities.forEach((key, value) -> {
+                        try {
+                            if (key instanceof PokemonSpawnDetail pokemonSpawnDetail && pokemonSpawnDetail.isValid()) {
+                                RenderablePokemon renderablePokemon = pokemonSpawnDetail.getPokemon().asRenderablePokemon();
+                                boolean isIgnored = Cobblenav.CONFIG.ignoredLabels.stream().anyMatch(
+                                        string -> renderablePokemon.getSpecies().getLabels().contains(string)
+                                );
+                                boolean isHidden = Cobblenav.CONFIG.hiddenPokemon.stream().anyMatch(
+                                        string -> renderablePokemon.getForm().showdownId().equals(string)
+                                );
+                                boolean isSeen = true;
+                                if (Cobblenav.CONFIG.useCounterIntegration && Cobblenav.CONFIG.onlySeenPokemonMode) {
+                                    isSeen = EncounterApi.INSTANCE.check(player, renderablePokemon.getSpecies().getName().toLowerCase());
+                                }
+
+                                if (isIgnored || isHidden) {
+                                    return;
+                                }
+                                if (isSeen) {
+                                    spawnMap.put(renderablePokemon, value);
                                 }
                             }
-                            catch (Throwable e) {
-                                Cobblenav.LOGGER.error(e.getMessage(), e);
-                            }
-                        });
-                    }
+                        }
+                        catch (Throwable e) {
+                            Cobblenav.LOGGER.error(e.getMessage(), e);
+                        }
+                    });
                 }
             }
             catch (IllegalStateException ignored) {
