@@ -83,8 +83,6 @@ public class SpawnMapRequestReceiver {
                     });
                 }
             }
-            catch (IllegalStateException ignored) {
-            }
             catch (Throwable e) {
                 Cobblenav.LOGGER.error(e.getMessage(), e);
             }
