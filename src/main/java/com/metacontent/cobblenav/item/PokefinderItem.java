@@ -14,6 +14,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.network.PacketByteBuf;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
@@ -37,7 +38,9 @@ public class PokefinderItem extends Item {
                 playerEntity.playSound(CobblemonSounds.PC_OFF, 0.1f, 1.25f);
             }
             else {
-                ClientPlayNetworking.send(CobblenavPackets.TRACKED_ENTITY_ID_REQUEST_PACKET, PacketByteBufs.create());
+                PacketByteBuf buf = PacketByteBufs.create();
+                buf.writeEnumConstant(CobblenavClient.CONFIG.pokefinderFinderType);
+                ClientPlayNetworking.send(CobblenavPackets.TRACKED_ENTITY_ID_REQUEST_PACKET, buf);
                 playerEntity.playSound(CobblemonSounds.PC_ON, 0.1f, 1.25f);
             }
             return TypedActionResult.success(playerEntity.getStackInHand(hand), false);

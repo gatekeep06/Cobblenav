@@ -1,11 +1,23 @@
 package com.metacontent.cobblenav.client.widget;
 
-public class ScrollerWidget extends IconButton {
+import net.minecraft.client.gui.DrawContext;
+import net.minecraft.util.math.ColorHelper;
+
+public class ScrollerWidget extends AbstractPokenavButton {
+    private static final int COLOR = ColorHelper.Argb.getArgb(255, 97, 97, 102);
+    private static final int HOVERED_COLOR = ColorHelper.Argb.getArgb(255, 121, 121, 126);
     private final OnScrollerDrag onDrag;
 
-    public ScrollerWidget(int x, int y, int width, int height, int offsetX, int offsetY, OnScrollerDrag onDrag) {
-        super(x, y, width, height, offsetX, offsetY, null, () -> {});
+    public ScrollerWidget(int x, int y, int height, OnScrollerDrag onDrag) {
+        super(x, y, 2, height, 0, 0);
         this.onDrag = onDrag;
+    }
+
+
+    @Override
+    protected void renderButton(DrawContext drawContext, int i, int j, float f) {
+        drawContext.fill(getX(), getY(), getX() + getWidth(), getY() + getHeight(),
+                isHovered() ? HOVERED_COLOR : COLOR);
     }
 
     @Override

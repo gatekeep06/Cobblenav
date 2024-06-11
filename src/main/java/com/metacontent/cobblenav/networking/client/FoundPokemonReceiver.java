@@ -7,7 +7,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.network.PacketByteBuf;
 
-public class BestPokemonReceiver {
+public class FoundPokemonReceiver {
     public static void receive(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender responseSender) {
         boolean hasFoundPokemon = buf.readBoolean();
         if (client.currentScreen instanceof FinderScreen finderScreen) {

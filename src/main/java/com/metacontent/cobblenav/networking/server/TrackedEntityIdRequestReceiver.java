@@ -2,11 +2,13 @@ package com.metacontent.cobblenav.networking.server;
 
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity;
 import com.cobblemon.mod.common.pokemon.RenderablePokemon;
+import com.metacontent.cobblenav.config.util.PokemonFinderType;
 import com.metacontent.cobblenav.networking.CobblenavPackets;
-import com.metacontent.cobblenav.util.BestPokemonFinder;
+import com.metacontent.cobblenav.util.finder.BestPokemonFinder;
 import com.metacontent.cobblenav.util.CobblenavNbtHelper;
 import com.metacontent.cobblenav.util.FoundPokemon;
 import com.metacontent.cobblenav.util.LastFoundPokemonSaverEntity;
+import com.metacontent.cobblenav.util.finder.PokemonFinder;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.minecraft.network.PacketByteBuf;
@@ -21,18 +23,21 @@ import java.util.Map;
 
 public class TrackedEntityIdRequestReceiver {
     public static void receive(MinecraftServer server, ServerPlayerEntity player, ServerPlayNetworkHandler handler, PacketByteBuf buf, PacketSender responseSender) {
+        PokemonFinderType finderType = buf.readEnumConstant(PokemonFinderType.class);
         server.execute(() -> {
             if (player instanceof LastFoundPokemonSaverEntity lastFoundPokemonSaver) {
                 RenderablePokemon renderablePokemon = CobblenavNbtHelper.getRenderablePokemonByNbtData(lastFoundPokemonSaver.cobblenav$getLastFoundPokemonData());
                 if (renderablePokemon != null) {
-                    BestPokemonFinder finder = new BestPokemonFinder(player, player.getServerWorld());
+                    PokemonFinder finder = PokemonFinder.get(finderType, player, player.getServerWorld());
+                    if (finder == null) {
+                        return;
+                    }
                     String name = renderablePokemon.getForm().showdownId();
                     List<PokemonEntity> entities = finder.find(name);
-                    Map.Entry<FoundPokemon, Float> entry = BestPokemonFinder.selectBest(entities);
+                    FoundPokemon pokemon = finder.select(entities);
                     PacketByteBuf responseBuf = PacketByteBufs.create();
-                    if (entry != null) {
-                        FoundPokemon foundPokemon = entry.getKey();
-                        responseBuf.writeInt(foundPokemon.getEntityId());
+                    if (pokemon != null) {
+                        responseBuf.writeInt(pokemon.getEntityId());
                     }
                     else {
                         responseBuf.writeInt(-1);

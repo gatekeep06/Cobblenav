@@ -1,3 +1,9 @@
+# Update 1.3.3
+
+- Fixed screen blinking that occurred when trying to render a pokemon with corrupted animations. Now such pokemon will be hidden and the problem will be reported in chat and logs.
+- Added an alternative mode for the finder, which can be activated in the client config separately for pokenav and pokefinder. In the alternative mode, the search engine will search for the closest pokemon instead of the best ones.
+- Updated the scroll bar slider. Now more compact and correct in terms of design.
+
 # Update 1.3.2
 
 - Fixed exception occurrence if trainer's name is longer than 16 characters.
