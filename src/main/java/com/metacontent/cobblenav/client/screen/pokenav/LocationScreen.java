@@ -51,7 +51,7 @@ public class LocationScreen extends AbstractPokenavItemScreen {
     private IconButton increaseBucketIndexButton;
     private IconButton reverseSortingButton;
 
-    protected LocationScreen() {
+    public LocationScreen() {
         super(Text.literal("Location"));
         this.player = MinecraftClient.getInstance().player;
         this.buckets = Cobblemon.INSTANCE.getBestSpawner().getConfig().getBuckets();
