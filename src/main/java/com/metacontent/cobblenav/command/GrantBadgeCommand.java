@@ -1,6 +1,7 @@
 package com.metacontent.cobblenav.command;
 
 import com.metacontent.cobblenav.Cobblenav;
+import com.metacontent.cobblenav.command.suggestion.BadgeSuggestionProvider;
 import com.metacontent.cobblenav.config.util.Badge;
 import com.metacontent.cobblenav.store.AdditionalStatsData;
 import com.metacontent.cobblenav.util.GrantedBadge;
@@ -23,7 +24,7 @@ public class GrantBadgeCommand {
     public static void register(CommandDispatcher<ServerCommandSource> dispatcher, CommandRegistryAccess commandRegistryAccess, CommandManager.RegistrationEnvironment registrationEnvironment) {
         dispatcher.register(CommandManager.literal("badge")
                 .then(CommandManager.literal("grant")
-                        .then(CommandManager.argument("badge", StringArgumentType.string())
+                        .then(CommandManager.argument("badge", StringArgumentType.string()).suggests(new BadgeSuggestionProvider())
                                 .then(CommandManager.argument("player", EntityArgumentType.player())
                                         .executes(GrantBadgeCommand::run)))));
     }
