@@ -9,6 +9,9 @@ public class CobbledexChecker implements SeenPokemonChecker {
     @Override
     public boolean check(Species species, PlayerEntity player) {
         PlayerDiscovery playerDiscovery = (PlayerDiscovery) Cobblemon.playerData.get(player).getExtraData().get(PlayerDiscovery.NAME_KEY);
+        if (playerDiscovery == null) {
+            return false;
+        }
         return playerDiscovery.getCaughtSpecies().contains(species.getNationalPokedexNumber());
     }
 }
