@@ -11,6 +11,7 @@ import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.Drawable;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
@@ -61,11 +62,12 @@ public class BadgeDisplayWidget implements Drawable {
             this.type = type;
             this.grantedBadge = grantedBadge;
             this.textRenderer = MinecraftClient.getInstance().textRenderer;
+            Style typeStyle = Style.EMPTY.withColor(type.getHue());
             this.tooltip = granted() ? List.of(
-                    type.getDisplayName(),
+                    type.getDisplayName().setStyle(typeStyle),
                     Text.literal(grantedBadge.grantedBy()),
                     Text.literal(grantedBadge.grantDate().toInstant().atZone(ZoneId.systemDefault()).format(DateTimeFormatter.ISO_LOCAL_DATE))
-            ) : List.of(type.getDisplayName());
+            ) : List.of(type.getDisplayName().setStyle(typeStyle));
         }
 
         @Override
