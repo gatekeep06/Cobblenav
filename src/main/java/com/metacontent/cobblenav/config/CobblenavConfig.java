@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 public class CobblenavConfig {
+    public final boolean useCobbledexIntegration;
     public final boolean useCounterIntegration;
     public final boolean onlySeenPokemonMode;
     public final boolean useCobblemonTrainersIntegration;
@@ -33,6 +34,7 @@ public class CobblenavConfig {
     public final boolean enableDebugMode;
 
     private CobblenavConfig(
+            boolean useCobbledexIntegration,
             boolean useCounterIntegration,
             boolean onlySeenPokemonMode,
             boolean useCobblemonTrainersIntegration,
@@ -49,6 +51,7 @@ public class CobblenavConfig {
             CounterIntegrationConfig counterIntegrationConfig,
             boolean enableDebugMode
     ) {
+        this.useCobbledexIntegration = useCobbledexIntegration;
         this.useCounterIntegration = useCounterIntegration;
         this.onlySeenPokemonMode = onlySeenPokemonMode;
         this.useCobblemonTrainersIntegration = useCobblemonTrainersIntegration;
@@ -68,7 +71,7 @@ public class CobblenavConfig {
     }
 
     private CobblenavConfig() {
-        this(false, false, false, new Badges(), -1, -1, 100, 100, PokemonFeatureWeights.BASE_WEIGHTS, List.of("not_modeled"), List.of(), 2, Map.of(), List.of(0), new CounterIntegrationConfig(), false);
+        this(false, false, false, false, new Badges(), -1, -1, 100, 100, PokemonFeatureWeights.BASE_WEIGHTS, List.of("not_modeled"), List.of(), 2, Map.of(), List.of(0), new CounterIntegrationConfig(), false);
     }
 
     public static CobblenavConfig init() {
