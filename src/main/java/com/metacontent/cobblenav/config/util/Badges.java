@@ -1,5 +1,6 @@
 package com.metacontent.cobblenav.config.util;
 
+import net.minecraft.server.network.ServerPlayerEntity;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -24,9 +25,12 @@ public class Badges {
         return badges.stream().filter(badge -> badge.type().equals(type)).findFirst().orElse(null);
     }
 
-    @Nullable
-    public Badge getByPermission(String permission) {
-        return badges.stream().filter(badge -> badge.permissionToGrant().equals(permission)).findFirst().orElse(null);
+    public List<Badge> getByPermission(String permission) {
+        return badges.stream().filter(badge -> badge.permissionToGrant().equals(permission)).toList();
+    }
+
+    public List<Badge> getPermitted(ServerPlayerEntity player) {
+        return badges.stream().filter(badge -> badge.hasPermissionToGrant(player)).toList();
     }
 
     public Set<String> getTypes() {
