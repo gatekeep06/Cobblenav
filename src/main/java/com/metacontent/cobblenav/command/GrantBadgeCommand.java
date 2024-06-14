@@ -3,6 +3,7 @@ package com.metacontent.cobblenav.command;
 import com.metacontent.cobblenav.Cobblenav;
 import com.metacontent.cobblenav.config.util.Badge;
 import com.metacontent.cobblenav.store.AdditionalStatsData;
+import com.metacontent.cobblenav.util.GrantedBadge;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
@@ -15,6 +16,8 @@ import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
+
+import java.util.Date;
 
 public class GrantBadgeCommand {
     public static void register(CommandDispatcher<ServerCommandSource> dispatcher, CommandRegistryAccess commandRegistryAccess, CommandManager.RegistrationEnvironment registrationEnvironment) {
@@ -35,7 +38,8 @@ public class GrantBadgeCommand {
         }
         ServerPlayerEntity player = context.getArgument("player", EntitySelector.class).getPlayer(context.getSource());
         if (badge.hasPermissionToGrant(source)) {
-            AdditionalStatsData.executeForDataOf(player, statsData -> statsData.addBadge(badge.type()));
+            GrantedBadge grantedBadge = new GrantedBadge(badge.type(), source.getEntityName(), new Date());
+            AdditionalStatsData.executeForDataOf(player, statsData -> statsData.addBadge(grantedBadge));
             return 1;
         }
         else {
