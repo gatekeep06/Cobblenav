@@ -18,6 +18,7 @@ public class Cobblenav implements ModInitializer {
     public static final String CONFIG_PATH = "/" + ID + "/cobblenav-config.json";
     public static final String CLIENT_CONFIG_PATH = "/" + ID + "/client-cobblenav-config.json";
     public static final CobblenavConfig CONFIG = CobblenavConfig.init();
+    public static final IntegrationManager INTEGRATIONS = new IntegrationManager();
 
     public static final PokenavAreaContextResolver RESOLVER = new PokenavAreaContextResolver();
 
