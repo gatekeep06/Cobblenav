@@ -17,20 +17,11 @@ public class CobblenavEvents {
         CobblemonEvents.TRADE_COMPLETED.subscribe(Priority.NORMAL, PokemonUsageDeletionHandler::handleTradeCompletion);
         AttackEntityCallback.EVENT.register(SecretPokenavEventHandler::handleAttack);
 
-        if (FabricLoader.getInstance().isModLoaded("cobblemontrainers") && Cobblenav.CONFIG.useCobblemonTrainersIntegration) {
-            Cobblenav.LOGGER.info("CobblemonTrainers Integration is enabled");
+        if (Cobblenav.INTEGRATIONS.trainers()) {
             CobblemonEvents.BATTLE_VICTORY.subscribe(Priority.NORMAL, ContactRecordHandler::handleTrainerBattleVictory);
         }
-        else if (!FabricLoader.getInstance().isModLoaded("cobblemontrainers") && Cobblenav.CONFIG.useCobblemonTrainersIntegration) {
-            Cobblenav.LOGGER.warn("CobblemonTrainers is not installed, integration will not be used");
-        }
-
-        if (FabricLoader.getInstance().isModLoaded("cobblemon_counter") && Cobblenav.CONFIG.useCounterIntegration) {
-            Cobblenav.LOGGER.info("Cobblemon Counter Integration is enabled");
+        if (Cobblenav.INTEGRATIONS.counter()) {
             CobblemonEvents.POKEMON_ENTITY_SPAWN.subscribe(Priority.NORMAL, EggMoveHandler::possiblyGiveEggMove);
-        }
-        else if (!FabricLoader.getInstance().isModLoaded("cobblemon_counter") && Cobblenav.CONFIG.useCounterIntegration) {
-            Cobblenav.LOGGER.warn("Cobblemon Counter is not installed, integration will not be used");
         }
     }
 }
