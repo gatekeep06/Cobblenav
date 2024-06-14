@@ -4,10 +4,7 @@ import com.cobblemon.mod.common.Cobblemon;
 import com.cobblemon.mod.common.api.storage.player.PlayerData;
 import com.cobblemon.mod.common.api.storage.player.PlayerDataExtension;
 import com.cobblemon.mod.common.api.storage.player.PlayerDataExtensionRegistry;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
+import com.google.gson.*;
 import com.metacontent.cobblenav.util.GrantedBadge;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -96,18 +93,27 @@ public class AdditionalStatsData implements PlayerDataExtension {
     @NotNull
     @Override
     public AdditionalStatsData deserialize(@NotNull JsonObject jsonObject) {
-        totalPvpCount = jsonObject.getAsJsonPrimitive("totalPvpCount").getAsInt();
+        JsonPrimitive totalPvpPrimitive = jsonObject.getAsJsonPrimitive("totalPvpCount");
+        if (totalPvpPrimitive != null) {
+            totalPvpCount = totalPvpPrimitive.getAsInt();
+        }
 
-        startDate = new Date(jsonObject.getAsJsonPrimitive("startDate").getAsLong());
+        JsonPrimitive startDatePrimitive = jsonObject.getAsJsonPrimitive("startDate");
+        if (startDatePrimitive != null) {
+            startDate = new Date(startDatePrimitive.getAsLong());
+        }
 
         JsonArray grantedBadgesArray = jsonObject.getAsJsonArray("grantedBadges");
-        grantedBadges.clear();
-        grantedBadgesArray.forEach(jsonElement -> grantedBadges.add(GSON.fromJson(jsonElement, GrantedBadge.class)));
+        if (grantedBadgesArray != null) {
+            grantedBadges.clear();
+            grantedBadgesArray.forEach(jsonElement -> grantedBadges.add(GSON.fromJson(jsonElement, GrantedBadge.class)));
+        }
 
         JsonObject pokemonUsageObject = jsonObject.getAsJsonObject("pokemonUsage");
-        pokemonUsage.clear();
-        pokemonUsageObject.entrySet().forEach(entry -> pokemonUsage.put(UUID.fromString(entry.getKey()), entry.getValue().getAsInt()));
-
+        if (pokemonUsageObject != null) {
+            pokemonUsage.clear();
+            pokemonUsageObject.entrySet().forEach(entry -> pokemonUsage.put(UUID.fromString(entry.getKey()), entry.getValue().getAsInt()));
+        }
         return this;
     }
 

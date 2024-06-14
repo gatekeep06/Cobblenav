@@ -13,6 +13,7 @@ import com.cobblemon.mod.common.api.spawning.spawner.SpawningArea;
 import com.cobblemon.mod.common.config.CobblemonConfig;
 import com.cobblemon.mod.common.pokemon.RenderablePokemon;
 import com.metacontent.cobblenav.Cobblenav;
+import com.metacontent.cobblenav.integration.SeenPokemonChecker;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.minecraft.network.PacketByteBuf;
@@ -65,8 +66,9 @@ public class SpawnMapRequestReceiver {
                                         string -> renderablePokemon.getForm().showdownId().equals(string)
                                 );
                                 boolean isSeen = true;
-                                if (Cobblenav.CONFIG.useCounterIntegration && Cobblenav.CONFIG.onlySeenPokemonMode) {
-                                    isSeen = EncounterApi.INSTANCE.check(player, renderablePokemon.getSpecies().getName().toLowerCase());
+                                SeenPokemonChecker checker = Cobblenav.INTEGRATIONS.getChecker();
+                                if (checker != null) {
+                                    isSeen = checker.check(renderablePokemon.getSpecies(), player);
                                 }
 
                                 if (isIgnored || isHidden) {

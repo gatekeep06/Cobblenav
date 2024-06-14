@@ -3,6 +3,7 @@ package com.metacontent.cobblenav;
 import com.metacontent.cobblenav.command.CobblenavCommands;
 import com.metacontent.cobblenav.config.CobblenavConfig;
 import com.metacontent.cobblenav.event.CobblenavEvents;
+import com.metacontent.cobblenav.integration.IntegrationManager;
 import com.metacontent.cobblenav.item.CobblenavItems;
 import com.metacontent.cobblenav.networking.CobblenavPackets;
 import com.metacontent.cobblenav.store.AdditionalStatsData;
@@ -18,6 +19,7 @@ public class Cobblenav implements ModInitializer {
     public static final String CONFIG_PATH = "/" + ID + "/cobblenav-config.json";
     public static final String CLIENT_CONFIG_PATH = "/" + ID + "/client-cobblenav-config.json";
     public static final CobblenavConfig CONFIG = CobblenavConfig.init();
+    public static final IntegrationManager INTEGRATIONS = new IntegrationManager();
 
     public static final PokenavAreaContextResolver RESOLVER = new PokenavAreaContextResolver();
 
