@@ -134,8 +134,8 @@ public class ContactData implements PlayerDataExtension {
     public ContactData deserialize(@NotNull JsonObject jsonObject) {
         JsonArray jsonArray = jsonObject.getAsJsonArray("contacts");
         contacts.clear();
-        if (!jsonArray.isJsonNull()) {
-            for (JsonElement jsonElement: jsonArray) {
+        if (jsonArray != null) {
+            for (JsonElement jsonElement : jsonArray) {
                 PokenavContact contact = GSON.fromJson(jsonElement, PokenavContact.class);
                 if (contact.getName() != null) {
                     contacts.put(contact.getKey(), contact);
@@ -147,7 +147,9 @@ public class ContactData implements PlayerDataExtension {
         }
 
         JsonPrimitive jsonPrimitive = jsonObject.getAsJsonPrimitive("title");
-        title = jsonPrimitive.getAsString();
+        if (jsonPrimitive != null) {
+            title = jsonPrimitive.getAsString();
+        }
 
         return this;
     }
