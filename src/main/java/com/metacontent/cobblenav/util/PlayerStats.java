@@ -6,7 +6,6 @@ import com.metacontent.cobblenav.store.AdditionalStatsData;
 import net.minecraft.network.PacketByteBuf;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public record PlayerStats(
         int totalPvp,
@@ -16,7 +15,7 @@ public record PlayerStats(
         int evolutions,
         Map<UUID, Integer> pokemonUsage,
         Date startDate,
-        Set<String> gymBadges
+        Set<GrantedBadge> grantedBadges
 ) {
     public static PlayerStats fromPlayerData(PlayerData data) {
         PlayerAdvancementData advancementData = data.getAdvancementData();
@@ -29,9 +28,9 @@ public record PlayerStats(
         int totalPvp = statsData.getTotalPvpCount();
         Map<UUID, Integer> pokemonUsage = statsData.getPokemonUsage();
         Date startDate = statsData.getStartDate();
-        Set<String> gymBadges = statsData.getGymBadges();
+        Set<GrantedBadge> grantedBadges = statsData.getGrantedBadges();
 
-        return new PlayerStats(totalPvp, pvpWinnings, captures, shinyCaptures, evolutions, pokemonUsage, startDate, gymBadges);
+        return new PlayerStats(totalPvp, pvpWinnings, captures, shinyCaptures, evolutions, pokemonUsage, startDate, grantedBadges);
     }
 
     public void saveToBuf(PacketByteBuf buf) {
@@ -42,7 +41,7 @@ public record PlayerStats(
         buf.writeInt(evolutions);
         buf.writeMap(pokemonUsage, PacketByteBuf::writeUuid, PacketByteBuf::writeInt);
         buf.writeDate(startDate);
-        buf.writeCollection(gymBadges, PacketByteBuf::writeString);
+        buf.writeCollection(grantedBadges, (buf1, grantedBadge) -> grantedBadge.saveToBuf(buf1));
     }
 
     public static PlayerStats fromBuf(PacketByteBuf buf) {
@@ -53,7 +52,7 @@ public record PlayerStats(
         int evolutions = buf.readInt();
         Map<UUID, Integer> pokemonUsage = buf.readMap(PacketByteBuf::readUuid, PacketByteBuf::readInt);
         Date startDate = buf.readDate();
-        Set<String> gymBadges = new HashSet<>(buf.readList(PacketByteBuf::readString));
-        return new PlayerStats(totalPvp, pvpWinnings, captures, shinyCaptures, evolutions, pokemonUsage, startDate, gymBadges);
+        Set<GrantedBadge> grantedBadges = new HashSet<>(buf.readList(GrantedBadge::fromBuf));
+        return new PlayerStats(totalPvp, pvpWinnings, captures, shinyCaptures, evolutions, pokemonUsage, startDate, grantedBadges);
     }
 }

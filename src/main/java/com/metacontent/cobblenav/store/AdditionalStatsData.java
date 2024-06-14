@@ -4,9 +4,11 @@ import com.cobblemon.mod.common.Cobblemon;
 import com.cobblemon.mod.common.api.storage.player.PlayerData;
 import com.cobblemon.mod.common.api.storage.player.PlayerDataExtension;
 import com.cobblemon.mod.common.api.storage.player.PlayerDataExtensionRegistry;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.metacontent.cobblenav.Cobblenav;
+import com.metacontent.cobblenav.util.GrantedBadge;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import org.jetbrains.annotations.NotNull;
@@ -16,10 +18,11 @@ import java.util.function.Consumer;
 
 public class AdditionalStatsData implements PlayerDataExtension {
     public static final String NAME = "cobblenavPlayerStatsData";
+    private static final Gson GSON = (new GsonBuilder()).setPrettyPrinting().disableHtmlEscaping().create();
 
     private int totalPvpCount = 0;
     private Date startDate = new Date();
-    private final Set<String> gymBadges = new HashSet<>();
+    private final Set<GrantedBadge> grantedBadges = new HashSet<>();
     private final Map<UUID, Integer> pokemonUsage = new HashMap<>();
 
     public int getTotalPvpCount() {
@@ -38,12 +41,12 @@ public class AdditionalStatsData implements PlayerDataExtension {
         this.startDate = startDate;
     }
 
-    public Set<String> getGymBadges() {
-        return gymBadges;
+    public Set<GrantedBadge> getGrantedBadges() {
+        return grantedBadges;
     }
 
-    public void addBadge(String badge) {
-        gymBadges.add(badge);
+    public void addBadge(GrantedBadge badge) {
+        grantedBadges.add(badge);
     }
 
     public Map<UUID, Integer> getPokemonUsage() {
@@ -97,9 +100,9 @@ public class AdditionalStatsData implements PlayerDataExtension {
 
         startDate = new Date(jsonObject.getAsJsonPrimitive("startDate").getAsLong());
 
-        JsonArray gymBadgesArray = jsonObject.getAsJsonArray("gymBadges");
-        gymBadges.clear();
-        gymBadgesArray.forEach(jsonElement -> gymBadges.add(jsonElement.getAsString()));
+        JsonArray grantedBadgesArray = jsonObject.getAsJsonArray("grantedBadges");
+        grantedBadges.clear();
+        grantedBadgesArray.forEach(jsonElement -> grantedBadges.add(GSON.fromJson(jsonElement, GrantedBadge.class)));
 
         JsonObject pokemonUsageObject = jsonObject.getAsJsonObject("pokemonUsage");
         pokemonUsage.clear();
@@ -124,9 +127,9 @@ public class AdditionalStatsData implements PlayerDataExtension {
 
         jsonObject.addProperty("startDate", startDate.getTime());
 
-        JsonArray gymBadgesArray = new JsonArray();
-        gymBadges.forEach(gymBadgesArray::add);
-        jsonObject.add("gymBadges", gymBadgesArray);
+        JsonArray grantedBadgesArray = new JsonArray();
+        grantedBadges.forEach(badge -> grantedBadgesArray.add(GSON.toJsonTree(badge)));
+        jsonObject.add("grantedBadges", grantedBadgesArray);
 
         JsonObject pokemonUsageObject = new JsonObject();
         pokemonUsage.forEach((uuid, integer) -> pokemonUsageObject.addProperty(uuid.toString(), integer));

@@ -128,7 +128,7 @@ public class StatsScreen extends AbstractPokenavItemScreen {
 
         });
 
-        badgeDisplay.setBadges(badges, stats.gymBadges());
+        badgeDisplay.setBadges(badges, stats.grantedBadges());
 
         this.stats = stats;
     }
