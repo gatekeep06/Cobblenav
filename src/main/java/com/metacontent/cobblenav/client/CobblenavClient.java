@@ -1,6 +1,7 @@
 package com.metacontent.cobblenav.client;
 
 import com.cobblemon.mod.common.client.CobblemonClient;
+import com.metacontent.cobblenav.Cobblenav;
 import com.metacontent.cobblenav.client.hud.TrackArrowHudOverlay;
 import com.metacontent.cobblenav.client.screen.pokenav.LocationScreen;
 import com.metacontent.cobblenav.client.screen.pokenav.MainScreen;
@@ -22,8 +23,8 @@ public class CobblenavClient implements ClientModInitializer {
     public static ClientCobblenavConfig CONFIG = ClientCobblenavConfig.init();
     private static KeyBinding pokenavKey;
     private static KeyBinding locationKey;
-    private static KeyBinding decreaseBucketKey;
-    private static KeyBinding increaseBucketKey;
+    public static KeyBinding decreaseBucketKey;
+    public static KeyBinding increaseBucketKey;
 
     @Override
     public void onInitializeClient() {
@@ -62,17 +63,6 @@ public class CobblenavClient implements ClientModInitializer {
             }
             else if (locationKey.wasPressed()) {
                 client.setScreen(new LocationScreen());
-            }
-        });
-        ClientTickEvents.END_CLIENT_TICK.register(client -> {
-            if (!(client.currentScreen instanceof LocationScreen locationScreen)) {
-                return;
-            }
-            if (decreaseBucketKey.wasPressed()) {
-                locationScreen.decreaseBucket();
-            }
-            else if (increaseBucketKey.wasPressed()) {
-                locationScreen.increaseBucket();
             }
         });
         ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) ->

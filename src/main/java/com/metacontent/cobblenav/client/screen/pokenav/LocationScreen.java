@@ -267,18 +267,29 @@ public class LocationScreen extends AbstractPokenavItemScreen {
     }
 
     public void decreaseBucket() {
-        player.playSound(CobblemonSounds.PC_CLICK, 0.05f, 1.25f);
         if (bucketIndex - 1 >= 0) {
+            player.playSound(CobblemonSounds.PC_CLICK, 0.05f, 1.25f);
             bucketIndex--;
             checkSpawns();
         }
     }
 
     public void increaseBucket() {
-        player.playSound(CobblemonSounds.PC_CLICK, 0.05f, 1.25f);
         if (bucketIndex + 1 < buckets.size()) {
+            player.playSound(CobblemonSounds.PC_CLICK, 0.05f, 1.25f);
             bucketIndex++;
             checkSpawns();
         }
+    }
+
+    @Override
+    public boolean keyPressed(int i, int j, int k) {
+        if (CobblenavClient.increaseBucketKey.matchesKey(i, j)) {
+            increaseBucket();
+        }
+        else if (CobblenavClient.decreaseBucketKey.matchesKey(i, j)) {
+            decreaseBucket();
+        }
+        return super.keyPressed(i, j, k);
     }
 }
