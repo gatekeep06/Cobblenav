@@ -1,3 +1,21 @@
+# Update 1.3.4
+
+- Added only seen pokemon mode. 
+
+Can be enabled in the config. In this mode, only those pokemon that the player has previously seen will be displayed on the location screen. For this mode to work, either Cobblemon Counter or Rafa's Cobbledex must be installed. If both are installed, Cobblemon Counter will be prioritized.
+
+- Added key bindings to open the main screen and location screen.
+
+The keys are not assigned by default. To use them, you need to have a pokenav in your inventory.
+
+- Slightly improved badges.
+  - Received badges now also store information about who granted the badge and the date of granting.
+  - Added suggestions for the ```/badge grant``` command.
+  - The badge names are now in color💅.
+
+- Fixed giving egg moves to pokemon with special characters in their name. It is now possible.
+- Added protection against deleting player data elements, which could cause an error when entering the world.
+
 # Update 1.3.3
 
 - Fixed screen blinking that occurred when trying to render a pokemon with corrupted animations. Now such pokemon will be hidden and the problem will be reported in chat and logs.

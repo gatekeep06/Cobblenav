@@ -23,7 +23,7 @@ public class EggMoveHandler {
     public static Unit possiblyGiveEggMove(SpawnEvent<PokemonEntity> event) {
         Entity entity = event.getCtx().getCause().getEntity();
         Pokemon pokemon = event.getEntity().getPokemon();
-        String pokemonName = pokemon.getSpecies().showdownId();
+        String pokemonName = pokemon.getSpecies().getName().toLowerCase();
         if (entity instanceof PlayerEntity player) {
             Pair<String, Integer> streak = CaptureApi.INSTANCE.getStreak(player);
             if (streak.component1().equals(pokemonName)) {

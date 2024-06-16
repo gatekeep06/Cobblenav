@@ -35,6 +35,8 @@ dependencies {
         "run/mods/SelfdotModLibs-2.2.0+1.20.1-dev-shadow.jar",
         "run/mods/SelfdotModLibs-2.2.0+1.20.1-sources.jar"))
 
+    modImplementation("maven.modrinth:cobblemon-pokedex:${property("cobbledex_version")}")
+
     // Cobblemon Counter
     modImplementation("maven.modrinth:cobblemon-counter:${property("cobblemon_counter_version")}")
 
