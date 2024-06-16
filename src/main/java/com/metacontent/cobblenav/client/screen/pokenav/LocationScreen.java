@@ -135,22 +135,10 @@ public class LocationScreen extends AbstractPokenavItemScreen {
                 }
         );
         decreaseBucketIndexButton = new IconButton(width / 2 - 25, borderY + BORDER_DEPTH + 22, 5, 7, 97, 0, null,
-                () -> {
-                    player.playSound(CobblemonSounds.PC_CLICK, 0.05f, 1.25f);
-                    if (bucketIndex - 1 >= 0) {
-                        bucketIndex--;
-                        checkSpawns();
-                    }
-                }
+                this::decreaseBucket
         );
         increaseBucketIndexButton = new IconButton(width / 2 + 25, borderY + BORDER_DEPTH + 22, 5, 7, 102, 0, null,
-                () -> {
-                    player.playSound(CobblemonSounds.PC_CLICK, 0.05f, 1.25f);
-                    if (bucketIndex + 1 < buckets.size()) {
-                        bucketIndex++;
-                        checkSpawns();
-                    }
-                }
+                this::increaseBucket
         );
         reverseSortingButton = new IconButton(borderX + BORDER_WIDTH - BORDER_DEPTH - 14, borderY + BORDER_HEIGHT - BORDER_DEPTH - 12,
                 11, 11, 97, 12, CobblenavClient.CONFIG.reverseSortingButtonCooldown, Text.translatable("gui.cobblenav.pokenav_item.button_tooltip.reverse"),
@@ -276,5 +264,21 @@ public class LocationScreen extends AbstractPokenavItemScreen {
         buf.writeInt(bucketIndex);
         buf.writeInt(sortingMark);
         ClientPlayNetworking.send(CobblenavPackets.SAVE_PREFERENCES_PACKET, buf);
+    }
+
+    public void decreaseBucket() {
+        player.playSound(CobblemonSounds.PC_CLICK, 0.05f, 1.25f);
+        if (bucketIndex - 1 >= 0) {
+            bucketIndex--;
+            checkSpawns();
+        }
+    }
+
+    public void increaseBucket() {
+        player.playSound(CobblemonSounds.PC_CLICK, 0.05f, 1.25f);
+        if (bucketIndex + 1 < buckets.size()) {
+            bucketIndex++;
+            checkSpawns();
+        }
     }
 }
