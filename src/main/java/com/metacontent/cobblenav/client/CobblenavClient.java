@@ -22,6 +22,8 @@ public class CobblenavClient implements ClientModInitializer {
     public static ClientCobblenavConfig CONFIG = ClientCobblenavConfig.init();
     private static KeyBinding pokenavKey;
     private static KeyBinding locationKey;
+    private static KeyBinding decreaseBucketKey;
+    private static KeyBinding increaseBucketKey;
 
     @Override
     public void onInitializeClient() {
@@ -32,6 +34,16 @@ public class CobblenavClient implements ClientModInitializer {
         ));
         pokenavKey = KeyBindingHelper.registerKeyBinding(new KeyBinding(
                 "key.cobblenav.open_pokenav",
+                InputUtil.Type.KEYSYM, GLFW.GLFW_DONT_CARE,
+                "category.cobblenav"
+        ));
+        decreaseBucketKey = KeyBindingHelper.registerKeyBinding(new KeyBinding(
+                "key.cobblenav.decrease_bucket",
+                InputUtil.Type.KEYSYM, GLFW.GLFW_DONT_CARE,
+                "category.cobblenav"
+        ));
+        increaseBucketKey = KeyBindingHelper.registerKeyBinding(new KeyBinding(
+                "key.cobblenav.increase_bucket",
                 InputUtil.Type.KEYSYM, GLFW.GLFW_DONT_CARE,
                 "category.cobblenav"
         ));
@@ -50,6 +62,17 @@ public class CobblenavClient implements ClientModInitializer {
             }
             else if (locationKey.wasPressed()) {
                 client.setScreen(new LocationScreen());
+            }
+        });
+        ClientTickEvents.END_CLIENT_TICK.register(client -> {
+            if (!(client.currentScreen instanceof LocationScreen locationScreen)) {
+                return;
+            }
+            if (decreaseBucketKey.wasPressed()) {
+                locationScreen.decreaseBucket();
+            }
+            else if (increaseBucketKey.wasPressed()) {
+                locationScreen.increaseBucket();
             }
         });
         ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) ->
