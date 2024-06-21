@@ -12,6 +12,7 @@ public class CobblenavCommands {
         CommandRegistrationCallback.EVENT.register(GiveCustomPokenavCommand::register);
         CommandRegistrationCallback.EVENT.register(CheckConfigCommand::register);
         CommandRegistrationCallback.EVENT.register(GrantBadgeCommand::register);
+        CommandRegistrationCallback.EVENT.register(OpenAllPokemonScreenCommand::register);
         if (Cobblenav.CONFIG.enableDebugMode) {
             CommandRegistrationCallback.EVENT.register(AddDebugingContactsCommand::register);
         }
