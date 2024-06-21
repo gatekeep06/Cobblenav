@@ -28,6 +28,7 @@ public class CobblenavPackets {
     public static final Identifier STREAK_PACKET = new Identifier(Cobblenav.ID, "streak_packet");
     public static final Identifier PLAYER_STATS_REQUEST_PACKET = new Identifier(Cobblenav.ID, "player_stats_request_packet");
     public static final Identifier PLAYER_STATS_PACKET = new Identifier(Cobblenav.ID, "player_stats_packet");
+    public static final Identifier ALL_POKEMON_PACKET = new Identifier(Cobblenav.ID, "all_pokemon_packet");
 
     public static void registerC2SPackets() {
         ServerPlayNetworking.registerGlobalReceiver(SPAWN_MAP_REQUEST_PACKET, SpawnMapRequestReceiver::receive);
@@ -53,5 +54,6 @@ public class CobblenavPackets {
         ClientPlayNetworking.registerGlobalReceiver(SAVED_PREFERENCES_PACKET, SavedPreferencesReceiver::receive);
         ClientPlayNetworking.registerGlobalReceiver(STREAK_PACKET, StreakReceiver::receive);
         ClientPlayNetworking.registerGlobalReceiver(PLAYER_STATS_PACKET, PlayerStatsReceiver::receive);
+        ClientPlayNetworking.registerGlobalReceiver(ALL_POKEMON_PACKET, AllPokemonReceiver::receive);
     }
 }
