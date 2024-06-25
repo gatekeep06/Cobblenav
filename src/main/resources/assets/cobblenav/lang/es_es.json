@@ -67,5 +67,6 @@
   "gui.cobblenav.pokenav_item.button_tooltip.refresh": "Actualizar",
   "gui.cobblenav.pokenav_item.button_tooltip.reverse": "Clasificación inversa",
   "gui.cobblenav.pokenav_item.button_tooltip.share": "Compartir",
-  "gui.cobblenav.pokenav_item.button_tooltip.find": "Buscar"
+  "gui.cobblenav.pokenav_item.button_tooltip.find": "Buscar",
+  "message.cobblenav.has_no_permitted_badges": "You have no permitted badges"
 }
