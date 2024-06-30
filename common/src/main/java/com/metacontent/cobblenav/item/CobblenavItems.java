@@ -42,6 +42,7 @@ public class CobblenavItems {
     public static final Item POKEFINDER_ITEM_WHITE = registerPokefinderItem("white");
     public static final Item POKEFINDER_ITEM_YELLOW = registerPokefinderItem("yellow");
 
+    @SuppressWarnings("unused")
     public static final ItemGroup POKENAV_GROUP = Registry.register(Registries.ITEM_GROUP, new Identifier(Cobblenav.ID, "pokenav_group"),
             ItemGroup.create(ItemGroup.Row.BOTTOM, 1)
                     .icon(POKENAV_ITEM::getDefaultStack)
