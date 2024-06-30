@@ -15,6 +15,9 @@
   "entrypoints": {
     "main": [
       "com.metacontent.cobblenav.fabric.CobblenavFabric"
+    ],
+    "client": [
+      "com.metacontent.cobblenav.fabric.client.CobblenavFabricClient"
     ]
   },
   "mixins": [
