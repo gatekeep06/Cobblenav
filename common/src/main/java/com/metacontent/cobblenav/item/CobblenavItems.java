@@ -3,7 +3,6 @@ package com.metacontent.cobblenav.item;
 import com.metacontent.cobblenav.Cobblenav;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemGroups;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.text.Text;
