@@ -8,7 +8,9 @@ architectury {
 }
 
 repositories {
-
+    maven {
+        url "https://oss.sonatype.org/content/repositories/snapshots"
+    }
 }
 
 configurations {
@@ -29,6 +31,7 @@ dependencies {
     common(project(path: ":common", configuration: "namedElements")) { transitive false }
     shadowCommon(project(path: ":common", configuration: "transformProductionFabric")) { transitive false }
     modImplementation "com.cobblemon:fabric:${rootProject.cobblemon_version}"
+    include(modImplementation "me.lucko:fabric-permissions-api:${rootProject.permissions_api_version}")
 }
 
 processResources {
