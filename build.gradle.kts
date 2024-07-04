@@ -31,9 +31,8 @@ dependencies {
 
     // CobblemonTrainers
     modImplementation("maven.modrinth:cobblemontrainers:${property("trainers_version")}")
-    modImplementation(files("/run/mods/SelfdotModLibs-2.2.0+1.20.1.jar",
-        "run/mods/SelfdotModLibs-2.2.0+1.20.1-dev-shadow.jar",
-        "run/mods/SelfdotModLibs-2.2.0+1.20.1-sources.jar"))
+    modImplementation(files("/run/mods/SelfdotModLibs-2.0.2.jar",
+        "run/mods/SelfdotModLibs-2.0.2-sources.jar"))
 
     modImplementation("maven.modrinth:cobblemon-pokedex:${property("cobbledex_version")}")
 
