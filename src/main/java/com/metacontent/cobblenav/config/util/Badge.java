@@ -7,7 +7,8 @@ import java.util.Objects;
 
 public record Badge(
         String type,
-        String permissionToGrant
+        String permissionToGrant,
+        String trainer
 ) {
     public boolean hasPermissionToGrant(ServerPlayerEntity player) {
         if (permissionToGrant == null || permissionToGrant.isEmpty()) {
