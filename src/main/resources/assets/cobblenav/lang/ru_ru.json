@@ -64,5 +64,9 @@
   "gui.cobblenav.pokenav_item.button_tooltip.reverse": "Инвертировать",
   "gui.cobblenav.pokenav_item.button_tooltip.share": "Поделиться",
   "gui.cobblenav.pokenav_item.button_tooltip.find": "Найти",
-  "item.cobblenav.pokenav_item.type.netherite": "Незеритовый"
+  "item.cobblenav.pokenav_item.type.netherite": "Незеритовый",
+  "key.cobblenav.open_pokenav": "Открыть покенав",
+  "key.cobblenav.open_location": "Открыть экран локации",
+  "category.cobblenav": "Cobblenav",
+  "message.cobblenav.has_no_permitted_badges": "У вас нет разрешенных к выдаче значков"
 }

@@ -64,5 +64,9 @@
 "gui.cobblenav.pokenav_item.button_tooltip.reverse": "Reverse Sorting",
 "gui.cobblenav.pokenav_item.button_tooltip.share": "Share",
 "gui.cobblenav.pokenav_item.button_tooltip.find": "Find",
-"item.cobblenav.pokenav_item.type.netherite": "Netherite"
+"item.cobblenav.pokenav_item.type.netherite": "Netherite",
+"key.cobblenav.open_pokenav": "Open Pokenav",
+"key.cobblenav.open_location": "Open Location Screen",
+"category.cobblenav": "Cobblenav",
+"message.cobblenav.has_no_permitted_badges": "You have no permitted badges"
 }

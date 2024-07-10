@@ -30,7 +30,7 @@ public class GrantBadgeCommand {
     }
 
     private static int run(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
-        String badgeType = context.getArgument("badge", String.class).toLowerCase();
+        String badgeType = context.getArgument("badge", String.class);
         Badge badge = Cobblenav.CONFIG.badges.getByType(badgeType);
         ServerPlayerEntity source = context.getSource().getPlayerOrThrow();
         if (badge == null) {
