@@ -5,6 +5,7 @@ import com.cobblemon.mod.common.api.storage.player.PlayerData;
 import com.cobblemon.mod.common.api.storage.player.PlayerDataExtension;
 import com.cobblemon.mod.common.api.storage.player.PlayerDataExtensionRegistry;
 import com.google.gson.*;
+import com.metacontent.cobblenav.config.util.Badge;
 import com.metacontent.cobblenav.util.GrantedBadge;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -44,6 +45,18 @@ public class AdditionalStatsData implements PlayerDataExtension {
 
     public void addBadge(GrantedBadge badge) {
         grantedBadges.add(badge);
+    }
+
+    public boolean removeBadge(String type) {
+        return grantedBadges.removeIf(grantedBadge -> grantedBadge.type() != null && grantedBadge.type().equals(type));
+    }
+
+    public boolean removeBadge(Badge badge) {
+        return removeBadge(badge.type());
+    }
+
+    public void removeAllBadges() {
+        grantedBadges.clear();
     }
 
     public Map<UUID, Integer> getPokemonUsage() {
