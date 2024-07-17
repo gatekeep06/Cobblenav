@@ -22,11 +22,11 @@ public class Badges {
 
     @Nullable
     public Badge getByType(String type) {
-        return badges.stream().filter(badge -> badge.type().equals(type)).findFirst().orElse(null);
+        return badges.stream().filter(badge -> badge.type() != null && badge.type().equals(type)).findFirst().orElse(null);
     }
 
     public List<Badge> getByPermission(String permission) {
-        return badges.stream().filter(badge -> badge.permissionToGrant().equals(permission)).toList();
+        return badges.stream().filter(badge -> badge.permissionToGrant() != null && badge.permissionToGrant().equals(permission)).toList();
     }
 
     public List<Badge> getByTrainer(String trainer) {
