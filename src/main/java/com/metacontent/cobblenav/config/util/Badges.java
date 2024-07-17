@@ -29,6 +29,10 @@ public class Badges {
         return badges.stream().filter(badge -> badge.permissionToGrant().equals(permission)).toList();
     }
 
+    public List<Badge> getByTrainer(String trainer) {
+        return badges.stream().filter(badge -> badge.trainer().equalsIgnoreCase(trainer)).toList();
+    }
+
     public List<Badge> getPermitted(ServerPlayerEntity player) {
         return badges.stream().filter(badge -> badge.hasPermissionToGrant(player)).toList();
     }

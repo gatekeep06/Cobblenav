@@ -40,7 +40,7 @@ public class BadgeDisplayWidget implements Drawable {
         for (String badge : allBadges) {
             ElementalType type = ElementalTypes.INSTANCE.get(badge.toLowerCase());
             if (type != null) {
-                GrantedBadge grantedBadge = playerBadges.stream().filter(b -> b.type().equals(badge.toLowerCase()))
+                GrantedBadge grantedBadge = playerBadges.stream().filter(b -> b.type().equals(badge))
                         .findFirst().orElse(null);
                 TypeWidget typeWidget = new BadgeWidget(0, 0, 9, 9, type, grantedBadge);
                 typeWidgets.add(typeWidget);

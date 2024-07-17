@@ -60,6 +60,7 @@
   "message.cobblenav.pokenav_is_not_in_hand": "For this action, the pokenav must be in your hand",
   "message.cobblenav.has_no_permission": "You have no permission to grant this badge",
   "message.cobblenav.no_badge": "There is no such badge registered",
+  "message.cobblenav.has_no_permitted_badges": "You have no permitted badges",
   "gui.cobblenav.pokenav_item.last_found": "Last found:",
   "gui.cobblenav.pokenav_item.last_found.tooltip": "Right-click to reset",
   "gui.cobblenav.pokenav_item.button_tooltip.back": "Back",

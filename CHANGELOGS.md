@@ -1,3 +1,10 @@
+# Update 1.3.5
+
+- Added spanish translations by josuburga.
+- Added key bindings for changing buckets on the location screen.
+- Added an option to specify the name of the trainer added by the CobblemonTrainers mod, when defeating which will be given a particular badge.
+- Fixed a bug that occurred if the badge name in the config had capitalized letters (I'm actually extremely dumb).
+
 # Update 1.3.4
 
 - Added only seen pokemon mode. 
