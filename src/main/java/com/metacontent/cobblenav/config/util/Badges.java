@@ -30,7 +30,7 @@ public class Badges {
     }
 
     public List<Badge> getByTrainer(String trainer) {
-        return badges.stream().filter(badge -> badge.trainer().equalsIgnoreCase(trainer)).toList();
+        return badges.stream().filter(badge -> badge.trainer() != null && badge.trainer().equalsIgnoreCase(trainer)).toList();
     }
 
     public List<Badge> getPermitted(ServerPlayerEntity player) {
